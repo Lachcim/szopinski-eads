@@ -42,7 +42,7 @@ void Sequence<Key, Info>::deleteList() {
     SequenceNode* i = this->head;
     while (i != 0) {
         SequenceNode* next = i->next;
-        delete i;
+        deleteNode(i);
         i = next;
     }
 
@@ -60,6 +60,14 @@ typename Sequence<Key, Info>::SequenceNode* Sequence<Key, Info>::createNode(cons
     output->next = 0;
 
     return output;
+}
+
+//deallocate node and its members
+template <class Key, class Info>
+void Sequence<Key, Info>::deleteNode(SequenceNode* node) {
+    delete node->key;
+    delete node->info;
+    delete node;
 }
 
 //addition operator
