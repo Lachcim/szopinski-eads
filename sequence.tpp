@@ -27,7 +27,7 @@ template <class Key, class Info>
 Sequence<Key, Info>& Sequence<Key, Info>::operator=(const Sequence<Key, Info>& other) {
     //handle self-assignment
     if (&other == this)
-        return;
+        return this;
 
     this->deleteList();
     this->copyList(other);
@@ -48,7 +48,7 @@ void Sequence<Key, Info>::deleteList() {
     SequenceNode* i = this->head;
     while (i != 0) {
         SequenceNode* next = i->next;
-        this->deleteNode(i);
+        delete i;
         i = next;
     }
 
@@ -61,19 +61,11 @@ void Sequence<Key, Info>::deleteList() {
 template <class Key, class Info>
 typename Sequence<Key, Info>::SequenceNode* Sequence<Key, Info>::createNode(const Key& key, const Info& info) {
     SequenceNode* output = new SequenceNode();
-    output->key = new Key(key);
-    output->info = new Info(info);
+    output->key = key;
+    output->info = info;
     output->next = 0;
 
     return output;
-}
-
-//deallocate node and its members
-template <class Key, class Info>
-void Sequence<Key, Info>::deleteNode(SequenceNode* node) {
-    delete node->key;
-    delete node->info;
-    delete node;
 }
 
 //addition operator
@@ -163,7 +155,7 @@ bool Sequence<Key, Info>::remove() {
 
     //handle single-element lists
     if (this->size == 1) {
-        this->deleteNode(this->tail);
+        delete this->tail;
 
         this->head = 0;
         this->tail = 0;
@@ -178,7 +170,7 @@ bool Sequence<Key, Info>::remove() {
         penultimateElement = i;
 
     //perform removal
-    this->deleteNode(this->tail);
+    delete this->tail;
     this->tail = penultimateElement;
     this->size--;
 
@@ -239,10 +231,11 @@ bool Sequence<Key, Info>::remove(int index) {
     //handle special case: first index
     if (index == 0) {
         SequenceNode* headNext = this->head->next;
-        this->deleteNode(this->head);
+        delete this->head;
         this->head = headNext;
         this->size--;
 
+        return true;
         return true;
     }
 
@@ -251,7 +244,7 @@ bool Sequence<Key, Info>::remove(int index) {
         precedingElement = precedingElement->next;
 
     SequenceNode* oldNext = precedingElement->next->next;
-    this->deleteNode(precedingElement->next);
+    delete precedingElement->next;
     precedingElement->next = oldNext;
     this->size--;
 

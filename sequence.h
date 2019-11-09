@@ -17,8 +17,7 @@ class Sequence {
 
         void copyList(const Sequence<Key, Info>&);
         void deleteList();
-        SequenceNode* createNode(const Key&, const Info&);
-        void deleteNode(SequenceNode*);
+        static SequenceNode* createNode(const Key&, const Info&);
     public:
         Sequence<Key, Info>();
         Sequence<Key, Info>(const Sequence<Key, Info>&);
