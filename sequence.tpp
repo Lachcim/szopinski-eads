@@ -17,6 +17,7 @@ Sequence<Key, Info>::Sequence(const Sequence<Key, Info>& other) {
 }
 
 //destructor
+template <class Key, class Info>
 Sequence<Key, Info>::~Sequence() {
     this->deleteList();
 }
@@ -47,7 +48,7 @@ void Sequence<Key, Info>::deleteList() {
     SequenceNode* i = this->head;
     while (i != 0) {
         SequenceNode* next = i->next;
-        deleteNode(i);
+        this->deleteNode(i);
         i = next;
     }
 
@@ -151,4 +152,70 @@ bool Sequence<Key, Info>::add(const Sequence<Key, Info>& other) {
     this->copyList(other);
 
     return other.size > 0;
+}
+
+//remove last element
+template <class Key, class Info>
+bool Sequence<Key, Info>::remove() {
+    //return false when the list is empty
+    if (this->size == 0)
+        return false;
+
+    //handle single-element lists
+    if (this->size == 1) {
+        this->deleteNode(this->tail);
+
+        this->head = 0;
+        this->tail = 0;
+        this->size = 0;
+
+        return true;
+    }
+
+    //find new tail
+    SequenceNode* penultimateElement;
+    for (SequenceNode* i = this->head; i->next != 0; i = i->next)
+        penultimateElement = i;
+
+    //perform removal
+    this->deleteNode(this->tail);
+    this->tail = penultimateElement;
+    this->size--;
+
+    return true;
+}
+
+//remove element at given index
+template <class Key, class Info>
+bool Sequence<Key, Info>::remove(int index) {
+    //handle illegal indices
+    if (index < 0 || index >= this->size)
+        return false;
+
+    //handle special case: last index
+    if (index == this->size - 1) {
+        this->remove();
+        return true;
+    }
+
+    //handle special case: first index
+    if (index == 0) {
+        SequenceNode* headNext = this->head->next;
+        this->deleteNode(this->head);
+        this->head = headNext;
+        this->size--;
+
+        return true;
+    }
+
+    SequenceNode* precedingElement = this->head;
+    for (int i = 0; i < index - 1; i++)
+        precedingElement = precedingElement->next;
+
+    SequenceNode* oldNext = precedingElement->next->next;
+    this->deleteNode(precedingElement->next);
+    precedingElement->next = oldNext;
+    this->size--;
+
+    return true;
 }

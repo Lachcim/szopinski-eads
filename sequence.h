@@ -31,8 +31,8 @@ class Sequence {
         void add(const Key&, const Info&);
         bool add(const Key&, const Info&, int);
         bool add(const Sequence<Key, Info>&);
-        bool copy(int, const Sequence<Key, Info>&);
-        bool copy(int, const Sequence<Key, Info>&, int);
+        bool copy(int, Sequence<Key, Info>&);
+        bool copy(int, Sequence<Key, Info>&, int);
         bool remove();
         bool remove(int);
         int removeKey(const Key&);
