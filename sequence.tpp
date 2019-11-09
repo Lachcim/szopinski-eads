@@ -257,3 +257,9 @@ bool Sequence<Key, Info>::remove(int index) {
 
     return true;
 }
+
+//get size
+template <class Key, class Info>
+int Sequence<Key, Info>::getSize() const {
+    return this->size;
+}
