@@ -187,13 +187,13 @@ bool Sequence<Key, Info>::remove() {
 
 //copy element at given index to the end of a different sequence
 template <class Key, class Info>
-bool Sequence<Key, Info>::copy(int index, Sequence<Key, Info>& destination) {
+bool Sequence<Key, Info>::copy(int index, Sequence<Key, Info>& destination) const {
     return this->copy(index, destination, destination.getSize());
 }
 
 //copy element at given index to a different sequence at the given index
 template <class Key, class Info>
-bool Sequence<Key, Info>::copy(int index, Sequence<Key, Info>& destination, int destinationIndex) {
+bool Sequence<Key, Info>::copy(int index, Sequence<Key, Info>& destination, int destinationIndex) const {
     //handle illegal indices
     if (index < 0 || index >= this->size)
         return false;
@@ -210,7 +210,7 @@ bool Sequence<Key, Info>::copy(int index, Sequence<Key, Info>& destination, int 
 
 //get element at the given index
 template <class Key, class Info>
-bool Sequence<Key, Info>::get(int index, Key& outputKey, Info& outputInfo) {
+bool Sequence<Key, Info>::get(int index, Key& outputKey, Info& outputInfo) const {
     //handle illegal indices
     if (index < 0 || index >= this->size)
         return false;
