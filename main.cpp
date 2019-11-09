@@ -1,9 +1,6 @@
-#include <iostream>
-
-using namespace std;
+#include "sequence.h"
 
 int main()
 {
-    cout << "Hello world!" << endl;
-    return 0;
+
 }
