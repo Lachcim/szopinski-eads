@@ -22,6 +22,7 @@ class Sequence {
     public:
         Sequence<Key, Info>();
         Sequence<Key, Info>(const Sequence<Key, Info>&);
+        ~Sequence<Key, Info>();
 
         Sequence<Key, Info>& operator=(const Sequence<Key, Info>&);
         Sequence<Key, Info> operator+(const Sequence<Key, Info>&);

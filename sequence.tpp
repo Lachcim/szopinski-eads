@@ -13,7 +13,12 @@ Sequence<Key, Info>::Sequence(const Sequence<Key, Info>& other) {
     this->tail = 0;
     this->size = 0;
 
-    copyList(other);
+    this->copyList(other);
+}
+
+//destructor
+Sequence<Key, Info>::~Sequence() {
+    this->deleteList();
 }
 
 //copy assignment operator
@@ -23,8 +28,8 @@ Sequence<Key, Info>& Sequence<Key, Info>::operator=(const Sequence<Key, Info>& o
     if (&other == this)
         return;
 
-    deleteList();
-    copyList(other);
+    this->deleteList();
+    this->copyList(other);
 
     return this;
 }
@@ -33,7 +38,7 @@ Sequence<Key, Info>& Sequence<Key, Info>::operator=(const Sequence<Key, Info>& o
 template <class Key, class Info>
 void Sequence<Key, Info>::copyList(const Sequence<Key, Info>& other) {
     for (SequenceNode* i = other.head; i != 0; i = i->next)
-        add(i->key, i->info);
+        this->add(i->key, i->info);
 }
 
 //deallocate entire list
@@ -91,12 +96,12 @@ Sequence<Key, Info>& Sequence<Key, Info>::operator+=(const Sequence<Key, Info>& 
 template <class Key, class Info>
 void Sequence<Key, Info>::add(const Key& key, const Info& info) {
     if (this->size != 0) {
-        //add element at end of list, ypdate tail
+        //add element at end of list, update tail
         this->tail->next = createNode(key, info);
         this->tail = this->tail->next;
     }
     else {
-        //the list is empty, set element as head and tail
+        //the list is empty, update head and tail
         this->head = createNode(key, info);
         this->tail = this->tail;
     }
