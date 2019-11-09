@@ -73,3 +73,20 @@ typename Sequence<Key, Info>::SequenceNode* Sequence<Key, Info>::copyNode(Sequen
 
     return output;
 }
+
+//addition operator
+template <class Key, class Info>
+Sequence<Key, Info> Sequence<Key, Info>::operator+(const Sequence<Key, Info>& other) {
+    Sequence<Key, Info> output(*this);
+    output.copyList(other);
+
+    return output;
+}
+
+//addition assignment operator
+template <class Key, class Info>
+Sequence<Key, Info>& Sequence<Key, Info>::operator+=(const Sequence<Key, Info>& other) {
+    this->copyList(other);
+
+    return this;
+}
