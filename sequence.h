@@ -17,7 +17,7 @@ class Sequence {
 
         void copyList(const Sequence<Key, Info>&);
         void deleteList();
-        SequenceNode* copyNode(SequenceNode&);
+        SequenceNode* createNode(const Key&, const Info&);
     public:
         Sequence<Key, Info>();
         Sequence<Key, Info>(const Sequence<Key, Info>&);
@@ -26,15 +26,15 @@ class Sequence {
         Sequence<Key, Info> operator+(const Sequence<Key, Info>&);
         Sequence<Key, Info>& operator+=(const Sequence<Key, Info>&);
 
-        void add(Key&, Info&);
-        void add(Key&, Info&, int);
-        void add(const Sequence<Key, Info>&);
-        void copy(int, const Sequence<Key, Info>&);
-        void copy(int, const Sequence<Key, Info>&, int);
-        void remove();
-        void remove(int);
-        void removeKey(Key&);
-        int getSize();
+        void add(const Key&, const Info&);
+        bool add(const Key&, const Info&, int);
+        bool add(const Sequence<Key, Info>&);
+        bool copy(int, const Sequence<Key, Info>&);
+        bool copy(int, const Sequence<Key, Info>&, int);
+        bool remove();
+        bool remove(int);
+        int removeKey(const Key&);
+        int getSize() const;
 };
 
 #include "sequence.tpp"

@@ -32,20 +32,8 @@ Sequence<Key, Info>& Sequence<Key, Info>::operator=(const Sequence<Key, Info>& o
 //copy entire list from a different sequence and add it to the end of this list
 template <class Key, class Info>
 void Sequence<Key, Info>::copyList(const Sequence<Key, Info>& other) {
-    for (SequenceNode* i = other.head; i != 0; i = i->next) {
-        if (this->tail != 0) {
-            //add element at end of list
-            this->tail->next = copyNode(*i);
-            this->tail = this->tail->next;
-        }
-        else {
-            //the list is empty, set element as head and tail
-            this->head = copyNode(*i);
-            this->tail = this->tail;
-        }
-
-        this->size++;
-    }
+    for (SequenceNode* i = other.head; i != 0; i = i->next)
+        add(i->key, i->info);
 }
 
 //deallocate entire list
@@ -65,10 +53,10 @@ void Sequence<Key, Info>::deleteList() {
 
 //allocates new node and creates a copy if its key and info
 template <class Key, class Info>
-typename Sequence<Key, Info>::SequenceNode* Sequence<Key, Info>::copyNode(SequenceNode& other) {
+typename Sequence<Key, Info>::SequenceNode* Sequence<Key, Info>::createNode(const Key& key, const Info& info) {
     SequenceNode* output = new SequenceNode();
-    output->key = new Key(other.key);
-    output->info = new Info(other.info);
+    output->key = new Key(key);
+    output->info = new Info(info);
     output->next = 0;
 
     return output;
@@ -89,4 +77,65 @@ Sequence<Key, Info>& Sequence<Key, Info>::operator+=(const Sequence<Key, Info>& 
     this->copyList(other);
 
     return this;
+}
+
+//add element at end of list
+template <class Key, class Info>
+void Sequence<Key, Info>::add(const Key& key, const Info& info) {
+    if (this->size != 0) {
+        //add element at end of list, ypdate tail
+        this->tail->next = createNode(key, info);
+        this->tail = this->tail->next;
+    }
+    else {
+        //the list is empty, set element as head and tail
+        this->head = createNode(key, info);
+        this->tail = this->tail;
+    }
+
+    this->size++;
+}
+
+//add element at given index
+template <class Key, class Info>
+bool Sequence<Key, Info>::add(const Key& key, const Info& info, int desiredIndex) {
+    //prevent addition at illegal indices
+    if (desiredIndex < 0 || desiredIndex > this->size)
+        return false;
+
+    //if index is equal to size or the list is empty, add at the end
+    if (desiredIndex == this->size || this->size == 0) {
+        this->add(key, info);
+        return true;
+    }
+
+    //if index is 0, create new node and update head
+    if (desiredIndex == 0) {
+        SequenceNode* oldHead = this->head;
+        this->head = createNode(key, info);
+        this->head->next = oldHead;
+        this->size++;
+
+        return true;
+    }
+
+    //insert new node at given index
+    SequenceNode* precedingElement = this->head;
+    for (int i = 0; i < desiredIndex - 1; i++)
+        precedingElement = precedingElement->next;
+
+    SequenceNode* oldNext = precedingElement->next;
+    precedingElement->next = createNode(key, info);
+    precedingElement->next->next = oldNext;
+    this->size++;
+
+    return true;
+}
+
+//add different sequence to sequence
+template <class Key, class Info>
+bool Sequence<Key, Info>::add(const Sequence<Key, Info>& other) {
+    this->copyList(other);
+
+    return other.size > 0;
 }
