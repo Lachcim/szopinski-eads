@@ -24,6 +24,30 @@ class Sequence {
         static SequenceNode* createNode(const Key&, const Info&);
 
     public:
+        class const_iterator {
+            protected:
+                SequenceNode* node;
+            public:
+                const KeyInfoPair& operator*();
+                const_iterator operator++();
+                const_iterator operator++(int);
+                bool operator==(const const_iterator&);
+                bool operator!=(const const_iterator&);
+        };
+        class iterator : const_iterator {
+            public:
+                KeyInfoPair& operator*();
+                KeyInfoPair* operator->();
+                KeyInfoPair& operator=(const KeyInfoPair&);
+                iterator operator++();
+                iterator operator++(int);
+        };
+
+        const_iterator begin() const;
+        const_iterator end() const;
+        iterator begin();
+        iterator end();
+
         Sequence<Key, Info>();
         Sequence<Key, Info>(const Sequence<Key, Info>&);
         ~Sequence<Key, Info>();
