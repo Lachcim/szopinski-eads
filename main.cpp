@@ -100,6 +100,4 @@ int main()
     printSequence(destination1);
     printf("Destination 2:\n");
     printSequence(destination2);
-
-    int i; scanf("%d", &i);
 }
