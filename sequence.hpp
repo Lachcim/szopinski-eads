@@ -38,8 +38,14 @@ Sequence<Key, Info>& Sequence<Key, Info>::operator=(const Sequence<Key, Info>& o
 //copy entire list from a different sequence and add it to the end of this list
 template <class Key, class Info>
 void Sequence<Key, Info>::copyList(const Sequence<Key, Info>& other) {
-    for (SequenceNode* i = other.head; i != 0; i = i->next)
-        this->add(i->data.key, i->data.info);
+    //probe size once to allow self-copying
+    int otherSize = other.size;
+
+    SequenceNode* otherNode = other.head;
+    for (int i = 0; i < otherSize; i++) {
+        this->add(otherNode->data);
+        otherNode = otherNode->next;
+    }
 }
 
 //deallocate entire list
@@ -82,7 +88,7 @@ template <class Key, class Info>
 Sequence<Key, Info>& Sequence<Key, Info>::operator+=(const Sequence<Key, Info>& other) {
     this->copyList(other);
 
-    return this;
+    return *this;
 }
 
 //add element at end of list
