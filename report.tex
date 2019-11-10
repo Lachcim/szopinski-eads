@@ -1,0 +1,45 @@
+﻿\documentclass{report}
+
+\title{
+	Singly-linked list of two data types \\
+	\large An EADS generic programming project report
+}
+\date{November 2019}
+\author{Michał Szopiński}
+
+\begin{document}
+
+\maketitle
+
+\section{Overview}
+
+The goal of the project was to write a singly-linked list of nodes capable of
+storing data entries consisting of two different data types, labeled {\it key} and {\it info}.
+This was to be achieved using the class template mechanism offered by the C++
+programming language. The end goal was to design a container class whose public
+members would facilitate the implementation of a function named {\tt split},
+which divides the container into two smaller ones, following a set of rules.
+
+The container in question is named {\tt Sequence} and can be used as follows:
+
+\begin{verbatim}
+Sequence<const char*, int> mySequence;
+mySequence.add("key 1", 123);
+mySequence.add("key 2", 456);
+mySequence.add("key 3", 789);
+mySequence.remove(1);
+\end{verbatim}
+
+The above code allocates a new instance of {\tt Sequence} on the stack,
+adds three elements to it, and then promptly removes the second element.
+This particular instance is capable of holding keys of type {\tt const char*}
+and info of type {\tt int}.
+
+There are many other methods and members of the {\tt Sequence} class template
+which can be used to manipulate the container.
+
+\subsection{Memory management}
+\subsection{Tail keeping mechanism and iterators}
+\subsection{Template implementation detail}
+
+\end{document}
