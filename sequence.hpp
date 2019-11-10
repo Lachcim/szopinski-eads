@@ -257,7 +257,6 @@ bool Sequence<Key, Info>::remove(int index) {
         this->size--;
 
         return true;
-        return true;
     }
 
     SequenceNode* precedingElement = this->head;
