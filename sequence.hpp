@@ -268,3 +268,21 @@ template <class Key, class Info>
 int Sequence<Key, Info>::getSize() const {
     return this->size;
 }
+
+//iterators
+template <class Key, class Info>
+typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::cbegin() const {
+    return const_iterator(this->head);
+}
+template <class Key, class Info>
+typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::cend() const {
+    return const_iterator(0);
+}
+template <class Key, class Info>
+typename Sequence<Key, Info>::iterator Sequence<Key, Info>::begin() {
+    return iterator(this->head);
+}
+template <class Key, class Info>
+typename Sequence<Key, Info>::iterator Sequence<Key, Info>::end() {
+    return iterator(0);
+}

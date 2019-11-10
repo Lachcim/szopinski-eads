@@ -25,16 +25,22 @@ class Sequence {
 
     public:
         class const_iterator {
+            friend class Sequence;
+
+            private:
+                const_iterator();
+                const_iterator(SequenceNode*);
             protected:
                 SequenceNode* node;
             public:
                 const KeyInfoPair& operator*();
+                const KeyInfoPair* operator->();
                 const_iterator operator++();
                 const_iterator operator++(int);
                 bool operator==(const const_iterator&);
                 bool operator!=(const const_iterator&);
         };
-        class iterator : const_iterator {
+        class iterator : public const_iterator {
             public:
                 KeyInfoPair& operator*();
                 KeyInfoPair* operator->();
@@ -43,8 +49,8 @@ class Sequence {
                 iterator operator++(int);
         };
 
-        const_iterator begin() const;
-        const_iterator end() const;
+        const_iterator cbegin() const;
+        const_iterator cend() const;
         iterator begin();
         iterator end();
 
