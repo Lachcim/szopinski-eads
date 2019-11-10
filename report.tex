@@ -70,6 +70,42 @@ mySequence.add(3, &buffer); //25 MB allocated on the heap by 1
 \end{verbatim}
 
 \subsection{Tail keeping mechanism and iterators}
+
+In order to facilitate bulk insertion, a tail keeping mechanism was implemented
+to keep track of the last element on the list. This reduced the time complexity
+of final-element insertion from $O(n)$ (resulting from the need to traverse the
+entire list) to $O(1)$. This, however, did not reduce the complexity of
+final-element removal, which could only be improved by implementing a doubly-linked
+list.
+
+As a result of this disparity between accessing final and non-final elements,
+an iterator class was added to the container to enable fast access to subsequent
+nodes. {\tt Sequence<Key, Info>::iterator} is therefore a forward iterator
+which can be used to efficiently traverse the list with a complexity of $O(n)$,
+as opposed to $O(n^2)$ that's associated with continuous calls to {\tt get()}.
+
+\begin{verbatim}
+//a sequence of 100000 elements
+Sequence<int, int> mySequence;
+for (int i = 0; i < 100000; i++)
+    mySequence.add(i, i);
+
+for (int i = 0; i < 100000; i++)
+    mySequence.get(i, output); //5050555500 queries
+
+Sequence<int, int>::iterator i;
+for (i = mySequence.begin(); i != mySequence.end(); ++i)
+    output = *i; //100000 queries
+\end{verbatim}
+
 \subsection{Template implementation detail}
+
+A minor implementation detail is how template implementation was separated from
+the declaration. Readers of the source code might be surprised at the presence
+of {\tt \#include} statements at the end of some header files. This was done to work
+around C++'s requirement of exposing the implementation to all classes that wish to
+use the template. To keep source code separate from class definitions, all declarations
+were put in {\bf .h} files, all implementations were put in {\bf .hpp} files, and the
+latter were appended to the former.
 
 \end{document}
