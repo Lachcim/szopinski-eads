@@ -38,7 +38,37 @@ and info of type {\tt int}.
 There are many other methods and members of the {\tt Sequence} class template
 which can be used to manipulate the container.
 
-\subsection{Memory management}
+\subsection{Memory management considerations}
+
+One of the key design features of the container is that it creates copies
+of the elements passed into it and allocates them on the heap, automatically
+managing them throughout its lifespan. While useful for storing multiple instances
+of independent objects, developers must be wary of this feature if they intend
+to store classes that are memory-intensive.
+
+\begin{verbatim}
+//instance on the stack stores 25MB on the heap
+ImageBuffer buffer(path);
+
+Sequence<int, ImageBuffer> mySequence;
+mySequence.add(1, buffer);
+mySequence.add(2, buffer);
+mySequence.add(3, buffer); //100 MB allocated on the heap by 4
+                           //instances of ImageBuffer
+\end{verbatim}
+
+As shown above, improper use of {\tt Sequence} can easily lead to excessive
+memory usage. When object independence isn't necessary, it may be preferable
+to create a sequence of pointers instead.
+
+\begin{verbatim}
+Sequence<int, ImageBuffer*> mySequence;
+mySequence.add(1, &buffer);
+mySequence.add(2, &buffer);
+mySequence.add(3, &buffer); //25 MB allocated on the heap by 1
+                            //instance of ImageBuffer
+\end{verbatim}
+
 \subsection{Tail keeping mechanism and iterators}
 \subsection{Template implementation detail}
 
