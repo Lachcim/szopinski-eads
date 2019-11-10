@@ -54,6 +54,10 @@ class Sequence {
         int getSize() const;
 };
 
+//declaration of iterators
+#include "sequenceiterator.h"
+
+//implementation of sequence and iterators
 #include "sequence.hpp"
 #include "sequenceiterator.hpp"
 
