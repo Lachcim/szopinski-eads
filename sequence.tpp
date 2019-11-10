@@ -96,7 +96,7 @@ void Sequence<Key, Info>::add(const Key& key, const Info& info) {
     else {
         //the list is empty, update head and tail
         this->head = createNode(key, info);
-        this->tail = this->tail;
+        this->tail = this->head;
     }
 
     this->size++;
