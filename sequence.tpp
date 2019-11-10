@@ -61,8 +61,8 @@ void Sequence<Key, Info>::deleteList() {
 template <class Key, class Info>
 typename Sequence<Key, Info>::SequenceNode* Sequence<Key, Info>::createNode(const Key& key, const Info& info) {
     SequenceNode* output = new SequenceNode();
-    output->key = key;
-    output->info = info;
+    output->data.key = key;
+    output->data.info = info;
     output->next = 0;
 
     return output;
@@ -101,6 +101,10 @@ void Sequence<Key, Info>::add(const Key& key, const Info& info) {
 
     this->size++;
 }
+template <class Key, class Info>
+void Sequence<Key, Info>::add(const KeyInfoPair& data) {
+    add(data.key, data.info);
+}
 
 //add element at given index
 template <class Key, class Info>
@@ -136,6 +140,10 @@ bool Sequence<Key, Info>::add(const Key& key, const Info& info, int desiredIndex
     this->size++;
 
     return true;
+}
+template <class Key, class Info>
+bool Sequence<Key, Info>::add(const KeyInfoPair& data, int desiredIndex) {
+    return add(data.key, data.info, desiredIndex);
 }
 
 //add different sequence to sequence
@@ -213,6 +221,10 @@ bool Sequence<Key, Info>::get(int index, Key& outputKey, Info& outputInfo) const
         outputInfo = *this->tail->info;
         return true;
     }
+}
+template <class Key, class Info>
+bool Sequence<Key, Info>::get(int index, KeyInfoPair& outputData) const {
+    return get(index, outputData.key, outputData.info);
 }
 
 //remove element at given index
