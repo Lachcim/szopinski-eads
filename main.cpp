@@ -87,6 +87,8 @@ int main()
     source.add("dest2", 1337);
     source.add("dest2", 8008135);
 
+    source.remove();
+
     printf("Original sequence:\n");
     printSequence(source);
 

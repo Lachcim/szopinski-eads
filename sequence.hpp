@@ -180,6 +180,7 @@ bool Sequence<Key, Info>::remove() {
     //perform removal
     delete this->tail;
     this->tail = penultimateElement;
+    this->tail->next = 0;
     this->size--;
 
     return true;
