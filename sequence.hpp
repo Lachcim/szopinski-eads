@@ -39,7 +39,7 @@ Sequence<Key, Info>& Sequence<Key, Info>::operator=(const Sequence<Key, Info>& o
 template <class Key, class Info>
 void Sequence<Key, Info>::copyList(const Sequence<Key, Info>& other) {
     for (SequenceNode* i = other.head; i != 0; i = i->next)
-        this->add(i->key, i->info);
+        this->add(i->data.key, i->data.info);
 }
 
 //deallocate entire list
