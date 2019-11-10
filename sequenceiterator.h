@@ -13,7 +13,7 @@ class Sequence<Key, Info>::const_iterator {
     public:
         const KeyInfoPair& operator*();
         const KeyInfoPair* operator->();
-        const_iterator operator++();
+        const_iterator& operator++();
         const_iterator operator++(int);
         bool operator==(const const_iterator&);
         bool operator!=(const const_iterator&);
@@ -25,7 +25,7 @@ class Sequence<Key, Info>::iterator : public const_iterator {
         KeyInfoPair& operator*();
         KeyInfoPair* operator->();
         KeyInfoPair& operator=(const KeyInfoPair&);
-        iterator operator++();
+        iterator& operator++();
         iterator operator++(int);
 };
 

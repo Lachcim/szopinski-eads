@@ -1,6 +1,6 @@
 //private constructor
 template <class Key, class Info>
-Sequence<Key, Info>::const_iterator::const_iterator(SequenceNode*) {
+Sequence<Key, Info>::const_iterator::const_iterator(SequenceNode* node) {
     this->node = node;
 }
 
@@ -18,16 +18,16 @@ const typename Sequence<Key, Info>::KeyInfoPair* Sequence<Key, Info>::const_iter
 
 //postfix incrementation operator
 template <class Key, class Info>
-typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::const_iterator::operator++() {
+typename Sequence<Key, Info>::const_iterator& Sequence<Key, Info>::const_iterator::operator++() {
     this->node = this->node->next;
-    return this;
+    return *this;
 }
 
 //prefix incrementation operator
 template <class Key, class Info>
 typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::const_iterator::operator++(int) {
     const_iterator old = *this;
-    this->nodd = this->node->next;
+    this->node = this->node->next;
     return old;
 }
 
