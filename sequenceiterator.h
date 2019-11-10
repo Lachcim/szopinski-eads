@@ -6,11 +6,12 @@ class Sequence<Key, Info>::const_iterator {
     friend class Sequence;
 
     private:
-        const_iterator();
         const_iterator(SequenceNode*);
     protected:
         SequenceNode* node;
     public:
+        const_iterator();
+
         const KeyInfoPair& operator*();
         const KeyInfoPair* operator->();
         const_iterator& operator++();

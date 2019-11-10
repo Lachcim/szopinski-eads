@@ -1,3 +1,9 @@
+//default constructor
+template <class Key, class Info>
+Sequence<Key, Info>::const_iterator::const_iterator() {
+    this->node = 0;
+}
+
 //private constructor
 template <class Key, class Info>
 Sequence<Key, Info>::const_iterator::const_iterator(SequenceNode* node) {
@@ -10,7 +16,7 @@ const typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::const_iter
     return this->node->data;
 }
 
-//dereference operator 2
+//structure pointer dereference operator
 template <class Key, class Info>
 const typename Sequence<Key, Info>::KeyInfoPair* Sequence<Key, Info>::const_iterator::operator->() {
     return &this->node->data;
