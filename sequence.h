@@ -28,11 +28,7 @@ class Sequence {
         Sequence<Key, Info>(const Sequence<Key, Info>&);
         ~Sequence<Key, Info>();
 
-        class const_iterator;
         class iterator;
-
-        const_iterator cbegin() const;
-        const_iterator cend() const;
         iterator begin();
         iterator end();
 

@@ -2,32 +2,23 @@
 #define SEQUENCEITERATOR_H
 
 template <class Key, class Info>
-class Sequence<Key, Info>::const_iterator {
+class Sequence<Key, Info>::iterator {
     friend class Sequence;
 
     private:
-        const_iterator(SequenceNode*);
-    protected:
+        iterator(SequenceNode*);
         SequenceNode* node;
-    public:
-        const_iterator();
 
-        const KeyInfoPair& operator*();
-        const KeyInfoPair* operator->();
-        const_iterator& operator++();
-        const_iterator operator++(int);
-        bool operator==(const const_iterator&);
-        bool operator!=(const const_iterator&);
-};
-
-template <class Key, class Info>
-class Sequence<Key, Info>::iterator : public const_iterator {
     public:
+        iterator();
+
         KeyInfoPair& operator*();
         KeyInfoPair* operator->();
         KeyInfoPair& operator=(const KeyInfoPair&);
         iterator& operator++();
         iterator operator++(int);
+        bool operator==(const iterator&);
+        bool operator!=(const iterator&);
 };
 
 #endif
