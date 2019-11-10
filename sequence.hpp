@@ -27,12 +27,12 @@ template <class Key, class Info>
 Sequence<Key, Info>& Sequence<Key, Info>::operator=(const Sequence<Key, Info>& other) {
     //handle self-assignment
     if (&other == this)
-        return this;
+        return *this;
 
     this->deleteList();
     this->copyList(other);
 
-    return this;
+    return *this;
 }
 
 //copy entire list from a different sequence and add it to the end of this list
