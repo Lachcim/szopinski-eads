@@ -29,14 +29,14 @@ typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::iterator::operat
     return *this;
 }
 
-//postfix incrementation operator
+//prefix incrementation operator
 template <class Key, class Info>
 typename Sequence<Key, Info>::iterator& Sequence<Key, Info>::iterator::operator++() {
     this->node = this->node->next;
     return *this;
 }
 
-//prefix incrementation operator
+//postfix incrementation operator
 template <class Key, class Info>
 typename Sequence<Key, Info>::iterator Sequence<Key, Info>::iterator::operator++(int) {
     iterator old = *this;
