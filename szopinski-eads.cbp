@@ -34,7 +34,8 @@
 		</Compiler>
 		<Unit filename="main.cpp" />
 		<Unit filename="sequence.h" />
-		<Unit filename="sequence.tpp" />
+		<Unit filename="sequence.hpp" />
+		<Unit filename="sequenceiterator.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

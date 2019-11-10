@@ -70,6 +70,7 @@ class Sequence {
         int getSize() const;
 };
 
-#include "sequence.tpp"
+#include "sequence.hpp"
+#include "sequenceiterator.hpp"
 
 #endif
