@@ -12,7 +12,7 @@ void split(Sequence<Key, Info> origin, int start, Sequence<Key, Info>& dest1, in
         ++it;
 
     //output to dest1 and dest2 interchangeably until both destinations exhausted
-    for (bool outputtingTo1 = true; count1 > 0 && count2 > 0; outputtingTo1 ^= true) {
+    for (bool outputtingTo1 = true; count1 > 0 || count2 > 0; outputtingTo1 ^= true) {
         //handle destination exhaustion
         if (outputtingTo1 && count1 == 0) continue;
         if (!outputtingTo1 && count2 == 0) continue;
