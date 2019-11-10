@@ -63,12 +63,36 @@ void printSequence(Sequence<const char*, int>& sequence) {
 }
 int main()
 {
-    Sequence<const char*, int> mySequence;
-    mySequence.add("alpha", 123);
-    mySequence.add("beta", 123456);
-    mySequence.add("gamma", 98765);
+    Sequence<const char*, int> source;
+    source.add("stays", 123);
+    source.add("stays", 12345);
+    source.add("stays", 1234567);
+    source.add("dest1", 31415);
+    source.add("dest1", 27182);
+    source.add("dest2", 2137);
+    source.add("dest2", 69);
+    source.add("dest2", 420);
+    source.add("dest1", 16180);
+    source.add("dest1", 14142);
+    source.add("dest2", 1352);
+    source.add("dest2", 911);
+    source.add("dest2", 404);
+    source.add("dest2", 1337);
+    source.add("dest2", 8008135);
 
-    printSequence(mySequence);
+    printf("Original sequence:\n");
+    printSequence(source);
+
+    Sequence<const char*, int> destination1;
+    Sequence<const char*, int> destination2;
+
+    printf("\nSplitting: starting at 3, 2 elements to dest1 2 times, 3 elements to dest2 3 times\n");
+    split(source, 3, destination1, 2, 2, destination2, 3, 3);
+
+    printf("Destination 1:\n");
+    printSequence(destination1);
+    printf("\nDestination 2:\n");
+    printSequence(destination2);
 
     int i; scanf("%d", &i);
 }
