@@ -217,10 +217,19 @@ bool Sequence<Key, Info>::get(int index, Key& outputKey, Info& outputInfo) const
 
     //optimize for tail
     if (index == this->size - 1) {
-        outputKey = *this->tail->key;
-        outputInfo = *this->tail->info;
+        outputKey = this->tail->data.key;
+        outputInfo = this->tail->data.info;
         return true;
     }
+
+    SequenceNode* element = this->head;
+    for (int i = 0; i < index; i++)
+        element = element->next;
+
+    outputKey = element->data.key;
+    outputInfo = element->data.info;
+
+    return true;
 }
 template <class Key, class Info>
 bool Sequence<Key, Info>::get(int index, KeyInfoPair& outputData) const {
