@@ -102,16 +102,6 @@ for (i = mySequence.begin(); i != mySequence.end(); ++i)
     output = *i; //100000 queries
 \end{verbatim}
 
-\subsection{Template implementation detail}
-
-A minor implementation detail is how template implementation was separated from
-the declaration. Readers of the source code might be surprised at the presence
-of {\tt \#include} statements at the end of some header files. This was done to
-work around C++'s requirement of exposing the implementation to all classes that
-wish to use the template. To keep source code separate from class definitions,
-all declarations were put in {\bf .h} files, all implementations were put in
-{\bf .hpp} files, and the latter were appended to the former.
-
 \section{Template specification}
 
 In the following section, function signatures are written in shorthand -
@@ -189,6 +179,18 @@ An iterator pointing to the head of the list.
 \subsubsection{{\tt iterator end()}}
 
 An iterator marking the end of the list. Internally, a null pointer.
+
+\subsubsection{{\tt class const\_iterator}}
+
+A constant version of {\tt iterator}, cannot be used to modify the sequence.
+
+\subsubsection{{\tt const\_iterator cbegin()}}
+
+An constant iterator pointing to the head of the list.
+
+\subsubsection{{\tt const\_iterator cend()}}
+
+An constant iterator marking the end of the list. Internally, a null pointer.
 
 \subsubsection{{\tt Sequence\& operator=(other)}}
 
