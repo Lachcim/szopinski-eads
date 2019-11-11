@@ -7,7 +7,7 @@ void split(Sequence<Key, Info> source, int start, Sequence<Key, Info>& dest1, in
     //obtain iterator of source
     typename Sequence<Key, Info>::iterator it = source.begin();
 
-    //increment operator to start position
+    //increment iterator to start position
     for (int i = 0; i < start; i++)
         ++it;
 
