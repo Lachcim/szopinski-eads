@@ -31,6 +31,9 @@ class Sequence {
         class iterator;
         iterator begin();
         iterator end();
+        class const_iterator;
+        const_iterator cbegin() const;
+        const_iterator cend() const;
 
         Sequence<Key, Info>& operator=(const Sequence<Key, Info>&);
         Sequence<Key, Info> operator+(const Sequence<Key, Info>&);

@@ -3,13 +3,13 @@
 #include "sequence.h"
 
 template <class Key, class Info>
-void split(Sequence<Key, Info>& source, int start, Sequence<Key, Info>& dest1, int step1, int count1, Sequence<Key, Info>& dest2, int step2, int count2) {
+void split(const Sequence<Key, Info>& source, int start, Sequence<Key, Info>& dest1, int step1, int count1, Sequence<Key, Info>& dest2, int step2, int count2) {
     //prevent incrementation past sequence
     if (start >= source.getSize())
         return;
 
     //obtain iterator of source
-    typename Sequence<Key, Info>::iterator it = source.begin();
+    typename Sequence<Key, Info>::const_iterator it = source.cbegin();
 
     //increment iterator to start position
     for (int i = 0; i < start; i++)
@@ -22,11 +22,11 @@ void split(Sequence<Key, Info>& source, int start, Sequence<Key, Info>& dest1, i
         if (!outputtingTo1 && count2 == 0) continue;
 
         //copy step1 or step2 elements to dest1 or dest2
-        for (int i = 0; i < (outputtingTo1 ? step1 : step2) && it != source.end(); i++)
+        for (int i = 0; i < (outputtingTo1 ? step1 : step2) && it != source.cend(); i++)
             (outputtingTo1 ? dest1 : dest2).add(*it++);
 
         //exit function if end of source reached
-        if (it == source.end())
+        if (it == source.cend())
             return;
 
         //decrement destination counter

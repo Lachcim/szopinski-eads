@@ -14,11 +14,28 @@ class Sequence<Key, Info>::iterator {
 
         KeyInfoPair& operator*();
         KeyInfoPair* operator->();
-        KeyInfoPair& operator=(const KeyInfoPair&);
         iterator& operator++();
         iterator operator++(int);
         bool operator==(const iterator&);
         bool operator!=(const iterator&);
+};
+template <class Key, class Info>
+class Sequence<Key, Info>::const_iterator {
+    friend class Sequence;
+
+    private:
+        const_iterator(SequenceNode*);
+        SequenceNode* node;
+
+    public:
+        const_iterator();
+
+        const KeyInfoPair& operator*();
+        const KeyInfoPair* operator->();
+        const_iterator& operator++();
+        const_iterator operator++(int);
+        bool operator==(const const_iterator&);
+        bool operator!=(const const_iterator&);
 };
 
 #endif
