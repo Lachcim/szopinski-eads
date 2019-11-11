@@ -235,4 +235,106 @@ Removes the element with the given index from the list. Returns true on success.
 
 Retrieves the size of the list with $O(1)$ complexity.
 
+\section{Implementation of the {\tt split} function}
+
+With the help of the aforementioned features, it was possible to implement the
+{\tt split} function in an efficient and elegant manner. Linear-time list
+traversal combined with constant-time final insertion reduced the
+time-complexity of {\tt split} to $O(n)$.
+
+\subsection{Input}
+
+The function accepts the following input parameters:
+
+\begin{itemize}
+\item {\tt const Sequence<Key, Info>\& source} - The sequence to be split
+\item {\tt int start} - The number of initial entries to be omitted
+\item {\tt Sequence<Key, Info>\& dest1} - The first output sequence
+\item {\tt int step1} - The number of entries to be copied to dest1 per turn
+\item {\tt int count1} - The number of turns when elements are copied to dest1
+\item {\tt Sequence<Key, Info>\& dest2} - The second output sequence
+\item {\tt int step2} - The number of entries to be copied to dest2 per turn
+\item {\tt int count2} - The number of turns when elements are copied to dest2
+\end{itemize}
+
+\subsection{Output}
+
+\begin{enumerate}
+\item The initial {\tt start} elements are not to be copied anywhere.
+
+\item  Past the initial {\tt start} elements, sequence nodes are to be copied
+interchangeably to {\tt dest1} and {\tt dest2}, starting with the former.
+
+\item  If {\tt count1} is 0 and it's {\tt dest1}'s turn, {\tt dest1} skips its
+turn. The same applies to {\tt dest2}.
+
+\item  If it's {\tt dest1}'s turn, {\tt step1} elements are to be copied to
+{\tt dest1}. If there are not enough elements in {\tt source}, the maximum
+possible amount of elements is copied and the algorithm terminates.
+The same applies to {\tt dest2}.
+
+\item  If it's {\tt dest1}'s turn, {\tt count1} is decremented. The same applies
+to {\tt dest2}.
+
+\item If both {\tt count1} and {\tt count2} are zero, the algorithm terminates.
+\end{enumerate}
+
+\subsection{Implementation}
+
+The algorithm used to implement the function can be described as follows
+(using pseudocode):
+
+\begin{verbatim}
+01 if start is greater or equal to source's length, terminate
+
+02 obtain iterator of source at the beginning
+
+03 increment iterator to start position
+
+04 mark dest1 as output destination
+
+05 if count1 > 0 or count2 > 0, continue, otherwise terminate
+
+06 if outputting to dest1 and count1 is 0, go to 10
+   if outputting to dest2 and count2 is 0, go to 10
+   
+07 if outputting to dest1, try to output step1 elements to dest1
+   if outputting to dest2, try to output step2 elements to dest2
+
+08 if end of source was reached mid-way, terminate
+
+09 if outputting to dest1, decrement count1
+   if outputting to dest2, decrement count2
+
+10 switch output destination
+
+11 go to 05
+
+\end{verbatim}
+
+\subsection{Example program output}
+
+The following constitutes example program output, with line breaks inserted
+for formatting.
+
+\begin{verbatim}
+Original sequence:
+Key:  stays stays stays   dest1 dest1 dest2 dest2 dest2 dest1 
+Info: 123   12345 1234567 31415 27182 2137  69    420   16180 
+
+dest1 dest2 dest2 dest2 dest2 dest2
+14142 1352  911   404   1337  8008135
+
+Splitting: starting at 3, 2 elements to dest1 2 times,
+3 elements to dest2 3 times
+
+Destination 1:
+Key:  dest1 dest1 dest1 dest1
+Info: 31415 27182 16180 14142
+
+Destination 2:
+Key:  dest2 dest2 dest2 dest2 dest2 dest2 dest2 dest2
+Info: 2137  69    420   1352  911   404   1337  8008135
+\end{verbatim}
+
 \end{document}
