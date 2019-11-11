@@ -108,4 +108,114 @@ use the template. To keep source code separate from class definitions, all decla
 were put in {\bf .h} files, all implementations were put in {\bf .hpp} files, and the
 latter were appended to the former.
 
+\section{Template specification}
+
+In the following section, function signatures are written in shorthand - omitting
+the data types of their parameters, the scope resolution operators and the template syntax.
+
+\subsection{Private members}
+
+\subsubsection{{\tt struct SequenceNode}}
+
+A building block for the linked list. It consists of a {\tt KeyInfoPair} struct to store
+the data and a pointer to another {\tt SequenceNode} to maintain the link.
+
+\subsubsection{{\tt SequenceNode* head}}
+
+A pointer to the first element in the linked list. Basic element of all linked lists.
+
+\subsubsection{{\tt SequenceNode* tail}}
+
+A pointer to the last element in the linked list. Enables quick insertion at the end of the list.
+
+\subsubsection{{\tt int size}}
+
+An integer representing the number of currently stored elements. Reduces time complexity
+of size queries.
+
+\subsubsection{{\tt void copyList(other)}}
+
+Copies the entire contents of a different sequence and appends them at the end of this
+sequence. Probes the number of nodes to be copied once to allow self-duplication.
+
+\subsubsection{{\tt void deleteList()}}
+
+Deallocates all nodes on the list. The sequence remains in a valid state and can be
+reused after this method is called.
+
+\subsubsection{{\tt SequenceNode* createNode(key, info)}}
+
+A helper function to create nodes in one line. Allocates a new {\tt SequenceNode} on the heap,
+assigns values to its members, and returns a pointer to the newly allocated object.
+
+\subsection{Public members}
+
+\subsubsection{{\tt struct KeyInfoPair}}
+
+A structure holding the key and the info of a given node. Value type of the iterator.
+
+\subsubsection{{\tt Sequence()}}
+
+Default constructor. Creates an empty list.
+
+\subsubsection{{\tt Sequence(other)}}
+
+Copy constructor. Copies all elements of the other list.
+
+\subsubsection{{\tt \~{}Sequence()}}
+
+Destructor. Deallocates all nodes on the list.
+
+\subsubsection{{\tt class iterator}}
+
+An forward input-output iterator that allows the list to be traversed with $O(n)$ complexity.
+
+\subsubsection{{\tt iterator begin()}}
+
+An iterator pointing to the head of the list.
+
+\subsubsection{{\tt iterator end()}}
+
+An iterator marking the end of the list. Internally, a null pointer.
+
+\subsubsection{{\tt Sequence\& operator=(other)}}
+
+Copy assignment operator. Deallocates all nodes of this list and copies all nodes from the other list.
+
+\subsubsection{{\tt Sequence operator+(other)}}
+
+Sum operator. Creates a new sequence combining its two operands.
+
+\subsubsection{{\tt Sequence\& operator+=(other)}}
+
+Addition assignment operator. Adds all nodes of the other sequence to this one.
+
+\subsubsection{{\tt void add(key, info)}, {\tt void add(keyInfoPair)}}
+
+Adds a new node at the end of the list.
+
+\subsubsection{{\tt bool add(key, info, index)}, {\tt bool add(keyInfoPair, index)}}
+
+Adds a new node at the given index. Returns true on success.
+
+\subsubsection{{\tt bool add(sequence)}}
+
+Appends the given sequence at the end of this list. Returns true if at least one element was appended.
+
+\subsubsection{{\tt bool get(index, outputKey, outputInfo)}, {\tt bool get(index, outputKeyInfoPair)}}
+
+Retrieves the element at the given index. Returns true on success.
+
+\subsubsection{{\tt bool remove()}}
+
+Removes the last element from the list. Returns true if the list wasn't empty.
+
+\subsubsection{{\tt bool remove(index)}}
+
+Removes the element with the given index from the list. Returns true on success.
+
+\subsubsection{{\tt int getSize()}}
+
+Retrieves the size of the list with $O(1)$ complexity.
+
 \end{document}
