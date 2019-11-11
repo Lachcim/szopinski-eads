@@ -3,9 +3,13 @@
 #include "sequence.h"
 
 template <class Key, class Info>
-void split(Sequence<Key, Info> source, int start, Sequence<Key, Info>& dest1, int step1, int count1, Sequence<Key, Info>& dest2, int step2, int count2) {
+void split(Sequence<Key, Info>& source, int start, Sequence<Key, Info>& dest1, int step1, int count1, Sequence<Key, Info>& dest2, int step2, int count2) {
     //obtain iterator of source
     typename Sequence<Key, Info>::iterator it = source.begin();
+
+    //prevent incrementation past sequence
+    if (start >= source.getSize())
+        return;
 
     //increment iterator to start position
     for (int i = 0; i < start; i++)
