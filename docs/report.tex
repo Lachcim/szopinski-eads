@@ -83,10 +83,11 @@ final-element removal, which could only be improved by implementing a
 doubly-linked list.
 
 As a result of this disparity between accessing final and non-final elements,
-an iterator class was added to the container to enable fast access to subsequent
-nodes. {\tt Sequence<Key, Info>::iterator} is therefore a forward iterator
-which can be used to efficiently traverse the list with a complexity of $O(n)$,
-as opposed to $O(n^2)$ that's associated with continuous calls to {\tt get()}.
+an iterator class was added to the container to enable fast access to
+consecutive nodes. {\tt Sequence<Key, Info>::iterator} is therefore a forward
+iterator which can be used to efficiently traverse the list with a complexity of
+$O(n)$, as opposed to $O(n^2)$ that's associated with continuous calls to
+{\tt get()}.
 
 \begin{verbatim}
 //a sequence of 100000 elements
