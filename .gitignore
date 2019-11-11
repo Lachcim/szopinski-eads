@@ -2,4 +2,4 @@
 *.depend
 bin/
 obj/
-report/
+docs/report/
