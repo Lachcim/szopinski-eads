@@ -35,7 +35,7 @@ void split(const Sequence<Key, Info>& source, int start, Sequence<Key, Info>& de
     }
 }
 
-void printSequence(Sequence<const char*, int>& sequence) {
+void printSequence(const Sequence<const char*, int>& sequence) {
     //buffers for text storage
     char bufferTop[256];
     char bufferBottom[256];
@@ -47,8 +47,8 @@ void printSequence(Sequence<const char*, int>& sequence) {
     strcpy(bufferBottom, "Info: ");
 
     //add sequence data to buffers
-    Sequence<const char*, int>::iterator i;
-    for (i = sequence.begin(); i != sequence.end(); ++i) {
+    Sequence<const char*, int>::const_iterator i;
+    for (i = sequence.cbegin(); i != sequence.cend(); ++i) {
         //write data to temp buffers
         sprintf(bufferTopTemp, "%s ", i->key);
         sprintf(bufferBottomTemp, "%d ", i->info);
