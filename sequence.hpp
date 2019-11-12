@@ -162,126 +162,49 @@ void Sequence<Key, Info>::clear(const Key& key) {
         previousNode = i;
     }
 }
-
-/*
-//add element at end of list
-
-
-//add element at given index
 template <class Key, class Info>
-bool Sequence<Key, Info>::add(const Key& key, const Info& info, int desiredIndex) {
-    //prevent addition at illegal indices
-    if (desiredIndex < 0 || desiredIndex > this->nodeCount)
-        return false;
+typename Sequence<Key, Info>::iterator Sequence<Key, Info>::insert(iterator position, const Info& info) {
+    //optimize for tail insertion
+    if (position == this->end()) {
+        this->push_back();
 
-    //if index is equal to nodeCount or the list is empty, add at the end
-    if (desiredIndex == this->nodeCount || this->nodeCount == 0) {
-        this->add(key, info);
-        return true;
+        //return identical iterator with new tail
+        iterator output(position);
+        output.node = this->tail;
+        return output;
     }
 
-    //if index is 0, create new node and update head
-    if (desiredIndex == 0) {
-        SequenceNode* oldHead = this->head;
-        this->head = createNode(key, info);
-        this->head->next = oldHead;
-        this->nodeCount++;
+    //find predecessor
+    SequenceNode* predecessor = 0;
+    for (SequenceNode* i = this->head; i != 0; i = i->next)
+        if (i->next == position.node) {
+            predecessor = i;
+            break;
+        }
 
-        return true;
+    //create new node
+    SequenceNode* newNode = new SequenceNode(position.getKey(), info);
+
+    //no predecessor, update head
+    if (predecessor == 0) {
+        newNode->next = this->head;
+        this->head = newNode;
+
+        //return identical iterator with new head
+        iterator output(position);
+        output.node = newNode;
+        return output;
     }
 
-    //insert new node at given index
-    SequenceNode* precedingElement = this->head;
-    for (int i = 0; i < desiredIndex - 1; i++)
-        precedingElement = precedingElement->next;
+    //predecessor found, establish link
+    SequenceNode* oldNext = predecessor->next;
+    predecessor->next = newNode;
+    newNode->next = oldNext;
 
-    SequenceNode* oldNext = precedingElement->next;
-    precedingElement->next = createNode(key, info);
-    precedingElement->next->next = oldNext;
-    this->nodeCount++;
-
-    return true;
+    iterator output(position);
+    output.node = newNode;
+    return output;
 }
-template <class Key, class Info>
-bool Sequence<Key, Info>::add(const KeyInfoPair& data, int desiredIndex) {
-    return add(data.key, data.info, desiredIndex);
-}
-
-//add different sequence to sequence
-template <class Key, class Info>
-bool Sequence<Key, Info>::add(const Sequence<Key, Info>& other) {
-    this->copyList(other);
-
-    return other.nodeCount > 0;
-}
-
-//remove last element
-template <class Key, class Info>
-bool Sequence<Key, Info>::remove() {
-    //return false when the list is empty
-    if (this->nodeCount == 0)
-        return false;
-
-    //handle single-element lists
-    if (this->nodeCount == 1) {
-        delete this->tail;
-
-        this->head = 0;
-        this->tail = 0;
-        this->nodeCount = 0;
-
-        return true;
-    }
-
-    //find new tail
-    SequenceNode* penultimateElement;
-    for (SequenceNode* i = this->head; i->next != 0; i = i->next)
-        penultimateElement = i;
-
-    //perform removal
-    delete this->tail;
-    this->tail = penultimateElement;
-    this->tail->next = 0;
-    this->nodeCount--;
-
-    return true;
-}
-
-//remove element at given index
-template <class Key, class Info>
-bool Sequence<Key, Info>::remove(int index) {
-    //handle illegal indices
-    if (index < 0 || index >= this->nodeCount)
-        return false;
-
-    //handle special case: last index
-    if (index == this->nodeCount - 1) {
-        this->remove();
-        return true;
-    }
-
-    //handle special case: first index
-    if (index == 0) {
-        SequenceNode* headNext = this->head->next;
-        delete this->head;
-        this->head = headNext;
-        this->nodeCount--;
-
-        return true;
-    }
-
-    SequenceNode* precedingElement = this->head;
-    for (int i = 0; i < index - 1; i++)
-        precedingElement = precedingElement->next;
-
-    SequenceNode* oldNext = precedingElement->next->next;
-    delete precedingElement->next;
-    precedingElement->next = oldNext;
-    this->nodeCount--;
-
-    return true;
-}
-*/
 
 //element access
 template <class Key, class Info>
