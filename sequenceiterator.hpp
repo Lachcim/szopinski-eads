@@ -58,10 +58,7 @@ bool Sequence<Key, Info>::iterator::isKeyed() const {
 }
 template <class Key, class Info>
 Key Sequence<Key, Info>::iterator::getKey() const {
-    if (this->keyed)
-        return this->key;
-    else
-        return this->node->data.key;
+    return this->node->data.key; //suitable for keyed and key-agnostic iterators
 }
 
 //default constructor
@@ -120,8 +117,5 @@ bool Sequence<Key, Info>::const_iterator::isKeyed() const {
 }
 template <class Key, class Info>
 Key Sequence<Key, Info>::const_iterator::getKey() const {
-    if (this->keyed)
-        return this->key;
-    else
-        return this->node->data.key;
+    return this->node->data.key; //suitable for keyed and key-agnostic iterators
 }
