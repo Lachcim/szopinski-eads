@@ -238,10 +238,14 @@ bool Sequence<Key, Info>::remove(int index) {
     return true;
 }
 
-//get size
+//size-related getters
 template <class Key, class Info>
 int Sequence<Key, Info>::size() const {
     return this->nodeCount;
+}
+template <class Key, class Info>
+bool Sequence<Key, Info>::empty() const {
+    return this->nodeCount == 0;
 }
 
 //iterators

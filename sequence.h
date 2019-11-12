@@ -47,6 +47,7 @@ class Sequence {
         bool remove();
         bool remove(int);
         int size() const;
+        bool empty() const;
 };
 
 //declaration of iterators
