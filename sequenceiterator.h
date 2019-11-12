@@ -6,8 +6,9 @@ class Sequence<Key, Info>::iterator {
     friend class Sequence;
 
     private:
-        iterator(SequenceNode*);
         SequenceNode* node;
+        Key key;
+        bool keyed;
 
     public:
         iterator();
@@ -18,14 +19,18 @@ class Sequence<Key, Info>::iterator {
         iterator operator++(int);
         bool operator==(const iterator&);
         bool operator!=(const iterator&);
+
+        bool isKeyed() const;
+        Key getKey() const;
 };
 template <class Key, class Info>
 class Sequence<Key, Info>::const_iterator {
     friend class Sequence;
 
     private:
-        const_iterator(SequenceNode*);
         SequenceNode* node;
+        Key key;
+        bool keyed;
 
     public:
         const_iterator();
@@ -37,6 +42,9 @@ class Sequence<Key, Info>::const_iterator {
         const_iterator operator++(int);
         bool operator==(const const_iterator&);
         bool operator!=(const const_iterator&);
+
+        bool isKeyed() const;
+        Key getKey() const;
 };
 
 #endif

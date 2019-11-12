@@ -358,17 +358,40 @@ bool Sequence<Key, Info>::empty(const Key& key) const {
 //iterators
 template <class Key, class Info>
 typename Sequence<Key, Info>::iterator Sequence<Key, Info>::begin() {
-    return iterator(this->head);
+    iterator output;
+    output.node = this->head;
+    return output;
+}
+template <class Key, class Info>
+typename Sequence<Key, Info>::iterator Sequence<Key, Info>::begin(const Key& key) {
+    iterator output;
+    output.keyed = true;
+    output.key = key;
+
+    //set iterator node to first instance of key, if none present, let it stay at 0
+    for (SequenceNode* i = this->head; i != 0; i = i->next)
+        if (i->data.key == key) {
+            output.node = i;
+            break;
+        }
+
+    return output;
 }
 template <class Key, class Info>
 typename Sequence<Key, Info>::iterator Sequence<Key, Info>::end() {
-    return iterator(0);
+    return iterator();
 }
 template <class Key, class Info>
 typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::cbegin() const {
-    return const_iterator(this->head);
+    const_iterator output;
+    output.node = this->head;
+    return output;
+}
+template <class Key, class Info>
+typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::cbegin(const Key& key) const {
+    return const_iterator(this->begin());
 }
 template <class Key, class Info>
 typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::cend() const {
-    return const_iterator(0);
+    return const_iterator();
 }
