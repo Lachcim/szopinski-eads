@@ -164,6 +164,10 @@ void Sequence<Key, Info>::clear(const Key& key) {
 }
 template <class Key, class Info>
 typename Sequence<Key, Info>::iterator Sequence<Key, Info>::insert(iterator position, const Info& info) {
+    //forbid key-agnostic iterators
+    if (!position.isKeyed())
+        return this->end();
+
     //optimize for tail insertion
     if (position == this->end()) {
         this->push_back();
