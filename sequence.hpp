@@ -88,40 +88,14 @@ void Sequence<Key, Info>::push_back(const KeyInfoPair& data) {
 }
 template <class Key, class Info>
 void Sequence<Key, Info>::pop_back(const Key& key) {
-    SequenceNode* lastNodePredecessor = 0;
-    SequenceNode* lastNode = 0;
+    iterator lastIterator;
 
-    //find last instance of key and its predecessor
-    SequenceNode* previousNode = 0;
-    for (SequenceNode* i = this->head; i != 0; i = i->next) {
-        if (i->data.key == key) {
-            lastNode = i;
-            lastNodePredecessor = previousNode;
-        }
+    //obtain keyed iterator to first instance of key and exhaust it
+    for (iterator i = this->begin(key); i != this->end(); ++i)
+        lastIterator = i;
 
-        previousNode = i;
-    }
-
-    //update head and tail if needed
-    bool isHead = lastNode == this->head;
-    bool isTail = lastNode == this->tail;
-
-    if (isHead && isTail) {
-        this->head = 0;
-        this->tail = 0;
-    }
-    else if (isHead) {
-        this->head = this->head->next;
-    }
-    else if (isTail) {
-        this->tail = lastNodePredecessor;
-        this->tail->next = 0;
-    }
-    else
-        lastNodePredecessor->next = lastNode->next;
-
-    delete lastNode; //undefined behavior if lastNode == 0
-    this->nodeCount--;
+    //erase last instance of key
+    this->erase(lastIterator);
 }
 template <class Key, class Info>
 void Sequence<Key, Info>::clear() {
@@ -129,38 +103,12 @@ void Sequence<Key, Info>::clear() {
 }
 template <class Key, class Info>
 void Sequence<Key, Info>::clear(const Key& key) {
-    //find every instance of key and remove it
-    SequenceNode* previousNode = 0;
-    for (SequenceNode* i = this->head; i != 0; i = i->next) {
-        if (i->data.key == key) {
-            //update head and tail if needed
-            bool isHead = i == this->head;
-            bool isTail = i == this->tail;
+    //obtain keyed iterator to first instance of key
+    iterator i = this->begin(key);
 
-            if (isHead && isTail) {
-                this->head = 0;
-                this->tail = 0;
-            }
-            else if (isHead) {
-                this->head = this->head->next;
-            }
-            else if (isTail) {
-                this->tail = previousNode;
-                this->tail->next = 0;
-            }
-            else
-                previousNode->next = i->next;
-
-            //delete this node and back up by one node
-            delete i;
-            this->nodeCount--;
-
-            if (previousNode != 0) i = previousNode;
-            else i = this->head;
-        }
-
-        previousNode = i;
-    }
+    //delete everything
+    while (i != this->end())
+        i = this->erase(i);
 }
 template <class Key, class Info>
 typename Sequence<Key, Info>::iterator Sequence<Key, Info>::insert(iterator position, const Info& info) {
@@ -217,7 +165,7 @@ typename Sequence<Key, Info>::iterator Sequence<Key, Info>::erase(iterator posit
     iterator output(position);
     ++output;
 
-    //find predecessor
+    //find predecessor in superlist
     SequenceNode* predecessor = 0;
     for (SequenceNode* i = this->head; i != 0; i = i->next)
         if (i->next == position.node) {
@@ -242,6 +190,9 @@ typename Sequence<Key, Info>::iterator Sequence<Key, Info>::erase(iterator posit
     }
     else
         predecessor->next = position.node->next;
+
+    delete position.node;
+    this->nodeCount--;
 
     //return output iterator
     return output;
