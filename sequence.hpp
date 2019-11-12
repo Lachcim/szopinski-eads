@@ -63,15 +63,12 @@ void Sequence<Key, Info>::deleteList() {
     this->nodeCount = 0;
 }
 
-//allocates new node and creates a copy if its key and info
+//sequence node constructor, creates a copy of its key and info
 template <class Key, class Info>
-typename Sequence<Key, Info>::SequenceNode* Sequence<Key, Info>::createNode(const Key& key, const Info& info) {
-    SequenceNode* output = new SequenceNode();
-    output->data.key = key;
-    output->data.info = info;
-    output->next = 0;
-
-    return output;
+Sequence<Key, Info>::SequenceNode::SequenceNode(const Key& key, const Info& info) {
+    this->data.key = key;
+    this->data.info = info;
+    this->next = 0;
 }
 
 //add element at end of list
@@ -79,12 +76,12 @@ template <class Key, class Info>
 void Sequence<Key, Info>::add(const Key& key, const Info& info) {
     if (this->nodeCount != 0) {
         //add element at end of list, update tail
-        this->tail->next = createNode(key, info);
+        this->tail->next = new SequenceNode(key, info);
         this->tail = this->tail->next;
     }
     else {
         //the list is empty, update head and tail
-        this->head = createNode(key, info);
+        this->head = new SequenceNode(key, info);
         this->tail = this->head;
     }
 

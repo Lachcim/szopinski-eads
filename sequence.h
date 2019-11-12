@@ -11,6 +11,8 @@ class Sequence {
 
     private:
         struct SequenceNode {
+            SequenceNode(const Key&, const Info&);
+
             KeyInfoPair data;
             SequenceNode* next;
         };
@@ -23,7 +25,6 @@ class Sequence {
         void deleteList();
 
         KeyInfoPair& getIndex(int) const;
-        static SequenceNode* createNode(const Key&, const Info&);
 
     public:
         Sequence<Key, Info>();
