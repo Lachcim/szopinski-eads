@@ -293,7 +293,7 @@ typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::getElement(const
     for (int i = 0; i < index; i++)
         ++it;
 
-    return it->data;
+    return it->data; //undefined behavior if no key found
 }
 template <class Key, class Info>
 typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::getLastElement(const Key& key) const {
@@ -304,7 +304,7 @@ typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::getLastElement(c
     for (iterator it = this->begin(key); it != this->end(); ++it)
         lastElement = it;
 
-    return lastElement->data;
+    return lastElement->data; //undefined behavior if no key found
 }
 template <class Key, class Info>
 typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::at(const Key& key, int index) {
