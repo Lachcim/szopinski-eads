@@ -57,8 +57,7 @@ class Sequence {
         iterator erase(iterator);
         void push_back(const Key&, const Info&);
         void push_back(const KeyInfoPair&);
-        void pop_back(const Key&, const Info&);
-        void pop_back(const KeyInfoPair&);
+        void pop_back(const Key&);
         void clear();
         void clear(const Key&);
 };

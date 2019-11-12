@@ -40,7 +40,7 @@ void Sequence<Key, Info>::copyList(const Sequence<Key, Info>& other) {
 
     SequenceNode* otherNode = other.head;
     for (int i = 0; i < otherSize; i++) {
-        this->add(otherNode->data);
+        this->push_back(otherNode->data);
         otherNode = otherNode->next;
     }
 }
@@ -66,11 +66,9 @@ Sequence<Key, Info>::SequenceNode::SequenceNode(const Key& key, const Info& info
     this->next = 0;
 }
 
-
-/*
-//add element at end of list
+//modifiers
 template <class Key, class Info>
-void Sequence<Key, Info>::add(const Key& key, const Info& info) {
+void Sequence<Key, Info>::push_back(const Key& key, const Info& info) {
     if (this->nodeCount != 0) {
         //add element at end of list, update tail
         this->tail->next = new SequenceNode(key, info);
@@ -85,9 +83,89 @@ void Sequence<Key, Info>::add(const Key& key, const Info& info) {
     this->nodeCount++;
 }
 template <class Key, class Info>
-void Sequence<Key, Info>::add(const KeyInfoPair& data) {
-    add(data.key, data.info);
+void Sequence<Key, Info>::push_back(const KeyInfoPair& data) {
+    this->push_back(data.key, data.info);
 }
+template <class Key, class Info>
+void Sequence<Key, Info>::pop_back(const Key& key) {
+    SequenceNode* lastNodePredecessor = 0;
+    SequenceNode* lastNode = 0;
+
+    //find last instance of key and its predecessor
+    SequenceNode* previousNode = 0;
+    for (SequenceNode* i = this->head; i != 0; i = i->next) {
+        if (i->data.key == key) {
+            lastNode = i;
+            lastNodePredecessor = previousNode;
+        }
+
+        previousNode = i;
+    }
+
+    //update head and tail if needed
+    bool isHead = lastNode == this->head;
+    bool isTail = lastNode == this->tail;
+
+    if (isHead && isTail) {
+        this->head = 0;
+        this->tail = 0;
+    }
+    else if (isHead) {
+        this->head = this->head->next;
+    }
+    else if (isTail) {
+        this->tail = lastNodePredecessor;
+        this->tail->next = 0;
+    }
+    else
+        lastNodePredecessor->next = lastNode->next;
+
+    delete lastNode; //undefined behavior if lastNode == 0
+    this->nodeCount--;
+}
+template <class Key, class Info>
+void Sequence<Key, Info>::clear() {
+    deleteList();
+}
+template <class Key, class Info>
+void Sequence<Key, Info>::clear(const Key& key) {
+    //find every instance of key and remove it
+    SequenceNode* previousNode = 0;
+    for (SequenceNode* i = this->head; i != 0; i = i->next) {
+        if (i->data.key == key) {
+            //update head and tail if needed
+            bool isHead = i == this->head;
+            bool isTail = i == this->tail;
+
+            if (isHead && isTail) {
+                this->head = 0;
+                this->tail = 0;
+            }
+            else if (isHead) {
+                this->head = this->head->next;
+            }
+            else if (isTail) {
+                this->tail = previousNode;
+                this->tail->next = 0;
+            }
+            else
+                previousNode->next = i->next;
+
+            //delete this node and back up by one node
+            delete i;
+            this->nodeCount--;
+
+            if (previousNode != 0) i = previousNode;
+            else i = this->head;
+        }
+
+        previousNode = i;
+    }
+}
+
+/*
+//add element at end of list
+
 
 //add element at given index
 template <class Key, class Info>
