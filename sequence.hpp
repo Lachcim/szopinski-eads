@@ -175,32 +175,42 @@ bool Sequence<Key, Info>::remove() {
     return true;
 }
 
-//get element at the given index
+//element access
 template <class Key, class Info>
-bool Sequence<Key, Info>::get(int index, Key& outputKey, Info& outputInfo) const {
-    //handle illegal indices
-    if (index < 0 || index >= this->nodeCount)
-        return false;
-
+typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::getIndex(int index) const {
     //optimize for tail
-    if (index == this->nodeCount - 1) {
-        outputKey = this->tail->data.key;
-        outputInfo = this->tail->data.info;
-        return true;
-    }
+    if (index == this->nodeCount - 1)
+        return head->data;
 
     SequenceNode* element = this->head;
     for (int i = 0; i < index; i++)
         element = element->next;
 
-    outputKey = element->data.key;
-    outputInfo = element->data.info;
-
-    return true;
+    return element->data;
 }
 template <class Key, class Info>
-bool Sequence<Key, Info>::get(int index, KeyInfoPair& outputData) const {
-    return get(index, outputData.key, outputData.info);
+typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::operator[](int index) {
+    return getIndex(index);
+}
+template <class Key, class Info>
+const typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::operator[](int index) const {
+    return getIndex(index);
+}
+template <class Key, class Info>
+typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::front() {
+    return head->data;
+}
+template <class Key, class Info>
+const typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::front() const {
+    return head->data;
+}
+template <class Key, class Info>
+typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::back() {
+    return tail->data;
+}
+template <class Key, class Info>
+const typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::back() const {
+    return tail->data;
 }
 
 //remove element at given index
