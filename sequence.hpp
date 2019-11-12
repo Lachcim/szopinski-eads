@@ -3,7 +3,7 @@ template <class Key, class Info>
 Sequence<Key, Info>::Sequence() {
     this->head = 0;
     this->tail = 0;
-    this->size = 0;
+    this->nodeCount = 0;
 }
 
 //copy constructor
@@ -11,7 +11,7 @@ template <class Key, class Info>
 Sequence<Key, Info>::Sequence(const Sequence<Key, Info>& other) {
     this->head = 0;
     this->tail = 0;
-    this->size = 0;
+    this->nodeCount = 0;
 
     this->copyList(other);
 }
@@ -39,7 +39,7 @@ Sequence<Key, Info>& Sequence<Key, Info>::operator=(const Sequence<Key, Info>& o
 template <class Key, class Info>
 void Sequence<Key, Info>::copyList(const Sequence<Key, Info>& other) {
     //probe size once to allow self-copying
-    int otherSize = other.size;
+    int otherSize = other.nodeCount;
 
     SequenceNode* otherNode = other.head;
     for (int i = 0; i < otherSize; i++) {
@@ -60,7 +60,7 @@ void Sequence<Key, Info>::deleteList() {
 
     this->head = 0;
     this->tail = 0;
-    this->size = 0;
+    this->nodeCount = 0;
 }
 
 //allocates new node and creates a copy if its key and info
@@ -74,27 +74,10 @@ typename Sequence<Key, Info>::SequenceNode* Sequence<Key, Info>::createNode(cons
     return output;
 }
 
-//addition operator
-template <class Key, class Info>
-Sequence<Key, Info> Sequence<Key, Info>::operator+(const Sequence<Key, Info>& other) {
-    Sequence<Key, Info> output(*this);
-    output.copyList(other);
-
-    return output;
-}
-
-//addition assignment operator
-template <class Key, class Info>
-Sequence<Key, Info>& Sequence<Key, Info>::operator+=(const Sequence<Key, Info>& other) {
-    this->copyList(other);
-
-    return *this;
-}
-
 //add element at end of list
 template <class Key, class Info>
 void Sequence<Key, Info>::add(const Key& key, const Info& info) {
-    if (this->size != 0) {
+    if (this->nodeCount != 0) {
         //add element at end of list, update tail
         this->tail->next = createNode(key, info);
         this->tail = this->tail->next;
@@ -105,7 +88,7 @@ void Sequence<Key, Info>::add(const Key& key, const Info& info) {
         this->tail = this->head;
     }
 
-    this->size++;
+    this->nodeCount++;
 }
 template <class Key, class Info>
 void Sequence<Key, Info>::add(const KeyInfoPair& data) {
@@ -116,11 +99,11 @@ void Sequence<Key, Info>::add(const KeyInfoPair& data) {
 template <class Key, class Info>
 bool Sequence<Key, Info>::add(const Key& key, const Info& info, int desiredIndex) {
     //prevent addition at illegal indices
-    if (desiredIndex < 0 || desiredIndex > this->size)
+    if (desiredIndex < 0 || desiredIndex > this->nodeCount)
         return false;
 
-    //if index is equal to size or the list is empty, add at the end
-    if (desiredIndex == this->size || this->size == 0) {
+    //if index is equal to nodeCount or the list is empty, add at the end
+    if (desiredIndex == this->nodeCount || this->nodeCount == 0) {
         this->add(key, info);
         return true;
     }
@@ -130,7 +113,7 @@ bool Sequence<Key, Info>::add(const Key& key, const Info& info, int desiredIndex
         SequenceNode* oldHead = this->head;
         this->head = createNode(key, info);
         this->head->next = oldHead;
-        this->size++;
+        this->nodeCount++;
 
         return true;
     }
@@ -143,7 +126,7 @@ bool Sequence<Key, Info>::add(const Key& key, const Info& info, int desiredIndex
     SequenceNode* oldNext = precedingElement->next;
     precedingElement->next = createNode(key, info);
     precedingElement->next->next = oldNext;
-    this->size++;
+    this->nodeCount++;
 
     return true;
 }
@@ -157,23 +140,23 @@ template <class Key, class Info>
 bool Sequence<Key, Info>::add(const Sequence<Key, Info>& other) {
     this->copyList(other);
 
-    return other.size > 0;
+    return other.nodeCount > 0;
 }
 
 //remove last element
 template <class Key, class Info>
 bool Sequence<Key, Info>::remove() {
     //return false when the list is empty
-    if (this->size == 0)
+    if (this->nodeCount == 0)
         return false;
 
     //handle single-element lists
-    if (this->size == 1) {
+    if (this->nodeCount == 1) {
         delete this->tail;
 
         this->head = 0;
         this->tail = 0;
-        this->size = 0;
+        this->nodeCount = 0;
 
         return true;
     }
@@ -187,7 +170,7 @@ bool Sequence<Key, Info>::remove() {
     delete this->tail;
     this->tail = penultimateElement;
     this->tail->next = 0;
-    this->size--;
+    this->nodeCount--;
 
     return true;
 }
@@ -196,11 +179,11 @@ bool Sequence<Key, Info>::remove() {
 template <class Key, class Info>
 bool Sequence<Key, Info>::get(int index, Key& outputKey, Info& outputInfo) const {
     //handle illegal indices
-    if (index < 0 || index >= this->size)
+    if (index < 0 || index >= this->nodeCount)
         return false;
 
     //optimize for tail
-    if (index == this->size - 1) {
+    if (index == this->nodeCount - 1) {
         outputKey = this->tail->data.key;
         outputInfo = this->tail->data.info;
         return true;
@@ -224,11 +207,11 @@ bool Sequence<Key, Info>::get(int index, KeyInfoPair& outputData) const {
 template <class Key, class Info>
 bool Sequence<Key, Info>::remove(int index) {
     //handle illegal indices
-    if (index < 0 || index >= this->size)
+    if (index < 0 || index >= this->nodeCount)
         return false;
 
     //handle special case: last index
-    if (index == this->size - 1) {
+    if (index == this->nodeCount - 1) {
         this->remove();
         return true;
     }
@@ -238,7 +221,7 @@ bool Sequence<Key, Info>::remove(int index) {
         SequenceNode* headNext = this->head->next;
         delete this->head;
         this->head = headNext;
-        this->size--;
+        this->nodeCount--;
 
         return true;
     }
@@ -250,15 +233,15 @@ bool Sequence<Key, Info>::remove(int index) {
     SequenceNode* oldNext = precedingElement->next->next;
     delete precedingElement->next;
     precedingElement->next = oldNext;
-    this->size--;
+    this->nodeCount--;
 
     return true;
 }
 
 //get size
 template <class Key, class Info>
-int Sequence<Key, Info>::getSize() const {
-    return this->size;
+int Sequence<Key, Info>::size() const {
+    return this->nodeCount;
 }
 
 //iterators

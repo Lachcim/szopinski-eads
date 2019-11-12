@@ -17,7 +17,7 @@ class Sequence {
 
         SequenceNode* head;
         SequenceNode* tail;
-        int size;
+        int nodeCount;
 
         void copyList(const Sequence<Key, Info>&);
         void deleteList();
@@ -36,8 +36,6 @@ class Sequence {
         const_iterator cend() const;
 
         Sequence<Key, Info>& operator=(const Sequence<Key, Info>&);
-        Sequence<Key, Info> operator+(const Sequence<Key, Info>&);
-        Sequence<Key, Info>& operator+=(const Sequence<Key, Info>&);
 
         void add(const Key&, const Info&);
         void add(const KeyInfoPair&);
@@ -48,7 +46,7 @@ class Sequence {
         bool get(int, KeyInfoPair&) const;
         bool remove();
         bool remove(int);
-        int getSize() const;
+        int size() const;
 };
 
 //declaration of iterators

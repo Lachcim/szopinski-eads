@@ -5,7 +5,7 @@
 template <class Key, class Info>
 void split(const Sequence<Key, Info>& source, int start, Sequence<Key, Info>& dest1, int step1, int count1, Sequence<Key, Info>& dest2, int step2, int count2) {
     //prevent incrementation past sequence
-    if (start >= source.getSize())
+    if (start >= source.size())
         return;
 
     //obtain iterator of source
