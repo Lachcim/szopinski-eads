@@ -87,6 +87,18 @@ void Sequence<Key, Info>::push_back(const KeyInfoPair& data) {
     this->push_back(data.key, data.info);
 }
 template <class Key, class Info>
+void Sequence<Key, Info>::push_front(const Key& key, const Info& info) {
+    //obtain keyed iterator to first instance of key
+    iterator firstElement = this->begin(key);
+
+    //insert new element before previous first element
+    this->insert(firstElement, info);
+}
+template <class Key, class Info>
+void Sequence<Key, Info>::push_front(const KeyInfoPair& data) {
+    this->push_front(data.key, data.info);
+}
+template <class Key, class Info>
 void Sequence<Key, Info>::pop_back(const Key& key) {
     iterator lastIterator;
 
@@ -96,6 +108,11 @@ void Sequence<Key, Info>::pop_back(const Key& key) {
 
     //erase last instance of key
     this->erase(lastIterator);
+}
+template <class Key, class Info>
+void Sequence<Key, Info>::pop_front(const Key& key) {
+    //erase first instance of key
+    this->erase(this->begin(key));
 }
 template <class Key, class Info>
 void Sequence<Key, Info>::clear() {
