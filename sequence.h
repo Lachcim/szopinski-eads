@@ -49,7 +49,9 @@ class Sequence {
         const KeyInfoPair& back(const Key&) const;
 
         int size() const;
+        int size(const Key&) const;
         bool empty() const;
+        bool empty(const Key&) const;
 
         void add(const Key&, const Info&);
         void add(const KeyInfoPair&);

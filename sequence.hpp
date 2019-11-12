@@ -251,14 +251,32 @@ bool Sequence<Key, Info>::remove(int index) {
     return true;
 }
 
-//size-related getters
+//capacity
 template <class Key, class Info>
 int Sequence<Key, Info>::size() const {
     return this->nodeCount;
 }
 template <class Key, class Info>
+int Sequence<Key, Info>::size(const Key& key) const {
+    int output = 0;
+
+    for (iterator it = this->begin(key); it != this->end(); ++it)
+        if (it->key == key)
+            output++;
+
+    return output;
+}
+template <class Key, class Info>
 bool Sequence<Key, Info>::empty() const {
     return this->nodeCount == 0;
+}
+template <class Key, class Info>
+bool Sequence<Key, Info>::empty(const Key& key) const {
+    for (iterator it = this->begin(key); it != this->end(); ++it)
+        if (it->key == key)
+            return false;
+
+    return true;
 }
 
 //iterators
