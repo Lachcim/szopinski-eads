@@ -23,7 +23,7 @@ void split(const Sequence<Key, Info>& source, int start, Sequence<Key, Info>& de
 
         //copy step1 or step2 elements to dest1 or dest2
         for (int i = 0; i < (outputtingTo1 ? step1 : step2) && it != source.cend(); i++)
-            (outputtingTo1 ? dest1 : dest2).add(*it++);
+            (outputtingTo1 ? dest1 : dest2).push_back(*it++);
 
         //exit function if end of source reached
         if (it == source.cend())
@@ -75,21 +75,21 @@ void printSequence(const Sequence<const char*, int>& sequence) {
 int main()
 {
     Sequence<const char*, int> source;
-    source.add("stays", 123);
-    source.add("stays", 12345);
-    source.add("stays", 1234567);
-    source.add("dest1", 31415);
-    source.add("dest1", 27182);
-    source.add("dest2", 2137);
-    source.add("dest2", 69);
-    source.add("dest2", 420);
-    source.add("dest1", 16180);
-    source.add("dest1", 14142);
-    source.add("dest2", 1352);
-    source.add("dest2", 911);
-    source.add("dest2", 404);
-    source.add("dest2", 1337);
-    source.add("dest2", 8008135);
+    source.push_back("stays", 123);
+    source.push_back("stays", 12345);
+    source.push_back("stays", 1234567);
+    source.push_back("dest1", 31415);
+    source.push_back("dest1", 27182);
+    source.push_back("dest2", 2137);
+    source.push_back("dest2", 69);
+    source.push_back("dest2", 420);
+    source.push_back("dest1", 16180);
+    source.push_back("dest1", 14142);
+    source.push_back("dest2", 1352);
+    source.push_back("dest2", 911);
+    source.push_back("dest2", 404);
+    source.push_back("dest2", 1337);
+    source.push_back("dest2", 8008135);
 
     printf("Original sequence:\n");
     printSequence(source);

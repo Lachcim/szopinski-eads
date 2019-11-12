@@ -53,13 +53,14 @@ class Sequence {
         bool empty() const;
         bool empty(const Key&) const;
 
-        void add(const Key&, const Info&);
-        void add(const KeyInfoPair&);
-        bool add(const Key&, const Info&, int);
-        bool add(const KeyInfoPair&, int);
-        bool add(const Sequence<Key, Info>&);
-        bool remove();
-        bool remove(int);
+        iterator insert(iterator, const Info&);
+        iterator erase(iterator);
+        void push_back(const Key&, const Info&);
+        void push_back(const KeyInfoPair&);
+        void pop_back(const Key&, const Info&);
+        void pop_back(const KeyInfoPair&);
+        void clear();
+        void clear(const Key&);
 };
 
 //declaration of iterators

@@ -5,7 +5,6 @@ Sequence<Key, Info>::Sequence() {
     this->tail = 0;
     this->nodeCount = 0;
 }
-
 //copy constructor
 template <class Key, class Info>
 Sequence<Key, Info>::Sequence(const Sequence<Key, Info>& other) {
@@ -15,13 +14,11 @@ Sequence<Key, Info>::Sequence(const Sequence<Key, Info>& other) {
 
     this->copyList(other);
 }
-
 //destructor
 template <class Key, class Info>
 Sequence<Key, Info>::~Sequence() {
     this->deleteList();
 }
-
 //copy assignment operator
 template <class Key, class Info>
 Sequence<Key, Info>& Sequence<Key, Info>::operator=(const Sequence<Key, Info>& other) {
@@ -47,7 +44,6 @@ void Sequence<Key, Info>::copyList(const Sequence<Key, Info>& other) {
         otherNode = otherNode->next;
     }
 }
-
 //deallocate entire list
 template <class Key, class Info>
 void Sequence<Key, Info>::deleteList() {
@@ -62,7 +58,6 @@ void Sequence<Key, Info>::deleteList() {
     this->tail = 0;
     this->nodeCount = 0;
 }
-
 //sequence node constructor, creates a copy of its key and info
 template <class Key, class Info>
 Sequence<Key, Info>::SequenceNode::SequenceNode(const Key& key, const Info& info) {
@@ -71,6 +66,8 @@ Sequence<Key, Info>::SequenceNode::SequenceNode(const Key& key, const Info& info
     this->next = 0;
 }
 
+
+/*
 //add element at end of list
 template <class Key, class Info>
 void Sequence<Key, Info>::add(const Key& key, const Info& info) {
@@ -172,6 +169,42 @@ bool Sequence<Key, Info>::remove() {
     return true;
 }
 
+//remove element at given index
+template <class Key, class Info>
+bool Sequence<Key, Info>::remove(int index) {
+    //handle illegal indices
+    if (index < 0 || index >= this->nodeCount)
+        return false;
+
+    //handle special case: last index
+    if (index == this->nodeCount - 1) {
+        this->remove();
+        return true;
+    }
+
+    //handle special case: first index
+    if (index == 0) {
+        SequenceNode* headNext = this->head->next;
+        delete this->head;
+        this->head = headNext;
+        this->nodeCount--;
+
+        return true;
+    }
+
+    SequenceNode* precedingElement = this->head;
+    for (int i = 0; i < index - 1; i++)
+        precedingElement = precedingElement->next;
+
+    SequenceNode* oldNext = precedingElement->next->next;
+    delete precedingElement->next;
+    precedingElement->next = oldNext;
+    this->nodeCount--;
+
+    return true;
+}
+*/
+
 //element access
 template <class Key, class Info>
 typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::getElement(const Key& key, int index) const {
@@ -214,41 +247,6 @@ typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::back(const Key& 
 template <class Key, class Info>
 const typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::back(const Key& key) const {
     return getLastElement(key);
-}
-
-//remove element at given index
-template <class Key, class Info>
-bool Sequence<Key, Info>::remove(int index) {
-    //handle illegal indices
-    if (index < 0 || index >= this->nodeCount)
-        return false;
-
-    //handle special case: last index
-    if (index == this->nodeCount - 1) {
-        this->remove();
-        return true;
-    }
-
-    //handle special case: first index
-    if (index == 0) {
-        SequenceNode* headNext = this->head->next;
-        delete this->head;
-        this->head = headNext;
-        this->nodeCount--;
-
-        return true;
-    }
-
-    SequenceNode* precedingElement = this->head;
-    for (int i = 0; i < index - 1; i++)
-        precedingElement = precedingElement->next;
-
-    SequenceNode* oldNext = precedingElement->next->next;
-    delete precedingElement->next;
-    precedingElement->next = oldNext;
-    this->nodeCount--;
-
-    return true;
 }
 
 //capacity
