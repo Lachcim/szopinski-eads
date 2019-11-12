@@ -61,6 +61,12 @@ Sequence<Key, Info>::const_iterator::const_iterator(SequenceNode* node) {
     this->node = node;
 }
 
+//conversion constructor
+template <class Key, class Info>
+Sequence<Key, Info>::const_iterator::const_iterator(const iterator& other) {
+    this->node = other->node;
+}
+
 //dereference operator
 template <class Key, class Info>
 const typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::const_iterator::operator*() {
