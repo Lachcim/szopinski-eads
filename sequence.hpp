@@ -193,6 +193,7 @@ typename Sequence<Key, Info>::iterator Sequence<Key, Info>::insert(iterator posi
     if (predecessor == 0) {
         newNode->next = this->head;
         this->head = newNode;
+        this->nodeCount++;
 
         //return identical iterator with new head
         iterator output(position);
@@ -204,9 +205,45 @@ typename Sequence<Key, Info>::iterator Sequence<Key, Info>::insert(iterator posi
     SequenceNode* oldNext = predecessor->next;
     predecessor->next = newNode;
     newNode->next = oldNext;
+    this->nodeCount++;
 
     iterator output(position);
     output.node = newNode;
+    return output;
+}
+template <class Key, class Info>
+typename Sequence<Key, Info>::iterator Sequence<Key, Info>::erase(iterator position) {
+    //prepare output iterator pointing to next element in sublist
+    iterator output(position);
+    ++output;
+
+    //find predecessor
+    SequenceNode* predecessor = 0;
+    for (SequenceNode* i = this->head; i != 0; i = i->next)
+        if (i->next == position.node) {
+            predecessor = i;
+            break;
+        }
+
+    //update head and tail if needed
+    bool isHead = position.node == this->head;
+    bool isTail = position.node == this->tail;
+
+    if (isHead && isTail) {
+        this->head = 0;
+        this->tail = 0;
+    }
+    else if (isHead) {
+        this->head = this->head->next;
+    }
+    else if (isTail) {
+        this->tail = predecessor;
+        this->tail->next = 0;
+    }
+    else
+        predecessor->next = position.node->next;
+
+    //return output iterator
     return output;
 }
 
