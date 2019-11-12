@@ -24,8 +24,8 @@ class Sequence {
         void copyList(const Sequence<Key, Info>&);
         void deleteList();
 
-        KeyInfoPair& getIndex(int) const;
-
+        KeyInfoPair& getElement(const Key&, int) const;
+        KeyInfoPair& getLastElement(const Key&) const;
     public:
         Sequence<Key, Info>();
         Sequence<Key, Info>(const Sequence<Key, Info>&);
@@ -34,17 +34,19 @@ class Sequence {
 
         class iterator;
         iterator begin();
+        iterator begin(const Key&);
         iterator end();
         class const_iterator;
         const_iterator cbegin() const;
+        const_iterator cbegin(const Key&) const;
         const_iterator cend() const;
 
-        KeyInfoPair& operator[](int);
-        const KeyInfoPair& operator[](int) const;
-        KeyInfoPair& front();
-        const KeyInfoPair& front() const;
-        KeyInfoPair& back();
-        const KeyInfoPair& back() const;
+        KeyInfoPair& at(const Key&, int);
+        const KeyInfoPair& at(const Key&, int) const;
+        KeyInfoPair& front(const Key&);
+        const KeyInfoPair& front(const Key&) const;
+        KeyInfoPair& back(const Key&);
+        const KeyInfoPair& back(const Key&) const;
 
         int size() const;
         bool empty() const;

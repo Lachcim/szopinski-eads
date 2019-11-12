@@ -174,40 +174,46 @@ bool Sequence<Key, Info>::remove() {
 
 //element access
 template <class Key, class Info>
-typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::getIndex(int index) const {
-    //optimize for tail
-    if (index == this->nodeCount - 1)
-        return head->data;
+typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::getElement(const Key& key, int index) const {
+    //obtain iterator for sublist
+    iterator it = this.begin(key);
 
-    SequenceNode* element = this->head;
+    //increment iterator to given index
     for (int i = 0; i < index; i++)
-        element = element->next;
+        ++it;
 
-    return element->data;
+    return it->data;
 }
 template <class Key, class Info>
-typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::operator[](int index) {
-    return getIndex(index);
+typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::getLastElement(const Key& key) const {
+    //create empty iterator
+    iterator lastElement;
+
+    //obtain iterator for sublist, increment it until exhaustion
+    for (iterator it = this->begin(key); it != this->end(); ++it)
+        lastElement = it;
+
+    return lastElement->data;
 }
 template <class Key, class Info>
-const typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::operator[](int index) const {
-    return getIndex(index);
+typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::at(const Key& key, int index) {
+    return getElement(key, index);
 }
 template <class Key, class Info>
-typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::front() {
-    return head->data;
+typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::front(const Key& key) {
+    return getElement(key, 0);
 }
 template <class Key, class Info>
-const typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::front() const {
-    return head->data;
+const typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::front(const Key& key) const {
+    return getElement(key, 0);
 }
 template <class Key, class Info>
-typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::back() {
-    return tail->data;
+typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::back(const Key& key) {
+    return getLastElement(key);
 }
 template <class Key, class Info>
-const typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::back() const {
-    return tail->data;
+const typename Sequence<Key, Info>::KeyInfoPair& Sequence<Key, Info>::back(const Key& key) const {
+    return getLastElement(key);
 }
 
 //remove element at given index
