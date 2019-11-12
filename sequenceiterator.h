@@ -34,7 +34,6 @@ class Sequence<Key, Info>::const_iterator {
 
     public:
         const_iterator();
-        const_iterator(const iterator&);
 
         const KeyInfoPair& operator*();
         const KeyInfoPair* operator->();

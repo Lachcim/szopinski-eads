@@ -118,7 +118,7 @@ typename Sequence<Key, Info>::iterator Sequence<Key, Info>::insert(iterator posi
 
     //optimize for tail insertion
     if (position == this->end()) {
-        this->push_back();
+        this->push_back(position.getKey(), info);
 
         //return identical iterator with new tail
         iterator output(position);
@@ -304,7 +304,18 @@ typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::cbegin() const
 }
 template <class Key, class Info>
 typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::cbegin(const Key& key) const {
-    return const_iterator(this->begin());
+    const_iterator output;
+    output.keyed = true;
+    output.key = key;
+
+    //set iterator node to first instance of key, if none present, let it stay at 0
+    for (SequenceNode* i = this->head; i != 0; i = i->next)
+        if (i->data.key == key) {
+            output.node = i;
+            break;
+        }
+
+    return output;
 }
 template <class Key, class Info>
 typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::cend() const {

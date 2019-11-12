@@ -24,7 +24,7 @@ typename Sequence<Key, Info>::iterator& Sequence<Key, Info>::iterator::operator+
     }
 
     //default this to end() if search for next node fails
-    SequenceNode* start = this->node;
+    SequenceNode* start = this->node->next;
     this->node = 0;
 
     //search for next node
@@ -66,11 +66,6 @@ template <class Key, class Info>
 Sequence<Key, Info>::const_iterator::const_iterator() {
     this->node = 0;
     this->keyed = false;
-}
-//conversion constructor
-template <class Key, class Info>
-Sequence<Key, Info>::const_iterator::const_iterator(const iterator& other) {
-    this->node = other->node;
 }
 //dereference operator
 template <class Key, class Info>
