@@ -1,7 +1,7 @@
 ﻿\documentclass{article}
 
 \title{
-	Singly-linked list of two data types \\
+	Keyed singly-linked list of two data types \\
 	\large An EADS generic programming project report
 }
 \date{November 2019}
@@ -13,22 +13,22 @@
 
 \section{Overview}
 
-The goal of the project was to write a singly-linked list of nodes capable of
-storing data entries consisting of two different data types, labeled {\it key}
-and {\it info}. This was to be achieved using the class template mechanism
-offered by the C++ programming language. The end goal was to design a container
-class whose public members would facilitate the implementation of a function
-named {\tt split}, which divides the container into two smaller ones, following
+The goal of the project was to write a singly-linked list of nodes which would
+emulate a collection of independent sequences, each distinguished with a unique
+key. This was to be achieved using the class template mechanism offered by the
+C++ programming language. The end goal was to design a container class whose
+public members would facilitate the implementation of a function named
+{\tt split}, which divides the container into two smaller ones, following
 a set of rules.
 
 The container in question is named {\tt Sequence} and can be used as follows:
 
 \begin{verbatim}
 Sequence<const char*, int> mySequence;
-mySequence.add("key 1", 123);
-mySequence.add("key 2", 456);
-mySequence.add("key 3", 789);
-mySequence.remove(1);
+mySequence.push_back("my key", 123);
+mySequence.push_back("my key", 456);
+mySequence.push_back("my key", 789);
+mySequence.erase(++(mySequence.begin("my key")));
 \end{verbatim}
 
 The above code allocates a new instance of {\tt Sequence} on the stack,
@@ -36,42 +36,47 @@ adds three elements to it, and then promptly removes the second element.
 This particular instance is capable of holding keys of type {\tt const char*}
 and info of type {\tt int}.
 
-There are many other methods and members of the {\tt Sequence} class template
-which can be used to manipulate the container.
+\subsection{The key-info mechanism and sublists}
 
-\subsection{Memory management considerations}
-
-One of the key design features of the container is that it creates copies
-of the elements passed into it and allocates them on the heap, automatically
-managing them throughout its lifespan. While useful for storing multiple
-instances of independent objects, developers must be wary of this feature if
-they intend to store classes that are memory-intensive.
-
-\begin{verbatim}
-//instance on the stack stores 25MB on the heap
-ImageBuffer buffer(path);
-
-Sequence<int, ImageBuffer> mySequence;
-mySequence.add(1, buffer);
-mySequence.add(2, buffer);
-mySequence.add(3, buffer); //100 MB allocated on the heap by 4
-                           //instances of ImageBuffer
-\end{verbatim}
-
-As shown above, improper use of {\tt Sequence} can easily lead to excessive
-memory usage. When object independence isn't necessary, it may be preferable
-to create a sequence of pointers instead.
+The significance of the {\it key} parameter is that it groups elements together,
+effectively separating the sequence into multiple independent lists, henceforth
+called {\it sublists}. The modifiers provided by the class can therefore either
+operate on one individual sublist, or all of them at once. As such, most public
+members of {\tt Sequence} provide a parameter of type {\tt const Key\&}, which
+is used to specify the key of the sublist that is to be modified. Some members,
+such as {\tt size()}, provide no such parameter and operate on all sublists
+simultaneously.
 
 \begin{verbatim}
-//instance on the stack stores 25MB on the heap
-ImageBuffer buffer(path);
-
-Sequence<int, ImageBuffer*> mySequence;
-mySequence.add(1, &buffer);
-mySequence.add(2, &buffer);
-mySequence.add(3, &buffer); //25 MB allocated on the heap by 1
-                            //instance of ImageBuffer
+Sequence<const char*, int> mySequence;
+mySequence.push_back("my key", 123);
+mySequence.push_back("my key", 456);
+mySequence.push_back("my key", 789);
+mySequence.push_back("your key", 1234);
+mySequence.push_back("your key", 1234);
+mySequence.push_back("your key", 1234);
+mySequence.clear("my key");
 \end{verbatim}
+
+In the above code, {\tt "my key"} was the only key impacted by the {\tt clear()}
+method. After the final statement, three elements remain in the sequence - all
+of which belonging to the sublist {\tt "your key"}.
+
+\subsection{Key comparability and other requirements}
+
+Because the class template mechanism allows all classes to be used as keys and
+info entries, care must be taken to only use classes which are suitable for
+this task. A suitable class is a class that meets all of the following criteria:
+
+\begin{enumerate}
+\item In the case of keys, two instances of the class can be meaningfully
+compared using the {\tt ==} and {\tt !=} operators.
+\item It has a default constructor of no parameters.
+\item It has an effective copy constructor and a copy assignment operator.
+\end{enumerate}
+
+Failure to meet these criteria may produce unpredictable results or prevent
+compilation altogether.
 
 \subsection{Tail keeping mechanism and iterators}
 
@@ -87,24 +92,108 @@ an iterator class was added to the container to enable fast access to
 consecutive nodes. {\tt Sequence<Key, Info>::iterator} is therefore a forward
 iterator which can be used to efficiently traverse the list with a complexity of
 $O(n)$, as opposed to $O(n^2)$ that's associated with continuous calls to
-{\tt get()}.
+{\tt at()}.
 
 \begin{verbatim}
 //a sequence of 100000 elements
-Sequence<int, int> mySequence;
+Sequence<const char*, int> mySequence;
 for (int i = 0; i < 100000; i++)
-    mySequence.add(i, i);
+    mySequence.add("my key", i);
 
 for (int i = 0; i < 100000; i++)
-    mySequence.get(i, output); //5050555500 queries
+    output = mySequence.at("my key", i); //5050555500 queries
 
-Sequence<int, int>::iterator i;
-for (i = mySequence.begin(); i != mySequence.end(); ++i)
+Sequence<const char*, int>::iterator i;
+for (i = mySequence.begin("my key"); i != mySequence.end(); ++i)
     output = *i; //100000 queries
 \end{verbatim}
 
-{\tt Sequence<Key, Info>::const\_iterator} is a constant version of this iterator
-which does not permit any changes to the iterated sequence.
+{\tt Sequence<Key, Info>::const\_iterator} is a constant version of this
+iterator which does not permit any changes to the iterated sequence.
+
+\subsection{Keyed and key-agnostic iterators}
+
+Despite the fact that {\tt Sequence} is inherently designed to treat all of its
+sublists independently, the requirements of the final task demanded that a
+special interface is introduced to treat the sequence as a unitary "superlist".
+This interface is known as a {\it key-agnostic iterator} and can be used to
+transcend the boundaries of sublists when iterating over the sequence.
+Like most public members of the class, iterators posses a parameter which limits
+them to a single sublist: 
+
+\begin{verbatim}
+Sequence<const char*, int> mySequence;
+mySequence.push_back("my key", 123);
+mySequence.push_back("your key", 1234);
+mySequence.push_back("his key", 4321);
+mySequence.push_back("my key", 123);
+mySequence.push_back("your key", 1234);
+mySequence.push_back("his key", 4321);
+mySequence.push_back("my key", 123);
+mySequence.push_back("your key", 1234);
+mySequence.push_back("his key", 4321);
+
+Sequence<const char*, int>::iterator it;
+for (it = mySequence.begin("his key"); it != mySequence.end(); ++it)
+    printf("%s %d\n", it->key, it->info);
+    //prints "his key 4321" three times
+
+\end{verbatim}
+
+A similar call to {\tt begin()} (without the parentheses) would return a
+key-agnostic iterator, which would then produce nine different lines in the
+output stream.
+A key-agnostic iterator cannot be used to insert new elements with the
+{\tt insert(iterator, const Info\&)} method, as it is not related to any sublist
+and carries no information about its key. Similarly, the iterator returned by
+{\tt end()} is also key-agnostic and cannot be used to push new elements to
+the end of the list. In order to generate a keyed end iterator,
+{\tt end(const Key\&)} can be called, which in turn can be used for insertion:
+
+\begin{verbatim}
+mySequence.insert(mySequence.end("her key"), 777);
+\end{verbatim}
+
+Despite these differences, however, all end iterators, keyed or not, compare
+true to each other.
+
+\begin{verbatim}
+mySequence.end("her key") == mySequence.end() //true
+\end{verbatim}
+
+\subsection{Memory management considerations}
+
+One of the key design features of the container is that it creates copies
+of the elements passed into it and allocates them on the heap, automatically
+managing them throughout its lifespan. While useful for storing multiple
+instances of independent objects, developers must be wary of this feature if
+they intend to store classes that are memory-intensive.
+
+\begin{verbatim}
+//instance on the stack stores 25MB on the heap
+ImageBuffer buffer(path);
+
+Sequence<int, ImageBuffer> mySequence;
+mySequence.push_back(1, buffer);
+mySequence.push_back(2, buffer);
+mySequence.push_back(3, buffer); //100 MB allocated on the heap by
+                                 //four instances of ImageBuffer
+\end{verbatim}
+
+As shown above, improper use of {\tt Sequence} can easily lead to excessive
+memory usage. When object independence isn't necessary, it may be preferable
+to create a sequence of pointers instead.
+
+\begin{verbatim}
+//instance on the stack stores 25MB on the heap
+ImageBuffer buffer(path);
+
+Sequence<int, ImageBuffer*> mySequence;
+mySequence.push_back(1, &buffer);
+mySequence.push_back(2, &buffer);
+mySequence.push_back(3, &buffer); //25 MB allocated on the heap by
+                                  //one instance of ImageBuffer
+\end{verbatim}
 
 \section{Template specification}
 
