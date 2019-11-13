@@ -58,9 +58,9 @@ mySequence.push_back("your key", 1234);
 mySequence.clear("my key");
 \end{verbatim}
 
-In the above code, {\tt "my key"} was the only key impacted by the {\tt clear()}
-method. After the final statement, three elements remain in the sequence - all
-of which belonging to the sublist {\tt "your key"}.
+In the above code, {\tt "my key"} was the only key impacted by the
+{\tt clear(const Key\&)} method. After the final statement, three elements
+remain in the sequence - all of which belonging to the sublist {\tt "your key"}.
 
 \subsection{Key comparability and other requirements}
 
@@ -189,64 +189,23 @@ to create a sequence of pointers instead.
 ImageBuffer buffer(path);
 
 Sequence<int, ImageBuffer*> mySequence;
-mySequence.push_back(1, &buffer);
-mySequence.push_back(2, &buffer);
-mySequence.push_back(3, &buffer); //25 MB allocated on the heap by
+mySequence.push_back(1, \&buffer);
+mySequence.push_back(2, \&buffer);
+mySequence.push_back(3, \&buffer); //25 MB allocated on the heap by
                                   //one instance of ImageBuffer
 \end{verbatim}
 
 \section{Template specification}
 
 In the following section, function signatures are written in shorthand -
-omitting the data types of their parameters, the scope resolution operators and
-the template syntax.
+omitting the scope resolution operators and template syntax.
 
-\subsection{Private members}
-
-\subsubsection{{\tt struct SequenceNode}}
-
-A building block for the linked list. It consists of a {\tt KeyInfoPair} struct
-to store the data and a pointer to another {\tt SequenceNode} to maintain the
-link.
-
-\subsubsection{{\tt SequenceNode* head}}
-
-A pointer to the first element in the linked list. Basic element of all linked
-lists.
-
-\subsubsection{{\tt SequenceNode* tail}}
-
-A pointer to the last element in the linked list. Enables quick insertion at the
-end of the list.
-
-\subsubsection{{\tt int size}}
-
-An integer representing the number of currently stored elements. Reduces time
-complexity of size queries.
-
-\subsubsection{{\tt void copyList(other)}}
-
-Copies the entire contents of a different sequence and appends them at the end
-of this sequence. Probes the number of nodes to be copied once to allow
-self-duplication.
-
-\subsubsection{{\tt void deleteList()}}
-
-Deallocates all nodes on the list. The sequence remains in a valid state and can
-be reused after this method is called.
-
-\subsubsection{{\tt SequenceNode* createNode(key, info)}}
-
-A helper function to create nodes in one line. Allocates a new
-{\tt SequenceNode} on the heap, assigns values to its members, and returns a
-pointer to the newly allocated object.
-
-\subsection{Public members}
+\subsection{{\tt Sequence<Key, Info>}}
 
 \subsubsection{{\tt struct KeyInfoPair}}
 
-A structure holding the key and the info of a given node. Value type of the
-iterator.
+A structure holding the key and the info of a given element. It's the value type
+of the iterator.
 
 \subsubsection{{\tt Sequence()}}
 
@@ -256,79 +215,125 @@ Default constructor. Creates an empty list.
 
 Copy constructor. Copies all elements of the other list.
 
-\subsubsection{{\tt \~{}Sequence()}}
-
-Destructor. Deallocates all nodes on the list.
-
-\subsubsection{{\tt class iterator}}
-
-An forward input-output iterator that allows the list to be traversed with
-$O(n)$ complexity.
-
-\subsubsection{{\tt iterator begin()}}
-
-An iterator pointing to the head of the list.
-
-\subsubsection{{\tt iterator end()}}
-
-An iterator marking the end of the list. Internally, a null pointer.
-
-\subsubsection{{\tt class const\_iterator}}
-
-A constant version of {\tt iterator}, cannot be used to modify the sequence.
-
-\subsubsection{{\tt const\_iterator cbegin()}}
-
-An constant iterator pointing to the head of the list.
-
-\subsubsection{{\tt const\_iterator cend()}}
-
-An constant iterator marking the end of the list. Internally, a null pointer.
-
 \subsubsection{{\tt Sequence\& operator=(other)}}
 
 Copy assignment operator. Deallocates all nodes of this list and copies all
 nodes from the other list.
 
-\subsubsection{{\tt Sequence operator+(other)}}
+\subsubsection{{\tt \~{}Sequence()}}
 
-Sum operator. Creates a new sequence combining its two operands.
+Destructor. Deallocates all nodes on the list.
 
-\subsubsection{{\tt Sequence\& operator+=(other)}}
+\subsubsection{{\tt class iterator} \\
+	{\tt class const\_iterator}}
 
-Addition assignment operator. Adds all nodes of the other sequence to this one.
+An powerful forward input-output iterator that allows the list to be traversed
+with $O(n)$ complexity while respecting sublist boundaries, or ignoring them
+if necessary. A detailed specification of this class can be found in the next
+subsection.
 
-\subsubsection{{\tt void add(key, info)}\\
-{\tt void add(keyInfoPair)}}
+\subsubsection{{\tt iterator begin()} \\
+	{\tt iterator begin(const Key\&)} \\
+	{\tt iterator cbegin() const} \\
+	{\tt iterator cbegin(const Key\&) const}}
+	
+Returns an iterator pointing to the first element on the sublist. Overloads 1
+and 3 are key-agnostic.
 
-Adds a new node at the end of the list.
+\subsubsection{{\tt iterator end()} \\
+	{\tt iterator end(const Key\&)} \\
+	{\tt iterator cend() const} \\
+	{\tt iterator cend(const Key\&) const}}
+	
+Returns an iterator pointing to one element past the final item on the sublist.
+Overloads 1 and 3 are key-agnostic.
 
-\subsubsection{{\tt bool add(key, info, index)}\\
-{\tt bool add(keyInfoPair, index)}}
+\subsubsection{{\tt KeyInfoPair\& at(const Key\&, int)} \\
+	{\tt const KeyInfoPair\& at(const Key\&, int) const}}
+	
+Returns a reference to the n-th element on the given sublist. In contrast to
+the STL implementation of {\tt at()}, this method causes undefined behavior
+when trying to access a nonexistent element.
 
-Adds a new node at the given index. Returns true on success.
+\subsubsection{{\tt KeyInfoPair\& front(const Key\&)} \\
+	{\tt const KeyInfoPair\& front(const Key\&) const}}
+	
+Returns a reference to the first element on the given sublist. Causes undefined
+behavior when no such element is found.
 
-\subsubsection{{\tt bool add(sequence)}}
+\subsubsection{{\tt KeyInfoPair\& back(const Key\&)} \\
+	{\tt const KeyInfoPair\& back(const Key\&) const}}
+	
+Returns a reference to the last element on the given sublist. Causes undefined
+behavior when no such element is found.
 
-Appends the given sequence at the end of this list. Returns true if at least one
-element was appended.
+\subsubsection{{\tt int size() const} \\
+	{\tt int size(const Key\&) const}}
+	
+Returns the number of items in the given sublist. Overload 1 (for the entire
+sequence) has a complexity of $O(1)$, overload 2 has a complexity of $O(n)$.
 
-\subsubsection{{\tt bool get(index, outputKey, outputInfo)}\\
-{\tt bool get(index, outputKeyInfoPair)}}
+\subsubsection{{\tt bool empty() const} \\
+	{\tt bool empty(const Key\&) const}}
+	
+Checks whether the given sublist is empty. Overload 1 (for the entire sequence)
+has a complexity of $O(1)$, overload 2 has a complexity of $O(n)$.
 
-Retrieves the element at the given index. Returns true on success.
+\subsubsection{{\tt iterator insert(iterator, const Info\&)}}
+	
+Inserts a new node with the given info data before the specified element. Has
+no effect for key-agnostic iterators. $O(1)$ complexity for final-element
+insertions, $O(n)$ complexity for all other positions. Returns an iterator to
+the newly inserted element.
 
-\subsubsection{{\tt bool remove()}}
+\subsubsection{{\tt iterator erase(iterator}}
+	
+Erases the element at the given position with $O(n)$ complexity. Accepts
+key-agnostic iterators. Returns an iterator to the element following the erased
+element.
 
-Removes the last element from the list. Returns true if the list wasn't empty.
+\subsubsection{{\tt void push\_back(const Key\&, const Info\&)} \\
+	{\tt void push\_back(const KeyInfoPair\&)}}
+	
+Inserts a new element at the end of the given sublist. $O(1)$ complexity.
 
-\subsubsection{{\tt bool remove(index)}}
+\subsubsection{{\tt void push\_front(const Key\&, const Info\&)} \\
+	{\tt void push\_front(const KeyInfoPair\&)}}
+	
+Inserts a new element at the start of the given sublist.
 
-Removes the element with the given index from the list. Returns true on success.
+\subsubsection{{\tt void pop\_back(const Key\&)}}
 
-\subsubsection{{\tt int getSize()}}
+Erases the last element in the given sublist. Undefined behavior for empty
+lists.
 
-Retrieves the size of the list with $O(1)$ complexity.
+\subsubsection{{\tt void pop\_front(const Key\&)}}
+
+Erases the first element in the given sublist. Undefined behavior for empty
+lists.
+
+\subsubsection{{\tt void clear()} \\
+	{\tt void clear(const Key\&)}}
+
+Erases all elements in the given sublist.
+
+\subsection{{\tt Sequence<Key, Info>::iterator} \\
+{\tt Sequence<Key, Info>::const\_iterator}}
+
+\subsubsection{{\tt iterator()} \\
+	{\tt const\_iterator()}}
+
+Default constructor. Creates a key-agnostic end iterator.
+
+\subsubsection{{\tt bool isKeyed() const}}
+
+Checks whether the iterator is keyed, i.e. whether it follows sublist
+boundaries.
+
+\subsubsection{{\tt Key getKey() const}}
+
+Returns the key of the keyed iterator. For key-agnostic iterators, returns an
+instance of the key constructed with no parameters.
 
 \section{Implementation of the {\tt split} function}
 
