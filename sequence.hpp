@@ -314,6 +314,14 @@ typename Sequence<Key, Info>::iterator Sequence<Key, Info>::end() {
     return iterator();
 }
 template <class Key, class Info>
+typename Sequence<Key, Info>::iterator Sequence<Key, Info>::end(const Key& key) {
+    iterator output;
+    output.keyed = true;
+    output.key = key;
+
+    return output;
+}
+template <class Key, class Info>
 typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::cbegin() const {
     const_iterator output;
     output.node = this->head;
@@ -337,4 +345,12 @@ typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::cbegin(const K
 template <class Key, class Info>
 typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::cend() const {
     return const_iterator();
+}
+template <class Key, class Info>
+typename Sequence<Key, Info>::const_iterator Sequence<Key, Info>::cend(const Key& key) const {
+    const_iterator output;
+    output.keyed = true;
+    output.key = key;
+
+    return output;
 }

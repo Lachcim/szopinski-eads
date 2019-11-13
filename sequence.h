@@ -36,10 +36,12 @@ class Sequence {
         iterator begin();
         iterator begin(const Key&);
         iterator end();
+        iterator end(const Key&);
         class const_iterator;
         const_iterator cbegin() const;
         const_iterator cbegin(const Key&) const;
         const_iterator cend() const;
+        const_iterator cend(const Key&) const;
 
         KeyInfoPair& at(const Key&, int);
         const KeyInfoPair& at(const Key&, int) const;
