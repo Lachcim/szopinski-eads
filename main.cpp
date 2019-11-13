@@ -8,7 +8,7 @@ void split(const Sequence<Key, Info>& source, int start, Sequence<Key, Info>& de
     if (start >= source.size())
         return;
 
-    //obtain iterator of source
+    //obtain key-agnostic iterator of source
     typename Sequence<Key, Info>::const_iterator it = source.cbegin();
 
     //increment iterator to start position
