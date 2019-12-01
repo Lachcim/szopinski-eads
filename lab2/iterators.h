@@ -3,16 +3,15 @@
 #include "ring.h"
 
 template <typename Key, typename Info>
-class BiRing<Key, Info>::iterator {
-
-    friend class BiRing;
+class Ring<Key, Info>::iterator {
+    friend class Ring;
 
     private:
         Node* node;
 
     public:
         iterator();
-        
+
         KeyInfoPair& operator*();
         KeyInfoPair* operator->();
         iterator& operator++();
@@ -21,13 +20,11 @@ class BiRing<Key, Info>::iterator {
         iterator operator--(int);
         bool operator==(const iterator&) const;
         bool operator!=(const iterator&) const;
-
 };
 
 template <typename Key, typename Info>
-class BiRing<Key, Info>::const_iterator {
-
-    friend class BiRing;
+class Ring<Key, Info>::const_iterator {
+    friend class Ring;
 
     private:
         Node* node;
@@ -35,7 +32,7 @@ class BiRing<Key, Info>::const_iterator {
     public:
         const_iterator();
         const_iterator(const iterator&);
-        
+
         const KeyInfoPair& operator*();
         const KeyInfoPair* operator->();
         const_iterator& operator++();
@@ -44,9 +41,8 @@ class BiRing<Key, Info>::const_iterator {
         const_iterator operator--(int);
         bool operator==(const const_iterator&) const;
         bool operator!=(const const_iterator&) const;
-
 };
 
 #include "iterators.hpp"
 
-#endif 
+#endif
