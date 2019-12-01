@@ -1,5 +1,6 @@
 template <typename Key, typename Info>
 Ring<Key, Info>::Ring::Node::Node(Key newKey, Info newInfo, Node* newNext, Node* newPrev) {
+    //create node, assign KIP, link to other nodes
     keyAndInfo = KeyInfoPair(newKey, newInfo);
     next = newNext;
     prev = newPrev;
@@ -7,72 +8,95 @@ Ring<Key, Info>::Ring::Node::Node(Key newKey, Info newInfo, Node* newNext, Node*
 
 template <typename Key, typename Info>
 Ring<Key, Info>::Ring::Node::Node() {
+    //create unlinked node
     next = nullptr;
     prev = nullptr;
 }
 
 template <typename Key, typename Info>
 Ring<Key, Info>::Ring::KeyInfoPair::KeyInfoPair(Key newKey, Info newInfo) {
+    //assign key and info
     key = newKey;
     info = newInfo;
 }
 
 template <typename Key, typename Info>
 Ring<Key, Info>::Ring() {
+    //create empty ring
     anchor = nullptr;
     nodeCount = 0;
 }
 
 template  <typename Key, typename Info>
 Ring<Key, Info>::~Ring() {
+    //deallocate all elements
     clear();
 }
 
 template  <typename Key, typename Info>
 void Ring<Key, Info>::copyNodes(const Ring<Key, Info>& other) {
-    Node* temp = other.anchor;
+    //obtain iterator over other ring
+    const_iterator it = other.begin();
 
-    while (true) {
-        push_back(temp->keyAndInfo);
+    //probe size once to allow self-copying
+    int otherNodeCount = other.nodeCount;
 
-        temp = temp->next;
-        if (temp == other.anchor)
-            break;
+    //iterate over other ring, add all its nodes
+    for (int i = 0; i < otherNodeCount; i++) {
+        push_back(*it);
+        ++it;
     }
 }
 
 template  <typename Key, typename Info>
 Ring<Key, Info>::Ring(const Ring<Key, Info>& other) {
+    //prevent self-copying
+    if (&other == this)
+        return;
+
+    //destroy all nodes and copy them from the other ring
     clear();
     copyNodes(other);
 }
 
 template  <typename Key, typename Info>
 Ring<Key, Info>::Ring(Ring<Key, Info>&& other) {
+    //take over other ring's resources
     clear();
     anchor = other.anchor;
     nodeCount = other.nodeCount;
+
+    //mark other ring as empty
     other.anchor = nullptr;
     other.nodeCount = 0;
 }
 
 template  <typename Key, typename Info>
 Ring<Key, Info>& Ring<Key, Info>::operator=(const Ring<Key, Info>& other) {
+    //prevent self-assignment
+    if (&other == this)
+        return;
+
+    //copy nodes from other ring
     clear();
     copyNodes(other);
 }
 
 template  <typename Key, typename Info>
 Ring<Key, Info>& Ring<Key, Info>::operator=(Ring<Key, Info>&& other) {
+    //take over other ring's resources
     clear();
     anchor = other.anchor;
     nodeCount = other.nodeCount;
+
+    //mark other ring as empty
     other.anchor = nullptr;
     other.nodeCount = 0;
 }
 
 template  <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::begin() {
+    //return iterator to anchor or end() if empty
     iterator it;
     it.node = anchor;
     return it;
@@ -80,6 +104,7 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::begin() {
 
 template  <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::end() {
+    //return abstract end iterator
     iterator it;
     it.node = nullptr;
     return it;
@@ -87,6 +112,7 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::end() {
 
 template  <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::cbegin() const {
+    //return iterator to anchor or cend() if empty
     const_iterator it;
     it.node = anchor;
     return it;
@@ -94,6 +120,7 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::cbegin() const {
 
 template  <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::cend() const {
+    //return abstract end iterator
     const_iterator it;
     it.node = nullptr;
     return it;
@@ -101,14 +128,17 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::cend() const {
 
 template  <typename Key, typename Info>
 void Ring<Key, Info>::clear() {
+    //obtain pointer to anchor
     Node* it = anchor;
 
+    //deallocate nodeCount consecutive nodes
     for (int i = 0; i < nodeCount; i++) {
         Node* next = it->next;
         delete it;
         it = next;
     }
 
+    //mark ring as empty
     nodeCount = 0;
     anchor = nullptr;
 }
@@ -135,9 +165,11 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::advance(const iterator& star
 
 template  <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalAdvance(const const_iterator& start, const Key& seekedKey) const {
+    //move to element immediately following start
     const_iterator it = start;
     ++it;
 
+    //iterate over ring until start is reached again
     do {
         if (it->key == seekedKey)
             return it;
@@ -145,26 +177,33 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalAdvance(const 
         ++it;
     } while (it != start);
 
+    //if start reached without finding key and start matches key, return start
     if (start->key == seekedKey)
         return start;
 
+    //if no key found, return end iterator
     return cend();
 }
 
 template  <typename Key, typename Info>
 void Ring<Key, Info>::push_back(const KeyInfoPair& keyInfoPair) {
+    //if there's no anchor, create it
     if (!anchor) {
+        //allocate new node with itself as predecessor and successor
         Node* newNode = new Node(keyInfoPair.key, keyInfoPair.info, nullptr, nullptr);
         newNode->next = newNode;
         newNode->prev = newNode;
 
+        //mark new anchor
         anchor = newNode;
         nodeCount++;
         return;
     }
 
+    //allocate new element before anchor
     Node* newNode = new Node(keyInfoPair.key, keyInfoPair.info, anchor, anchor->prev);
 
+    //update anchor and the element before it
     anchor->prev->next = newNode;
     anchor->prev = newNode;
     nodeCount++;
@@ -172,16 +211,19 @@ void Ring<Key, Info>::push_back(const KeyInfoPair& keyInfoPair) {
 
 template  <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const KeyInfoPair& keyInfoPair, iterator& position) {
+    //if the ring is empty, use push_back's anchor insertion
     if (empty()) {
         push_back(keyInfoPair);
         return begin();
     }
 
+    //create new node and update neighbors
     Node* newNode = new Node(keyInfoPair.key, keyInfoPair.info, position.node, position.node->prev);
     position.node->prev->next = newNode;
     position.node->prev = newNode;
     nodeCount++;
 
+    //return iterator to newly created element
     iterator it;
     it.node = newNode;
     return it;
@@ -189,24 +231,30 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const KeyInfoPair& ke
 
 template  <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::erase(const iterator& element) {
+    //if there's only one element, use clear's anchor clearing
     if (nodeCount == 1) {
         clear();
         return end();
     }
 
+    //unlink element in list
     element.node->prev->next = element.node->next;
     element.node->next->prev = element.node->prev;
 
+    //update anchor if necessary
     if (element.node == anchor) {
         anchor = element.node->next;
     }
 
+    //obtain iterator to next element
     iterator nextElement;
     nextElement.node = element.node->next;
 
+    //delete this element
     delete element.node;
     nodeCount--;
 
+    //return iterator
     return nextElement;
 }
 
@@ -222,40 +270,48 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::find(const Key& seeked
 
 template  <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalFind(const Key& seekedKey, int index) const {
+    //if the ring is empty, return end
     if (empty())
         return cend();
 
+    //obtain iterator to first instance of key
     const_iterator it = cbegin();
     if (it->key != seekedKey)
-        advance(seekedKey, it);
+        seekedKey = advance(it, seekedKey);
 
+    //if key doesn't exist, return end
     if (it == cend())
         return cend();
 
+    //advance iterator index times
     for(int i = 0; i < index; i++)
-        advance(seekedKey, it);
+        seekedKey = advance(it, seekedKey);
 
+    //return iterator
     return it;
 }
 
 template  <typename Key, typename Info>
 int Ring<Key, Info>::size(const Key& key) const {
+    //obtain iterator to first element
     const_iterator it = cbegin();
-    int occurrences = 0;
 
-    while (true) {
+    //iterate over ring and count occurrences
+    int occurrences = 0;
+    do {
         if (it->key == key)
             occurrences++;
 
         ++it;
-        if (it == cbegin()) break;
-    }
+    } while (it != cbegin());
 
+    //return the number of found occurrences
     return occurrences;
 }
 
 template  <typename Key, typename Info>
 bool Ring<Key, Info>::operator==(const Ring<Key, Info>& other) const {
+    //return false on node count mismatch
     if (nodeCount != other.nodeCount)
         return false;
 
@@ -269,8 +325,10 @@ bool Ring<Key, Info>::operator!=(const Ring<Key, Info>& other) const {
 
 template  <typename Key, typename Info>
 void Ring<Key, Info>::clear(const Key& key) {
+    //obtain iterator to first element
     iterator it = begin();
 
+    //iterate over entire ring and remove all instances of key
     for (int i = 0; i < nodeCount; i++){
         if (it->key == key) {
             it = erase(it);
@@ -283,6 +341,9 @@ void Ring<Key, Info>::clear(const Key& key) {
 
 template  <typename Key, typename Info>
 bool Ring<Key, Info>::empty(const Key& key) const {
+    //find first instance of key
     const_iterator it = find(key, 0);
+
+    //if no first instance found, there's no key
     return it == cend();
 }
