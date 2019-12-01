@@ -51,7 +51,8 @@ class Ring {
 
         iterator find(const Key&, int);
         const_iterator find(const Key&, int) const;
-        void advance(const Key&, const_iterator&) const;
+        iterator advance(const iterator&, const Key&);
+        const_iterator advance(const const_iterator&, const Key&) const;
 
         bool empty() const;
         bool empty(const Key&) const;
@@ -61,6 +62,7 @@ class Ring {
     private:
         void copyNodes(const Ring&);
         const_iterator internalFind(const Key&, int) const;
+        const_iterator internalAdvance(const const_iterator&, const Key&) const;
 };
 
 #include "ring.hpp"

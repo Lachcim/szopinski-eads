@@ -7,13 +7,15 @@ class Ring<Key, Info>::iterator {
     friend class Ring;
 
     private:
+        iterator(const const_iterator&);
+
         Node* node;
 
     public:
         iterator();
 
-        KeyInfoPair& operator*();
-        KeyInfoPair* operator->();
+        KeyInfoPair& operator*() const;
+        KeyInfoPair* operator->() const;
         iterator& operator++();
         iterator operator++(int);
         iterator& operator--();
@@ -33,8 +35,8 @@ class Ring<Key, Info>::const_iterator {
         const_iterator();
         const_iterator(const iterator&);
 
-        const KeyInfoPair& operator*();
-        const KeyInfoPair* operator->();
+        const KeyInfoPair& operator*() const;
+        const KeyInfoPair* operator->() const;
         const_iterator& operator++();
         const_iterator operator++(int);
         const_iterator& operator--();

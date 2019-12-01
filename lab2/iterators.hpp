@@ -6,12 +6,17 @@ Ring<Key, Info>::iterator::iterator() {
 }
 
 template <typename Key, typename Info>
-typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::iterator::operator*() {
+Ring<Key, Info>::iterator::iterator(const const_iterator& other) {
+    node = other.node;
+}
+
+template <typename Key, typename Info>
+typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::iterator::operator*() const {
     return node->keyAndInfo;
 }
 
 template <typename Key, typename Info>
-typename Ring<Key, Info>::KeyInfoPair* Ring<Key, Info>::iterator::operator->() {
+typename Ring<Key, Info>::KeyInfoPair* Ring<Key, Info>::iterator::operator->() const {
     return &node->keyAndInfo;
 }
 
@@ -62,12 +67,12 @@ Ring<Key, Info>::const_iterator::const_iterator(const iterator& other) {
 }
 
 template <typename Key, typename Info>
-const typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::const_iterator::operator*() {
+const typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::const_iterator::operator*() const {
     return node->keyAndInfo;
 }
 
 template <typename Key, typename Info>
-const typename Ring<Key, Info>::KeyInfoPair* Ring<Key, Info>::const_iterator::operator->() {
+const typename Ring<Key, Info>::KeyInfoPair* Ring<Key, Info>::const_iterator::operator->() const {
     return &node->keyAndInfo;
 }
 

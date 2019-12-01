@@ -124,23 +124,31 @@ int Ring<Key, Info>::size() const {
 }
 
 template  <typename Key, typename Info>
-void Ring<Key, Info>::advance(const Key& seekedKey, const_iterator& start) const {
+typename Ring<Key, Info>::const_iterator Ring<Key, Info>::advance(const const_iterator& start, const Key& seekedKey) const {
+    return internalAdvance(start, seekedKey);
+}
+
+template  <typename Key, typename Info>
+typename Ring<Key, Info>::iterator Ring<Key, Info>::advance(const iterator& start, const Key& seekedKey) {
+    return internalAdvance(start, seekedKey);
+}
+
+template  <typename Key, typename Info>
+typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalAdvance(const const_iterator& start, const Key& seekedKey) const {
     const_iterator it = start;
     ++it;
 
-    while (true) {
-        if (it->key == seekedKey) {
-            start = it;
-            return;
-        }
+    do {
+        if (it->key == seekedKey)
+            return it;
 
-        if (it == start) break;
         ++it;
-    }
+    } while (it != start);
 
-    if (start->key == seekedKey) return;
+    if (start->key == seekedKey)
+        return start;
 
-    start.node = nullptr;
+    return cend();
 }
 
 template  <typename Key, typename Info>
