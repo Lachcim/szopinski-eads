@@ -1,23 +1,13 @@
 template <typename Key, typename Info>
-Ring<Key, Info>::Ring::Node::Node(Key newKey, Info newInfo, Node* newNext, Node* newPrev) {
-    //create node, assign KIP, link to other nodes
-    keyAndInfo = KeyInfoPair(newKey, newInfo);
+Ring<Key, Info>::Ring::Node::Node(Key newKey, Info newInfo, Node* newNext, Node* newPrev) : keyAndInfo(newKey, newInfo) {
+    //create node, assign KIP with initializer list, link to other nodes
     next = newNext;
     prev = newPrev;
 }
 
 template <typename Key, typename Info>
-Ring<Key, Info>::Ring::Node::Node() {
-    //create unlinked node
-    next = nullptr;
-    prev = nullptr;
-}
-
-template <typename Key, typename Info>
-Ring<Key, Info>::Ring::KeyInfoPair::KeyInfoPair(Key newKey, Info newInfo) {
-    //assign key and info
-    key = newKey;
-    info = newInfo;
+Ring<Key, Info>::Ring::KeyInfoPair::KeyInfoPair(Key newKey, Info newInfo): key(newKey), info(newInfo) {
+    //assign key and info with initializer list
 }
 
 template <typename Key, typename Info>

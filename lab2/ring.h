@@ -8,7 +8,6 @@ class Ring {
             Key key;
             Info info;
 
-            KeyInfoPair() = default;
             KeyInfoPair(Key, Info);
         };
 
@@ -18,7 +17,6 @@ class Ring {
             Node* next;
             Node* prev;
 
-            Node();
             Node(Key, Info, Node*, Node*);
         };
 
