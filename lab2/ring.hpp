@@ -51,7 +51,9 @@ template  <typename Key, typename Info>
 Ring<Key, Info>::Ring(Ring<Key, Info>&& other) {
     clear();
     anchor = other.anchor;
+    nodeCount = other.nodeCount;
     other.anchor = nullptr;
+    other.nodeCount = 0;
 }
 
 template  <typename Key, typename Info>
@@ -64,7 +66,9 @@ template  <typename Key, typename Info>
 Ring<Key, Info>& Ring<Key, Info>::operator=(Ring<Key, Info>&& other) {
     clear();
     anchor = other.anchor;
+    nodeCount = other.nodeCount;
     other.anchor = nullptr;
+    other.nodeCount = 0;
 }
 
 template  <typename Key, typename Info>
