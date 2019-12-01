@@ -36,7 +36,7 @@ Ring<Key, Info>::~Ring() {
 template  <typename Key, typename Info>
 void Ring<Key, Info>::copyNodes(const Ring<Key, Info>& other) {
     //obtain iterator over other ring
-    const_iterator it = other.begin();
+    const_iterator it = other.cbegin();
 
     //probe size once to allow self-copying
     int otherNodeCount = other.nodeCount;
@@ -80,6 +80,8 @@ Ring<Key, Info>& Ring<Key, Info>::operator=(const Ring<Key, Info>& other) {
     //copy nodes from other ring
     clear();
     copyNodes(other);
+
+    return *this;
 }
 
 template  <typename Key, typename Info>
@@ -92,6 +94,8 @@ Ring<Key, Info>& Ring<Key, Info>::operator=(Ring<Key, Info>&& other) {
     //mark other ring as empty
     other.anchor = nullptr;
     other.nodeCount = 0;
+
+    return *this;
 }
 
 template  <typename Key, typename Info>
@@ -272,7 +276,9 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::erase(const iterator& elemen
 
 template  <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::find(const Key& seekedKey, int index) {
-    return internalFind(seekedKey, index);
+    iterator output;
+    output.node = internalFind(seekedKey, index).node;
+    return output;
 }
 
 template  <typename Key, typename Info>
@@ -289,7 +295,7 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalFind(const Key
     //obtain iterator to first instance of key
     const_iterator it = cbegin();
     if (it->key != seekedKey)
-        seekedKey = advance(it, seekedKey);
+        it = advance(it, seekedKey);
 
     //if key doesn't exist, return end
     if (it == cend())
@@ -297,7 +303,7 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalFind(const Key
 
     //advance iterator index times
     for(int i = 0; i < index; i++)
-        seekedKey = advance(it, seekedKey);
+        it = advance(it, seekedKey);
 
     //return iterator
     return it;

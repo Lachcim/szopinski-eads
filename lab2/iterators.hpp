@@ -92,7 +92,7 @@ typename Ring<Key, Info>::const_iterator& Ring<Key, Info>::const_iterator::opera
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::const_iterator::operator--(int) {
-    iterator old = *this;
+    const_iterator old = *this;
     node = node->prev;
     return old;
 }
