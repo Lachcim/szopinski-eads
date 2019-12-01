@@ -75,7 +75,7 @@ template  <typename Key, typename Info>
 Ring<Key, Info>& Ring<Key, Info>::operator=(const Ring<Key, Info>& other) {
     //prevent self-assignment
     if (&other == this)
-        return;
+        return *this;
 
     //copy nodes from other ring
     clear();

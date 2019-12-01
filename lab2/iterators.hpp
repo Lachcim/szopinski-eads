@@ -7,6 +7,7 @@ Ring<Key, Info>::iterator::iterator() {
 
 template <typename Key, typename Info>
 Ring<Key, Info>::iterator::iterator(const const_iterator& other) {
+    //private constructor for internal conversion
     node = other.node;
 }
 
