@@ -160,7 +160,9 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::advance(const const_it
 
 template  <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::advance(const iterator& start, const Key& seekedKey) {
-    return internalAdvance(start, seekedKey);
+    iterator output;
+    output.node = internalAdvance(start, seekedKey).node;
+    return output;
 }
 
 template  <typename Key, typename Info>
@@ -210,6 +212,11 @@ void Ring<Key, Info>::push_back(const KeyInfoPair& keyInfoPair) {
 }
 
 template  <typename Key, typename Info>
+void Ring<Key, Info>::push_back(const Key& key, const Info& info) {
+    push_back(KeyInfoPair(key, info));
+}
+
+template  <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const KeyInfoPair& keyInfoPair, iterator& position) {
     //if the ring is empty, use push_back's anchor insertion
     if (empty()) {
@@ -227,6 +234,11 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const KeyInfoPair& ke
     iterator it;
     it.node = newNode;
     return it;
+}
+
+template  <typename Key, typename Info>
+typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const Key& key, const Info& info, iterator& position) {
+    return insert(KeyInfoPair(key, info), position);
 }
 
 template  <typename Key, typename Info>

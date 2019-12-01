@@ -6,12 +6,6 @@ Ring<Key, Info>::iterator::iterator() {
 }
 
 template <typename Key, typename Info>
-Ring<Key, Info>::iterator::iterator(const const_iterator& other) {
-    //private constructor for internal conversion
-    node = other.node;
-}
-
-template <typename Key, typename Info>
 typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::iterator::operator*() const {
     return node->keyAndInfo;
 }
@@ -85,7 +79,7 @@ typename Ring<Key, Info>::const_iterator& Ring<Key, Info>::const_iterator::opera
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::const_iterator::operator++(int) {
-    iterator old = *this;
+    const_iterator old = *this;
     node = node->next;
     return old;
 }

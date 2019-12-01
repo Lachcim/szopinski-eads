@@ -7,8 +7,6 @@ class Ring<Key, Info>::iterator {
     friend class Ring;
 
     private:
-        iterator(const const_iterator&);
-
         Node* node;
 
     public:
