@@ -1,8 +1,8 @@
 template <typename Key, typename Info>
-Ring<Key, Info>::Ring::Node::Node(Key newKey, Info newInfo, Node* newNext, Node* newPrev) : keyAndInfo(newKey, newInfo) {
+Ring<Key, Info>::Ring::Node::Node(Key newKey, Info newInfo, Node* newNext, Node* newPrevious) : keyInfoPair(newKey, newInfo) {
     //create node, assign KIP with initializer list, link to other nodes
     next = newNext;
-    prev = newPrev;
+    previous = newPrevious;
 }
 
 template <typename Key, typename Info>
@@ -188,7 +188,7 @@ void Ring<Key, Info>::push_back(const KeyInfoPair& keyInfoPair) {
         //allocate new node with itself as predecessor and successor
         Node* newNode = new Node(keyInfoPair.key, keyInfoPair.info, nullptr, nullptr);
         newNode->next = newNode;
-        newNode->prev = newNode;
+        newNode->previous = newNode;
 
         //mark new anchor
         anchor = newNode;
@@ -197,11 +197,11 @@ void Ring<Key, Info>::push_back(const KeyInfoPair& keyInfoPair) {
     }
 
     //allocate new element before anchor
-    Node* newNode = new Node(keyInfoPair.key, keyInfoPair.info, anchor, anchor->prev);
+    Node* newNode = new Node(keyInfoPair.key, keyInfoPair.info, anchor, anchor->previous);
 
     //update anchor and the element before it
-    anchor->prev->next = newNode;
-    anchor->prev = newNode;
+    anchor->previous->next = newNode;
+    anchor->previous = newNode;
     nodeCount++;
 }
 
@@ -219,9 +219,9 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const KeyInfoPair& ke
     }
 
     //create new node and update neighbors
-    Node* newNode = new Node(keyInfoPair.key, keyInfoPair.info, position.node, position.node->prev);
-    position.node->prev->next = newNode;
-    position.node->prev = newNode;
+    Node* newNode = new Node(keyInfoPair.key, keyInfoPair.info, position.node, position.node->previous);
+    position.node->previous->next = newNode;
+    position.node->previous = newNode;
     nodeCount++;
 
     //return iterator to newly created element
@@ -244,8 +244,8 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::erase(const iterator& elemen
     }
 
     //unlink element in list
-    element.node->prev->next = element.node->next;
-    element.node->next->prev = element.node->prev;
+    element.node->previous->next = element.node->next;
+    element.node->next->previous = element.node->previous;
 
     //update anchor if necessary
     if (element.node == anchor) {
@@ -332,8 +332,8 @@ bool Ring<Key, Info>::operator==(const Ring<Key, Info>& other) const {
 
         bool mismatch = false;
         do {
-            if (thisNode->keyAndInfo.key != otherNode->keyAndInfo.key
-                || thisNode->keyAndInfo.info != otherNode->keyAndInfo.info) {
+            if (thisNode->keyInfoPair.key != otherNode->keyInfoPair.key
+                || thisNode->keyInfoPair.info != otherNode->keyInfoPair.info) {
                 //on element mismatch, set flag and stop rotation comparison
                 mismatch = true;
                 break;
@@ -385,7 +385,7 @@ void Ring<Key, Info>::rotate(int amount) {
 
     //rotate to the right for negative arguments
     for (int i = amount; i < 0; i++)
-        anchor = anchor->prev;
+        anchor = anchor->previous;
 }
 
 template  <typename Key, typename Info>

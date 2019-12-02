@@ -13,9 +13,9 @@ class Ring {
 
     private:
         struct Node {
-            KeyInfoPair keyAndInfo;
+            KeyInfoPair keyInfoPair;
             Node* next;
-            Node* prev;
+            Node* previous;
 
             Node(Key, Info, Node*, Node*);
         };

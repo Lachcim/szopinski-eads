@@ -5,12 +5,12 @@ Ring<Key, Info>::iterator::iterator() {
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::iterator::operator*() const {
-    return node->keyAndInfo;
+    return node->keyInfoPair;
 }
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::KeyInfoPair* Ring<Key, Info>::iterator::operator->() const {
-    return &node->keyAndInfo;
+    return &node->keyInfoPair;
 }
 
 template <typename Key, typename Info>
@@ -28,14 +28,14 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::iterator::operator++(int) {
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator& Ring<Key, Info>::iterator::operator--() {
-    node = node->prev;
+    node = node->previous;
     return *this;
 }
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::iterator::operator--(int) {
     iterator old = *this;
-    node = node->prev;
+    node = node->previous;
     return old;
 }
 
@@ -61,12 +61,12 @@ Ring<Key, Info>::const_iterator::const_iterator(const iterator& other) {
 
 template <typename Key, typename Info>
 const typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::const_iterator::operator*() const {
-    return node->keyAndInfo;
+    return node->keyInfoPair;
 }
 
 template <typename Key, typename Info>
 const typename Ring<Key, Info>::KeyInfoPair* Ring<Key, Info>::const_iterator::operator->() const {
-    return &node->keyAndInfo;
+    return &node->keyInfoPair;
 }
 
 template <typename Key, typename Info>
@@ -84,14 +84,14 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::const_iterator::operat
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator& Ring<Key, Info>::const_iterator::operator--() {
-    node = node->prev;
+    node = node->previous;
     return *this;
 }
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::const_iterator::operator--(int) {
     const_iterator old = *this;
-    node = node->prev;
+    node = node->previous;
     return old;
 }
 
