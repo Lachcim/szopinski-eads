@@ -1,6 +1,5 @@
 #ifndef ITERATORS_H
 #define ITERATORS_H
-#include "ring.h"
 
 template <typename Key, typename Info>
 class Ring<Key, Info>::iterator {

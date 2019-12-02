@@ -1,5 +1,3 @@
-#include "ring.h"
-
 template <typename Key, typename Info>
 Ring<Key, Info>::iterator::iterator() {
     node = nullptr;

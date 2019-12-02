@@ -211,7 +211,7 @@ void Ring<Key, Info>::push_back(const Key& key, const Info& info) {
 }
 
 template  <typename Key, typename Info>
-typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const KeyInfoPair& keyInfoPair, iterator& position) {
+typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const KeyInfoPair& keyInfoPair, const iterator& position) {
     //if the ring is empty, use push_back's anchor insertion
     if (empty()) {
         push_back(keyInfoPair);
@@ -231,7 +231,7 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const KeyInfoPair& ke
 }
 
 template  <typename Key, typename Info>
-typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const Key& key, const Info& info, iterator& position) {
+typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const Key& key, const Info& info, const iterator& position) {
     return insert(KeyInfoPair(key, info), position);
 }
 

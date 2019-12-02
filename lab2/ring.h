@@ -41,8 +41,8 @@ class Ring {
         const_iterator cbegin() const;
         const_iterator cend() const;
 
-        iterator insert(const KeyInfoPair&, iterator&);
-        iterator insert(const Key&, const Info&, iterator&);
+        iterator insert(const KeyInfoPair&, const iterator&);
+        iterator insert(const Key&, const Info&, const iterator&);
         void push_back(const KeyInfoPair&);
         void push_back(const Key&, const Info&);
         iterator erase(const iterator&);
