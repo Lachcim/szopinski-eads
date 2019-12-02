@@ -17,13 +17,13 @@ Ring<Key, Info>::Ring() {
     nodeCount = 0;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 Ring<Key, Info>::~Ring() {
     //deallocate all elements
     clear();
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 void Ring<Key, Info>::copyNodes(const Ring<Key, Info>& other) {
     //obtain iterator over other ring
     const_iterator it = other.cbegin();
@@ -38,7 +38,7 @@ void Ring<Key, Info>::copyNodes(const Ring<Key, Info>& other) {
     }
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 Ring<Key, Info>::Ring(const Ring<Key, Info>& other) {
     //prevent self-copying
     if (&other == this)
@@ -50,7 +50,7 @@ Ring<Key, Info>::Ring(const Ring<Key, Info>& other) {
     copyNodes(other);
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 Ring<Key, Info>::Ring(Ring<Key, Info>&& other) {
     //take over other ring's resources
     anchor = other.anchor;
@@ -61,7 +61,7 @@ Ring<Key, Info>::Ring(Ring<Key, Info>&& other) {
     other.nodeCount = 0;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 Ring<Key, Info>& Ring<Key, Info>::operator=(const Ring<Key, Info>& other) {
     //prevent self-assignment
     if (&other == this)
@@ -74,7 +74,7 @@ Ring<Key, Info>& Ring<Key, Info>::operator=(const Ring<Key, Info>& other) {
     return *this;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 Ring<Key, Info>& Ring<Key, Info>::operator=(Ring<Key, Info>&& other) {
     //deallocate node list and take over other ring's resources
     clear();
@@ -88,7 +88,7 @@ Ring<Key, Info>& Ring<Key, Info>::operator=(Ring<Key, Info>&& other) {
     return *this;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::begin() {
     //return iterator to anchor or end() if empty
     iterator it;
@@ -96,7 +96,7 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::begin() {
     return it;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::end() {
     //return abstract end iterator
     iterator it;
@@ -104,7 +104,7 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::end() {
     return it;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::cbegin() const {
     //return iterator to anchor or cend() if empty
     const_iterator it;
@@ -112,7 +112,7 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::cbegin() const {
     return it;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::cend() const {
     //return abstract end iterator
     const_iterator it;
@@ -120,7 +120,7 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::cend() const {
     return it;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 void Ring<Key, Info>::clear() {
     //obtain pointer to anchor
     Node* it = anchor;
@@ -190,29 +190,29 @@ const typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::operator[](int ind
     return internalAt(index);
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 bool Ring<Key, Info>::empty() const {
     return nodeCount == 0;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 int Ring<Key, Info>::size() const {
     return nodeCount;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::advance(const const_iterator& start, const Key& seekedKey) const {
     return internalAdvance(start, seekedKey);
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::advance(const iterator& start, const Key& seekedKey) {
     iterator output;
     output.node = internalAdvance(start, seekedKey).node;
     return output;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalAdvance(const const_iterator& start, const Key& seekedKey) const {
     //move to element immediately following start
     const_iterator it = start;
@@ -234,7 +234,7 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalAdvance(const 
     return cend();
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 void Ring<Key, Info>::push_back(const KeyInfoPair& keyInfoPair) {
     //if there's no anchor, create it
     if (!anchor) {
@@ -258,12 +258,12 @@ void Ring<Key, Info>::push_back(const KeyInfoPair& keyInfoPair) {
     nodeCount++;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 void Ring<Key, Info>::push_back(const Key& key, const Info& info) {
     push_back(KeyInfoPair(key, info));
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const KeyInfoPair& keyInfoPair, const iterator& position) {
     //if the ring is empty, use push_back's anchor insertion
     if (empty()) {
@@ -283,12 +283,12 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const KeyInfoPair& ke
     return it;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const Key& key, const Info& info, const iterator& position) {
     return insert(KeyInfoPair(key, info), position);
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::erase(const iterator& element) {
     //if there's only one element, use clear's anchor clearing
     if (nodeCount == 1) {
@@ -317,19 +317,19 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::erase(const iterator& elemen
     return nextElement;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::find(const Key& seekedKey, int index) {
     iterator output;
     output.node = internalFind(seekedKey, index).node;
     return output;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::find(const Key& seekedKey, int index) const {
     return internalFind(seekedKey, index);
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalFind(const Key& seekedKey, int index) const {
     //if the ring is empty, return end
     if (empty())
@@ -352,7 +352,7 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalFind(const Key
     return it;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 int Ring<Key, Info>::size(const Key& key) const {
     //obtain iterator to first element
     const_iterator it = cbegin();
@@ -370,7 +370,7 @@ int Ring<Key, Info>::size(const Key& key) const {
     return occurrences;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 bool Ring<Key, Info>::operator==(const Ring<Key, Info>& other) const {
     //return false on node count mismatch
     if (nodeCount != other.nodeCount)
@@ -409,12 +409,12 @@ bool Ring<Key, Info>::operator==(const Ring<Key, Info>& other) const {
     return false;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 bool Ring<Key, Info>::operator!=(const Ring<Key, Info>& other) const {
     return !(*this == other);
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 void Ring<Key, Info>::clear(const Key& key) {
     //obtain iterator to first element
     iterator it = begin();
@@ -430,7 +430,7 @@ void Ring<Key, Info>::clear(const Key& key) {
     }
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 void Ring<Key, Info>::rotate(int amount) {
     //rotate to the left for positive arguments
     for (int i = amount; i > 0; i--)
@@ -441,7 +441,7 @@ void Ring<Key, Info>::rotate(int amount) {
         anchor = anchor->previous;
 }
 
-template  <typename Key, typename Info>
+template <typename Key, typename Info>
 bool Ring<Key, Info>::empty(const Key& key) const {
     //find first instance of key
     const_iterator it = find(key, 0);
