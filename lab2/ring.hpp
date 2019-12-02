@@ -137,6 +137,59 @@ void Ring<Key, Info>::clear() {
     anchor = nullptr;
 }
 
+template <typename Key, typename Info>
+const typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::internalAt(int index) const {
+    //obtain iterator to first element
+    const_iterator it = cbegin();
+
+    //increment/decrement iterator as needed
+    for (int i = index; i > 0; i--) ++it;
+    for (int i = index; i < 0; i++) --it;
+
+    //dereference iterator
+    return *it;
+}
+
+template <typename Key, typename Info>
+typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::at(int index) {
+    return (KeyInfoPair&)internalAt(index);
+}
+
+template <typename Key, typename Info>
+const typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::at(int index) const {
+    return internalAt(index);
+}
+
+template <typename Key, typename Info>
+typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::front() {
+    return (KeyInfoPair&)internalAt(0);
+}
+
+template <typename Key, typename Info>
+const typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::front() const {
+    return internalAt(0);
+}
+
+template <typename Key, typename Info>
+typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::back() {
+    return (KeyInfoPair&)internalAt(-1);
+}
+
+template <typename Key, typename Info>
+const typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::back() const {
+    return internalAt(-1);
+}
+
+template <typename Key, typename Info>
+typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::operator[](int index) {
+    return (KeyInfoPair&)internalAt(index);
+}
+
+template <typename Key, typename Info>
+const typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::operator[](int index) const {
+    return internalAt(index);
+}
+
 template  <typename Key, typename Info>
 bool Ring<Key, Info>::empty() const {
     return nodeCount == 0;

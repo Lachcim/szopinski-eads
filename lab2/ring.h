@@ -30,8 +30,6 @@ class Ring {
 
         Ring<Key, Info>& operator=(const Ring<Key, Info>&);
         Ring<Key, Info>& operator=(Ring<Key, Info>&&);
-        bool operator==(const Ring<Key, Info>&) const;
-        bool operator!=(const Ring<Key, Info>&) const;
 
         class iterator;
         class const_iterator;
@@ -40,6 +38,18 @@ class Ring {
         iterator end();
         const_iterator cbegin() const;
         const_iterator cend() const;
+
+        bool operator==(const Ring<Key, Info>&) const;
+        bool operator!=(const Ring<Key, Info>&) const;
+
+        KeyInfoPair& at(int);
+        const KeyInfoPair& at(int) const;
+        KeyInfoPair& front();
+        const KeyInfoPair& front() const;
+        KeyInfoPair& back();
+        const KeyInfoPair& back() const;
+        KeyInfoPair& operator[](int);
+        const KeyInfoPair& operator[](int) const;
 
         iterator insert(const KeyInfoPair&, const iterator&);
         iterator insert(const Key&, const Info&, const iterator&);
@@ -62,6 +72,7 @@ class Ring {
 
     private:
         void copyNodes(const Ring&);
+        const KeyInfoPair& internalAt(int) const;
         const_iterator internalFind(const Key&, int) const;
         const_iterator internalAdvance(const const_iterator&, const Key&) const;
 };
