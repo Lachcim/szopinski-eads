@@ -323,7 +323,37 @@ bool Ring<Key, Info>::operator==(const Ring<Key, Info>& other) const {
     if (nodeCount != other.nodeCount)
         return false;
 
-    //todo
+    //check all rotations of other
+    Node* otherAnchor = other.anchor;
+    do {
+        //start comparison at respective anchors
+        Node* thisNode = anchor;
+        Node* otherNode = otherAnchor;
+
+        bool mismatch = false;
+        do {
+            if (thisNode->keyAndInfo.key != otherNode->keyAndInfo.key
+                || thisNode->keyAndInfo.info != otherNode->keyAndInfo.info) {
+                //on element mismatch, set flag and stop rotation comparison
+                mismatch = true;
+                break;
+            }
+
+            //check next pair of elements
+            thisNode = thisNode->next;
+            otherNode = otherNode->next;
+        } while (thisNode != anchor);
+
+        //if there was no mismatch during rotation comparison, return true
+        if (!mismatch)
+            return true;
+
+        //rotate other anchor
+        otherAnchor = otherAnchor->next;
+    } while(otherAnchor != other.anchor);
+
+    //if no rotation was equal, return false
+    return false;
 }
 
 template  <typename Key, typename Info>
