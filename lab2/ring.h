@@ -48,6 +48,7 @@ class Ring {
         iterator erase(const iterator&);
         void clear();
         void clear(const Key&);
+        void rotate(int);
 
         iterator find(const Key&, int);
         const_iterator find(const Key&, int) const;

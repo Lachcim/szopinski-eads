@@ -378,6 +378,17 @@ void Ring<Key, Info>::clear(const Key& key) {
 }
 
 template  <typename Key, typename Info>
+void Ring<Key, Info>::rotate(int amount) {
+    //rotate to the left for positive arguments
+    for (int i = amount; i > 0; i--)
+        anchor = anchor->next;
+
+    //rotate to the right for negative arguments
+    for (int i = amount; i < 0; i++)
+        anchor = anchor->prev;
+}
+
+template  <typename Key, typename Info>
 bool Ring<Key, Info>::empty(const Key& key) const {
     //find first instance of key
     const_iterator it = find(key, 0);
