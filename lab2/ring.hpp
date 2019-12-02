@@ -44,15 +44,15 @@ Ring<Key, Info>::Ring(const Ring<Key, Info>& other) {
     if (&other == this)
         return;
 
-    //destroy all nodes and copy them from the other ring
-    clear();
+    //copy nodes from the other ring
+    anchor = nullptr;
+    nodeCount = 0;
     copyNodes(other);
 }
 
 template  <typename Key, typename Info>
 Ring<Key, Info>::Ring(Ring<Key, Info>&& other) {
     //take over other ring's resources
-    clear();
     anchor = other.anchor;
     nodeCount = other.nodeCount;
 
@@ -76,7 +76,7 @@ Ring<Key, Info>& Ring<Key, Info>::operator=(const Ring<Key, Info>& other) {
 
 template  <typename Key, typename Info>
 Ring<Key, Info>& Ring<Key, Info>::operator=(Ring<Key, Info>&& other) {
-    //take over other ring's resources
+    //deallocate node list and take over other ring's resources
     clear();
     anchor = other.anchor;
     nodeCount = other.nodeCount;
