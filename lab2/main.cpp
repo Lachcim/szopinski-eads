@@ -18,7 +18,7 @@ Ring<Key, Info> shuffle(const Ring<Key, Info>& ring1, int count1, const Ring<Key
                 output.push_back(*it1++);
 
         //do the analogous for ring2
-        if (it2 != ring1.cend())
+        if (it2 != ring2.cend())
             for (int j = 0; j < count2; j++)
                 output.push_back(*it2++);
     }
