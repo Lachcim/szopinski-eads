@@ -1,3 +1,9 @@
+/*
+*   ################################
+*   SECTION: ITERATOR
+*   ################################
+*/
+
 template <typename Key, typename Info>
 Ring<Key, Info>::iterator::iterator() {
     node = nullptr;
@@ -48,6 +54,12 @@ template <typename Key, typename Info>
 bool Ring<Key, Info>::iterator::operator!=(const iterator& other) const {
     return other.node != node;
 }
+
+/*
+*   ################################
+*   SECTION: CONST_ITERATOR
+*   ################################
+*/
 
 template <typename Key, typename Info>
 Ring<Key, Info>::const_iterator::const_iterator() {
