@@ -4,6 +4,8 @@
 *   ################################
 */
 
+#include <stdexcept>
+
 //default KeyInfoPair constructor
 template <typename Key, typename Info>
 Ring<Key, Info>::Ring::KeyInfoPair::KeyInfoPair(Key newKey, Info newInfo): key(newKey), info(newInfo) {
@@ -186,6 +188,10 @@ bool Ring<Key, Info>::operator!=(const Ring<Key, Info>& other) const {
 //internal random access function
 template <typename Key, typename Info>
 const typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::internalAt(int index) const {
+    //handle empty ring
+    if (empty())
+        throw std::out_of_range("can't access element of empty ring");
+
     //obtain iterator to first element
     const_iterator it = cbegin();
 
@@ -254,6 +260,10 @@ const typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::operator[](int ind
 //insert element before the given position, return reference to inserted element
 template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::insert(const KeyInfoPair& keyInfoPair, const iterator& position) {
+    //handle invalid position
+    if (position == end() && !empty())
+        throw std::invalid_argument("a non empty ring doesn't have an end iterator");
+
     //if the ring is empty, use push_back's anchor insertion
     if (empty()) {
         push_back(keyInfoPair);
@@ -312,6 +322,10 @@ void Ring<Key, Info>::push_back(const Key& key, const Info& info) {
 //erase element at given position, return iterator to next element
 template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::erase(const iterator& element) {
+    //handle invalid position
+    if (element == end())
+        throw std::out_of_range("can't erase element outside of ring");
+
     //if there's only one element, use clear's anchor clearing
     if (nodeCount == 1) {
         clear();
@@ -395,6 +409,10 @@ void Ring<Key, Info>::rotate(int amount) {
 //internal key lookup function
 template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalFind(const Key& soughtKey, int index) const {
+    //handle invalid argument
+    if (index < 0)
+        throw std::invalid_argument("only non-negative indices are allowed");
+
     //if the ring is empty, return end
     if (empty())
         return cend();
@@ -433,6 +451,10 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::find(const Key& sought
 //internal iterator advancement function
 template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalAdvance(const const_iterator& start, const Key& soughtKey) const {
+    //handle invalid position
+    if (start == cend())
+        throw std::out_of_range("can't advance end iterator");
+
     //move to element immediately following start
     const_iterator it = start;
     ++it;
@@ -498,6 +520,10 @@ int Ring<Key, Info>::size() const {
 //return the amount of occurrences of key in ring
 template <typename Key, typename Info>
 int Ring<Key, Info>::size(const Key& key) const {
+    //handle empty ring
+    if (empty())
+        return 0;
+
     //obtain iterator to first element
     const_iterator it = cbegin();
 

@@ -11,22 +11,34 @@ Ring<Key, Info>::iterator::iterator() {
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::iterator::operator*() const {
+    if (!node)
+        throw std::logic_error("can't dereference end iterator");
+
     return node->keyInfoPair;
 }
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::KeyInfoPair* Ring<Key, Info>::iterator::operator->() const {
+    if (!node)
+        throw std::logic_error("can't dereference end iterator");
+
     return &node->keyInfoPair;
 }
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator& Ring<Key, Info>::iterator::operator++() {
+    if (!node)
+        throw std::logic_error("can't increment end iterator");
+
     node = node->next;
     return *this;
 }
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::iterator::operator++(int) {
+    if (!node)
+        throw std::logic_error("can't increment end iterator");
+
     iterator old = *this;
     node = node->next;
     return old;
@@ -34,12 +46,18 @@ typename Ring<Key, Info>::iterator Ring<Key, Info>::iterator::operator++(int) {
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator& Ring<Key, Info>::iterator::operator--() {
+    if (!node)
+        throw std::logic_error("can't decrement end iterator of a ring");
+
     node = node->previous;
     return *this;
 }
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::iterator Ring<Key, Info>::iterator::operator--(int) {
+    if (!node)
+        throw std::logic_error("can't decrement end iterator of a ring");
+
     iterator old = *this;
     node = node->previous;
     return old;
@@ -73,22 +91,34 @@ Ring<Key, Info>::const_iterator::const_iterator(const iterator& other) {
 
 template <typename Key, typename Info>
 const typename Ring<Key, Info>::KeyInfoPair& Ring<Key, Info>::const_iterator::operator*() const {
+    if (!node)
+        throw std::logic_error("can't dereference end iterator");
+
     return node->keyInfoPair;
 }
 
 template <typename Key, typename Info>
 const typename Ring<Key, Info>::KeyInfoPair* Ring<Key, Info>::const_iterator::operator->() const {
+    if (!node)
+        throw std::logic_error("can't dereference end iterator");
+
     return &node->keyInfoPair;
 }
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator& Ring<Key, Info>::const_iterator::operator++() {
+    if (!node)
+        throw std::logic_error("can't increment end iterator");
+
     node = node->next;
     return *this;
 }
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::const_iterator::operator++(int) {
+    if (!node)
+        throw std::logic_error("can't increment end iterator");
+
     const_iterator old = *this;
     node = node->next;
     return old;
@@ -96,12 +126,18 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::const_iterator::operat
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator& Ring<Key, Info>::const_iterator::operator--() {
+    if (!node)
+        throw std::logic_error("can't decrement end iterator of a ring");
+
     node = node->previous;
     return *this;
 }
 
 template <typename Key, typename Info>
 typename Ring<Key, Info>::const_iterator Ring<Key, Info>::const_iterator::operator--(int) {
+    if (!node)
+        throw std::logic_error("can't decrement end iterator of a ring");
+
     const_iterator old = *this;
     node = node->previous;
     return old;
