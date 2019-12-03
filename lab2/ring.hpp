@@ -394,15 +394,15 @@ void Ring<Key, Info>::rotate(int amount) {
 
 //internal key lookup function
 template <typename Key, typename Info>
-typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalFind(const Key& seekedKey, int index) const {
+typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalFind(const Key& soughtKey, int index) const {
     //if the ring is empty, return end
     if (empty())
         return cend();
 
     //obtain iterator to first instance of key
     const_iterator it = cbegin();
-    if (it->key != seekedKey)
-        it = advance(it, seekedKey);
+    if (it->key != soughtKey)
+        it = advance(it, soughtKey);
 
     //if key doesn't exist, return end
     if (it == cend())
@@ -410,7 +410,7 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalFind(const Key
 
     //advance iterator index times
     for(int i = 0; i < index; i++)
-        it = advance(it, seekedKey);
+        it = advance(it, soughtKey);
 
     //return iterator
     return it;
@@ -418,35 +418,35 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalFind(const Key
 
 //public interface of internalFind
 template <typename Key, typename Info>
-typename Ring<Key, Info>::iterator Ring<Key, Info>::find(const Key& seekedKey, int index) {
+typename Ring<Key, Info>::iterator Ring<Key, Info>::find(const Key& soughtKey, int index) {
     iterator output;
-    output.node = internalFind(seekedKey, index).node;
+    output.node = internalFind(soughtKey, index).node;
     return output;
 }
 
 //const version of find
 template <typename Key, typename Info>
-typename Ring<Key, Info>::const_iterator Ring<Key, Info>::find(const Key& seekedKey, int index) const {
-    return internalFind(seekedKey, index);
+typename Ring<Key, Info>::const_iterator Ring<Key, Info>::find(const Key& soughtKey, int index) const {
+    return internalFind(soughtKey, index);
 }
 
 //internal iterator advancement function
 template <typename Key, typename Info>
-typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalAdvance(const const_iterator& start, const Key& seekedKey) const {
+typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalAdvance(const const_iterator& start, const Key& soughtKey) const {
     //move to element immediately following start
     const_iterator it = start;
     ++it;
 
     //iterate over ring until start is reached again
     do {
-        if (it->key == seekedKey)
+        if (it->key == soughtKey)
             return it;
 
         ++it;
     } while (it != start);
 
     //if start reached without finding key and start matches key, return start
-    if (start->key == seekedKey)
+    if (start->key == soughtKey)
         return start;
 
     //if no key found, return end iterator
@@ -455,16 +455,16 @@ typename Ring<Key, Info>::const_iterator Ring<Key, Info>::internalAdvance(const 
 
 //public interface of internalAdvance
 template <typename Key, typename Info>
-typename Ring<Key, Info>::iterator Ring<Key, Info>::advance(const iterator& start, const Key& seekedKey) {
+typename Ring<Key, Info>::iterator Ring<Key, Info>::advance(const iterator& start, const Key& soughtKey) {
     iterator output;
-    output.node = internalAdvance(start, seekedKey).node;
+    output.node = internalAdvance(start, soughtKey).node;
     return output;
 }
 
 //const version of advance
 template <typename Key, typename Info>
-typename Ring<Key, Info>::const_iterator Ring<Key, Info>::advance(const const_iterator& start, const Key& seekedKey) const {
-    return internalAdvance(start, seekedKey);
+typename Ring<Key, Info>::const_iterator Ring<Key, Info>::advance(const const_iterator& start, const Key& soughtKey) const {
+    return internalAdvance(start, soughtKey);
 }
 
 /*
