@@ -26,7 +26,7 @@ Ring<Key, Info> shuffle(const Ring<Key, Info>& ring1, int count1, const Ring<Key
     //return output ring
     return output;
 }
-void printCharIntRing(const char* label, const Ring<const char*, long>& ring) {
+void printCharLongRing(const char* label, const Ring<const char*, long>& ring) {
     //print label
     std::cout << label << ":" << std::endl;
 
@@ -69,7 +69,7 @@ int main() {
     largeNumbers.push_back("misc", 213702137);
     largeNumbers.push_back("misc", 133701337);
 
-    printCharIntRing("Small numbers", smallNumbers);
-    printCharIntRing("Large numbers", largeNumbers);
-    printCharIntRing("Shuffled ring", shuffle(smallNumbers, 2, largeNumbers, 3, 5));
+    printCharLongRing("Small numbers", smallNumbers);
+    printCharLongRing("Large numbers", largeNumbers);
+    printCharLongRing("Shuffled ring", shuffle(smallNumbers, 2, largeNumbers, 3, 5));
 }

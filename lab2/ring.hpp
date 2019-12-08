@@ -1,10 +1,10 @@
+#include <stdexcept>
+
 /*
 *   ################################
 *   SECTION: CONSTRUCTORS, DESTRUCTORS AND ASSIGNMENT OPERATORS
 *   ################################
 */
-
-#include <stdexcept>
 
 //default KeyInfoPair constructor
 template <typename Key, typename Info>
