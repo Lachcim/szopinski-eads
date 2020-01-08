@@ -37,9 +37,7 @@ class AVLTree {
         const Info& operator[](const Key&) const;
 
         iterator insert(const KeyInfoPair&);
-        iterator insert(const KeyInfoPair&, const iterator&);
         iterator erase(const iterator&);
-        iterator erase(const KeyInfoPair&);
         void clear();
 
         iterator find(const Key&);
