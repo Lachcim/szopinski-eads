@@ -1,12 +1,12 @@
 /*
 *   ################################
-*   SECTION: NODE
+*   SECTION: CONSTRUCTORS, DESTRUCTORS AND ASSIGNMENT OPERATORS
 *   ################################
 */
 
 //default constructor
 template <typename Key, typename Info>
-AVLTree<Key, Info>::Node::Node(Key key, Info info) : keyInfoPair(key, info) {
+AVLTree<Key, Info>::Node::Node(KeyInfoPair kip) : keyInfoPair(kip) {
     this->left = nullptr;
     this->right = nullptr;
     this->height = 0;
@@ -78,4 +78,52 @@ typename AVLTree<Key, Info>::Node& AVLTree<Key, Info>::Node::operator=(Node&& ot
     other.right = nullptr;
 
     return *this;
+}
+
+/*
+*   ################################
+*   SECTION: AVL LOGIC
+*   ################################
+*/
+
+//insert a new leaf or update existing node if key exists
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::Node::insert(const KeyInfoPair& kip) {
+    //if key exists, update value
+    if (this->keyInfoPair.key == kip.key) {
+        this->keyInfoPair.info = kip.info;
+        return this;
+    }
+
+    //standard BST insertion
+    if (kip.key < this->keyInfoPair.key) {
+        //append to the left
+        if (!this->left) {
+            //create new leaf
+            this->left = new Node(kip);
+            if (!this->right) this->height++;
+            return this->left;
+        }
+        else {
+            //delegate insertion further
+            Node* output = this->left->insert(kip);
+            this->height = output->height + 1;
+            return output;
+        }
+    }
+    else {
+        //append to the right
+        if (!this->right) {
+            //create new leaf
+            this->right = new Node(kip);
+            if (!this->left) this->height++;
+            return this->right;
+        }
+        else {
+            //delegate insertion further
+            Node* output = this->right->insert(kip);
+            this->height = output->height + 1;
+            return output;
+        }
+    }
 }

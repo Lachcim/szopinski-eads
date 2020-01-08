@@ -3,7 +3,7 @@
 
 template <typename Key, typename Info>
 struct AVLTree<Key, Info>::Node {
-    Node(Key, Info);
+    Node(KeyInfoPair);
     ~Node();
     Node(const Node&);
     Node(Node&&);
@@ -16,6 +16,8 @@ struct AVLTree<Key, Info>::Node {
     Node* right;
 
     int height;
+
+    Node* insert(const KeyInfoPair&);
 };
 
 #include "node.hpp"
