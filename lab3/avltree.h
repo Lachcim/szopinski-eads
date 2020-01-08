@@ -12,14 +12,7 @@ class AVLTree {
         };
 
     private:
-        struct Node {
-            KeyInfoPair keyInfoPair;
-
-            Node* left;
-            Node* right;
-
-            Node(Key, Info);
-        };
+        struct Node;
 
         Node* root;
         int nodeCount;
@@ -60,6 +53,7 @@ class AVLTree {
 };
 
 #include "avltree.hpp"
+#include "node.h"
 #include "iterators.h"
 
 #endif
