@@ -76,3 +76,51 @@ AVLTree<Key, Info>& AVLTree<Key, Info>::operator=(AVLTree<Key, Info>&& other) {
 
     return *this;
 }
+
+/*
+*   ################################
+*   SECTION: AVL LOGIC
+*   ################################
+*/
+
+//insert a new leaf or update existing node if key exists
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::bstInsert(Node* node, const KeyInfoPair& kip) {
+    //if key exists, update value
+    if (node->keyInfoPair.key == kip.key) {
+        node->keyInfoPair.info = kip.info;
+        return node;
+    }
+
+    //standard BST insertion
+    if (kip.key < node->keyInfoPair.key) {
+        //append to the left
+        if (!node->left) {
+            //create new leaf
+            node->left = new Node(kip);
+            if (!node->right) node->height++;
+            return node->left;
+        }
+        else {
+            //delegate insertion further
+            Node* output = bstInsert(node->left, kip);
+            node->height = output->height + 1;
+            return output;
+        }
+    }
+    else {
+        //append to the right
+        if (!node->right) {
+            //create new leaf
+            node->right = new Node(kip);
+            if (!node->left) node->height++;
+            return node->right;
+        }
+        else {
+            //delegate insertion further
+            Node* output = bstInsert(node->right, kip);
+            node->height = output->height + 1;
+            return output;
+        }
+    }
+}

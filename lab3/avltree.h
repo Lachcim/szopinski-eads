@@ -48,7 +48,7 @@ class AVLTree {
         bool empty() const;
         int size() const;
     private:
-        void copyNodes(const AVLTree&);
+        Node* bstInsert(Node*, const KeyInfoPair&);
         const_iterator internalFind(const Key&, int) const;
 };
 
