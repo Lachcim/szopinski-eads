@@ -17,8 +17,8 @@ template <typename Key, typename Info>
 AVLTree<Key, Info>::AVLTree() {
     //create empty tree
     this->root = nullptr;
-    this->beginIterator = iterator(nullptr, nullptr);
-    this->endIterator = iterator(nullptr, nullptr);
+    this->beginIterator = iterator(nullptr, this);
+    this->endIterator = iterator(nullptr, this);
     this->nodeCount = 0;
 }
 
@@ -100,7 +100,7 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::end() {
     return endIterator;
 }
 
-//return iterator to lowest key or end() if empty
+//return iterator to lowest key or cend() if empty
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::cbegin() const {
     return const_iterator(beginIterator);
@@ -109,7 +109,7 @@ typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::cbegin() const {
 //return iterator to one past highest key
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::cend() const {
-    return ++const_iterator(endIterator);
+    return const_iterator(endIterator);
 }
 
 /*
