@@ -118,50 +118,46 @@ typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::cend() const {
 
 /*
 *   ################################
-*   SECTION: AVL LOGIC
+*   SECTION: MODIFIERS
 *   ################################
 */
 
 //insert a new leaf or update existing node if key exists
 template <typename Key, typename Info>
-typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::bstInsert(Node* node, const KeyInfoPair& kip) {
-    //if key exists, update value
-    if (node->keyInfoPair.key == kip.key) {
-        node->keyInfoPair.info = kip.info;
-        return node;
+typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const KeyInfoPair& kip) {
+    //if the tree is empty, insert element as root
+    if (empty()) {
+        root = new Node(kip);
+        nodeCount++;
+        findLimits();
+        return iterator(root, this);
     }
 
-    //standard BST insertion
-    if (kip.key < node->keyInfoPair.key) {
-        //append to the left
-        if (!node->left) {
-            //create new leaf
-            node->left = new Node(kip);
-            if (!node->right) node->height++;
-            return node->left;
+    //find the right insertion point
+    Node* parent = root;
+    while (true) {
+        //if a node was found with the same key, update the value and return
+        if (parent->keyInfoPair.key == kip.key) {
+            parent->keyInfoPair.info = kip.info;
+            return iterator(parent, this);
+        }
+
+        //perform standard BST insertion
+        if (kip.key < parent->keyInfoPair.key) {
+            if (parent->left) { parent = parent->left; continue; }
+            else return addLeaf(parent, false, kip);
         }
         else {
-            //delegate insertion further
-            Node* output = bstInsert(node->left, kip);
-            node->height = output->height + 1;
-            return output;
+            if (parent->right) { parent = parent->right; continue; }
+            else return addLeaf(parent, true, kip);
         }
     }
-    else {
-        //append to the right
-        if (!node->right) {
-            //create new leaf
-            node->right = new Node(kip);
-            if (!node->left) node->height++;
-            return node->right;
-        }
-        else {
-            //delegate insertion further
-            Node* output = bstInsert(node->right, kip);
-            node->height = output->height + 1;
-            return output;
-        }
-    }
+
+    //TODO: balancing
+}
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const Key& key, const Info& info) {
+    return insert(KeyInfoPair(key, info));
 }
 
 /*
@@ -211,7 +207,7 @@ void AVLTree<Key, Info>::findLimits() {
 
 //add leaf to node
 template <typename Key, typename Info>
-typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::addLeaf(Node* parent, bool right, const KeyInfoPair& kip) {
+typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::addLeaf(Node* parent, bool right, const KeyInfoPair& kip) {
     //check if branch is free to take
     if (!right && parent->left)
         throw std::invalid_argument("this node already has a left branch");
@@ -223,9 +219,13 @@ typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::addLeaf(Node* parent, boo
     newNode = new Node(kip);
     newNode->parent = parent;
 
+    //update tree parameters
+    nodeCount++;
+    findLimits();
+
     //if this was the node's second child, return
     if (parent->left && parent->right)
-        return newNode;
+        return iterator(newNode, this);
 
     //if this was the node's first child, update height
     while (parent) {
@@ -233,5 +233,5 @@ typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::addLeaf(Node* parent, boo
         parent = parent->parent;
     }
 
-    return newNode;
+    return iterator(newNode, this);;
 }
