@@ -54,27 +54,27 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::iterator::operator++(i
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::iterator::advance(Node* start, Node* current) {
     bool leftExists = current->left != nullptr;
-	bool rightExists = current->right != nullptr;
-	bool parentExists = current->parent != nullptr;
+    bool rightExists = current->right != nullptr;
+    bool parentExists = current->parent != nullptr;
 
-	//check left branch
-	if (leftExists) if (current->left->keyInfoPair.key > start->keyInfoPair.key)
-		return advance(start, current->left);
+    //check left branch
+    if (leftExists) if (current->left->keyInfoPair.key > start->keyInfoPair.key)
+        return advance(start, current->left);
 
     //check this node
-	if (current->keyInfoPair.key > start->keyInfoPair.key)
-		return current;
+    if (current->keyInfoPair.key > start->keyInfoPair.key)
+        return current;
 
     //check right branch
-	if (rightExists) if (current->right->keyInfoPair.key > start->keyInfoPair.key)
-		return advance(start, current->right);
+    if (rightExists) if (current->right->keyInfoPair.key > start->keyInfoPair.key)
+        return advance(start, current->right);
 
     //check parent
-	if (parentExists)
-		return advance(start, current->parent);
+    if (parentExists)
+        return advance(start, current->parent);
 
     //if there's no parent, we've reached the end
-	return nullptr;
+    return nullptr;
 }
 
 template <typename Key, typename Info>
@@ -103,27 +103,27 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::iterator::operator--(i
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::iterator::recede(Node* start, Node* current) {
     bool leftExists = current->left != nullptr;
-	bool rightExists = current->right != nullptr;
-	bool parentExists = current->parent != nullptr;
+    bool rightExists = current->right != nullptr;
+    bool parentExists = current->parent != nullptr;
 
     //check right branch
-	if (rightExists) if (current->right->keyInfoPair.key < start->keyInfoPair.key)
-		return recede(start, current->right);
+    if (rightExists) if (current->right->keyInfoPair.key < start->keyInfoPair.key)
+        return recede(start, current->right);
 
     //check this node
-	if (current->keyInfoPair.key < start->keyInfoPair.key)
-		return current;
+    if (current->keyInfoPair.key < start->keyInfoPair.key)
+        return current;
 
-	//check left branch
-	if (leftExists) if (current->left->keyInfoPair.key < start->keyInfoPair.key)
-		return recede(start, current->left);
+    //check left branch
+    if (leftExists) if (current->left->keyInfoPair.key < start->keyInfoPair.key)
+        return recede(start, current->left);
 
     //check parent
-	if (parentExists)
-		return recede(start, current->parent);
+    if (parentExists)
+        return recede(start, current->parent);
 
     //if there's no parent, we've reached the end
-	return nullptr;
+    return nullptr;
 }
 
 template <typename Key, typename Info>
