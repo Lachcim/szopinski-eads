@@ -22,8 +22,21 @@ AVLTree<Key, Info>::Node::~Node() {
 //copy constructor
 template <typename Key, typename Info>
 AVLTree<Key, Info>::Node::Node(const Node& other) : keyInfoPair(other.keyInfoPair) {
-    this->left = other.left ? new Node(*other.left) : nullptr;
-    this->right = other.right ? new Node(*other.right) : nullptr;
+    this->left = nullptr;
+    this->right = nullptr;
+
+    //copy children, set their parent
+    if (other.left) {
+        this->left = new Node(*other.left);
+        this->left->parent = this;
+    }
+    if (other.right) {
+        this->right = new Node(*other.right);
+        this->right->parent = this;
+    }
+
+    //copy parameters
+    this->parent = other.parent;
     this->height = other.height;
 }
 
@@ -32,6 +45,7 @@ template <typename Key, typename Info>
 AVLTree<Key, Info>::Node::Node(Node&& other) : keyInfoPair(other.keyInfoPair) {
     this->left = other.left;
     this->right = other.right;
+    this->parent = other.parent;
     this->height = other.height;
 
     other.left = nullptr;
@@ -48,10 +62,21 @@ typename AVLTree<Key, Info>::Node& AVLTree<Key, Info>::Node::operator=(const Nod
     //delete own nodes and copy other nodes
     if (this->left) delete this->left;
     if (this->right) delete this->right;
-    this->left = other.left ? new Node(*other.left) : nullptr;
-    this->right = other.right ? new Node(*other.right) : nullptr;
+
+    this->left = nullptr;
+    this->right = nullptr;
+
+    if (other.left) {
+        this->left = new Node(*other.left);
+        this->left->parent = this;
+    }
+    if (other.right) {
+        this->right = new Node(*other.right);
+        this->right->parent = this;
+    }
 
     //copy properties
+    this->parent = other.parent;
     this->height = other.height;
 
     return *this;

@@ -14,6 +14,7 @@ struct AVLTree<Key, Info>::Node {
     KeyInfoPair keyInfoPair;
     Node* left;
     Node* right;
+    Node* parent;
 
     int height;
 };
