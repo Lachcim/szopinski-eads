@@ -15,6 +15,8 @@ class AVLTree {
         struct Node;
 
         Node* root;
+        Node* beginNode;
+        Node* endNode;
         int nodeCount;
     public:
         AVLTree();
@@ -43,6 +45,7 @@ class AVLTree {
         bool empty() const;
         int size() const;
     private:
+        void findLimits();
         Node* bstInsert(Node*, const KeyInfoPair&);
         const_iterator internalFind(const Key&, int) const;
 };
