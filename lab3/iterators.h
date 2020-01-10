@@ -6,7 +6,11 @@ class AVLTree<Key, Info>::iterator {
     friend class AVLTree;
 
     private:
+        Node* prev;
         Node* node;
+        Node* next;
+
+        AVLTree* parent;
 
     public:
         iterator();
@@ -19,6 +23,10 @@ class AVLTree<Key, Info>::iterator {
         iterator operator--(int);
         bool operator==(const iterator&) const;
         bool operator!=(const iterator&) const;
+
+    private:
+        Node* advance(Node*, Node*);
+        Node* recede(Node*, Node*);
 };
 
 template <typename Key, typename Info>
@@ -26,7 +34,11 @@ class AVLTree<Key, Info>::const_iterator {
     friend class AVLTree;
 
     private:
+        Node* prev;
         Node* node;
+        Node* next;
+
+        AVLTree* parent;
 
     public:
         const_iterator();
