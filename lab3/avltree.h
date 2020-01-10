@@ -46,6 +46,7 @@ class AVLTree {
         int size() const;
     private:
         void findLimits();
+        Node* addLeaf(Node*, bool, const KeyInfoPair&);
         Node* bstInsert(Node*, const KeyInfoPair&);
         const_iterator internalFind(const Key&, int) const;
 };

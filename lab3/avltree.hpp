@@ -208,3 +208,30 @@ void AVLTree<Key, Info>::findLimits() {
         node = node->right;
     endNode = node;
 }
+
+//add leaf to node
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::addLeaf(Node* parent, bool right, const KeyInfoPair& kip) {
+    //check if branch is free to take
+    if (!right && parent->left)
+        throw std::invalid_argument("this node already has a left branch");
+    if (right && parent->right)
+        throw std::invalid_argument("this node already has a right branch");
+
+    //create and add new node
+    Node*& newNode = right ? parent->right : parent->left;
+    newNode = new Node(kip);
+    newNode->parent = parent;
+
+    //if this was the node's second child, return
+    if (parent->left && parent->right)
+        return newNode;
+
+    //if this was the node's first child, update height
+    while (parent) {
+        parent->height++;
+        parent = parent->parent;
+    }
+
+    return newNode;
+}

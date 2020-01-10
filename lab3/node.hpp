@@ -9,6 +9,7 @@ template <typename Key, typename Info>
 AVLTree<Key, Info>::Node::Node(KeyInfoPair kip) : keyInfoPair(kip) {
     this->left = nullptr;
     this->right = nullptr;
+    this->parent = nullptr;
     this->height = 0;
 }
 
