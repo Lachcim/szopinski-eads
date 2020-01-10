@@ -131,6 +131,7 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const KeyInfoPa
 
     //find the right insertion point
     Node* parent = root;
+    Node* newLeaf;
     while (true) {
         //if a node was found with the same key, update the value and return
         if (parent->keyInfoPair.key == kip.key) {
@@ -140,16 +141,19 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const KeyInfoPa
 
         //perform standard BST insertion
         if (kip.key < parent->keyInfoPair.key) {
-            if (parent->left) { parent = parent->left; continue; }
-            else return addLeaf(parent, false, kip);
+            if (!parent->left) { newLeaf = addLeaf(parent, false, kip); break; }
+            else parent = parent->left;
         }
         else {
-            if (parent->right) { parent = parent->right; continue; }
-            else return addLeaf(parent, true, kip);
+            if (!parent->right) { newLeaf = addLeaf(parent, true, kip); break; }
+            else parent = parent->right;
         }
     }
 
-    //TODO: balancing
+    //perform AVL balancing
+    balanceTree(newLeaf);
+
+    return iterator(newLeaf, this);
 }
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const Key& key, const Info& info) {
@@ -203,7 +207,7 @@ void AVLTree<Key, Info>::findLimits() {
 
 //add leaf to node
 template <typename Key, typename Info>
-typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::addLeaf(Node* parent, bool right, const KeyInfoPair& kip) {
+typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::addLeaf(Node* parent, bool right, const KeyInfoPair& kip) {
     //check if branch is free to take
     if (!right && parent->left)
         throw std::invalid_argument("this node already has a left branch");
@@ -235,5 +239,52 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::addLeaf(Node* parent, 
         parent = parent->parent;
     }
 
-    return iterator(newNode, this);;
+    return newNode;
+}
+
+//get AVL balance
+template <typename Key, typename Info>
+int AVLTree<Key, Info>::getBalance(Node* node) {
+    int leftHeight = node->left ? node->left->height : -1;
+    int rightHeight = node->right ? node->right->height : -1;
+
+    return leftHeight - rightHeight;
+}
+
+//perform AVL balancing
+template <typename Key, typename Info>
+void AVLTree<Key, Info>::balanceTree(Node* node) {
+    //find first unbalanced node and its two predecessors as well as the path taken
+    Node* rotatedNodes[3] = {nullptr, nullptr, nullptr};
+    int path[3];
+
+    //travel up the tree
+    while (node) {
+        //insert node into queue
+        rotatedNodes[2] = rotatedNodes[1];
+        rotatedNodes[1] = rotatedNodes[0];
+        rotatedNodes[0] = node;
+
+        //remember path
+        if (node->parent) {
+            path[2] = path[1];
+            path[1] = path[0];
+            path[0] = node->parent->right ? (node == node->parent->right) : false;
+        }
+
+        //if this node is unbalanced, finish search
+        int balanceFactor = getBalance(node);
+        if (balanceFactor == 2 || balanceFactor == -2)
+            break;
+
+        //proceed up the tree
+        node = node->parent;
+    }
+
+    //if the traversal ended prematurely, return
+    if (!node)
+        return;
+
+    //perform AVL rotation
+    rotateNodes(rotatedNodes[0], rotatedNodes[1], path[1], path[2]);
 }
