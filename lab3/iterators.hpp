@@ -13,6 +13,14 @@ AVLTree<Key, Info>::iterator::iterator() {
 }
 
 template <typename Key, typename Info>
+AVLTree<Key, Info>::iterator::iterator(Node* start, AVLTree* newParent) {
+    prev = start ? recede(start, start) : nullptr;
+    node = start;
+    next = start ? advance(start, start) : nullptr;
+    parent = newParent;
+}
+
+template <typename Key, typename Info>
 typename AVLTree<Key, Info>::KeyInfoPair& AVLTree<Key, Info>::iterator::operator*() const {
     if (!node)
         throw std::logic_error("can't dereference end iterator");
@@ -148,6 +156,15 @@ AVLTree<Key, Info>::const_iterator::const_iterator() {
     node = nullptr;
     next = nullptr;
     parent = nullptr;
+}
+
+template <typename Key, typename Info>
+AVLTree<Key, Info>::const_iterator::const_iterator(Node* start, const AVLTree* newParent) {
+    iterator it(start, (AVLTree*)newParent); //discard const in good faith
+    prev = it.prev;
+    node = it.node;
+    next = it.next;
+    parent = it.parent;
 }
 
 template <typename Key, typename Info>

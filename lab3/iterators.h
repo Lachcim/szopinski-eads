@@ -25,6 +25,7 @@ class AVLTree<Key, Info>::iterator {
         bool operator!=(const iterator&) const;
 
     private:
+        iterator(Node*, AVLTree*);
         Node* advance(Node*, Node*);
         Node* recede(Node*, Node*);
 };
@@ -38,7 +39,7 @@ class AVLTree<Key, Info>::const_iterator {
         Node* node;
         Node* next;
 
-        AVLTree* parent;
+        const AVLTree* parent;
 
     public:
         const_iterator();
@@ -52,6 +53,9 @@ class AVLTree<Key, Info>::const_iterator {
         const_iterator operator--(int);
         bool operator==(const const_iterator&) const;
         bool operator!=(const const_iterator&) const;
+
+    private:
+        const_iterator(Node*, const AVLTree*);
 };
 
 #include "iterators.hpp"

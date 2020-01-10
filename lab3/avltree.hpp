@@ -79,6 +79,67 @@ AVLTree<Key, Info>& AVLTree<Key, Info>::operator=(AVLTree<Key, Info>&& other) {
 
 /*
 *   ################################
+*   SECTION: ITERATORS
+*   ################################
+*/
+
+//return iterator to lowest key or end() if empty
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::begin() {
+    if (empty())
+        return iterator(nullptr, this);
+
+    //obtain pointer to root
+    Node* node = root;
+
+    //keep requesting lower key
+    while (node->left)
+        node = node->left;
+
+    return iterator(node, this);
+}
+
+//return iterator to highest key, incremented
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::end() {
+    if (empty())
+        return iterator(nullptr, this);
+
+    Node* node = root;
+    while (node->right)
+        node = node->right;
+
+    return iterator(node, this);
+}
+
+//return iterator to lowest key or cend() if empty
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::cbegin() const {
+    if (empty())
+        return const_iterator(nullptr, this);
+
+    Node* node = root;
+    while (node->left)
+        node = node->left;
+
+    return const_iterator(node, this);
+}
+
+//return iterator to highest key, incremented
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::cend() const {
+    if (empty())
+        return const_iterator(nullptr, this);
+
+    Node* node = root;
+    while (node->right)
+        node = node->right;
+
+    return const_iterator(node, this);
+}
+
+/*
+*   ################################
 *   SECTION: AVL LOGIC
 *   ################################
 */
@@ -123,4 +184,22 @@ typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::bstInsert(Node* node, con
             return output;
         }
     }
+}
+
+/*
+*   ################################
+*   SECTION: CAPACITY
+*   ################################
+*/
+
+//check if node count is zero
+template <typename Key, typename Info>
+bool AVLTree<Key, Info>::empty() const {
+    return nodeCount == 0;
+}
+
+//return node count
+template <typename Key, typename Info>
+int AVLTree<Key, Info>::size() const {
+    return nodeCount;
 }
