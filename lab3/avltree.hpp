@@ -219,13 +219,19 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::addLeaf(Node* parent, 
     nodeCount++;
     findLimits();
 
-    //if this was the node's second child, return
-    if (parent->left && parent->right)
-        return iterator(newNode, this);
-
-    //if this was the node's first child, update height
+    //update height in the branch
     while (parent) {
-        parent->height++;
+        int newHeight = 0;
+
+        if (parent->left)
+            if (parent->left->height >= newHeight)
+                newHeight = parent->left->height + 1;
+
+        if (parent->right)
+            if (parent->right->height >= newHeight)
+                newHeight = parent->right->height + 1;
+
+        parent->height = newHeight;
         parent = parent->parent;
     }
 
