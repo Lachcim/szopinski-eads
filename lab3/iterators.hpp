@@ -47,12 +47,7 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::iterator::operator++(i
         throw std::logic_error("can't increment end iterator");
 
     iterator old = *this;
-
-    prev = node;
-    node = next;
-    if (next)
-        next = advance(next, next);
-
+    ++(*this);
     return old;
 }
 
@@ -101,12 +96,7 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::iterator::operator--(i
         throw std::logic_error("can't decrement begin iterator");
 
     iterator old = *this;
-
-    next = node;
-    node = prev;
-    if (prev)
-        prev = recede(prev, prev);
-
+    --(*this);
     return old;
 }
 
@@ -191,6 +181,7 @@ typename AVLTree<Key, Info>::const_iterator& AVLTree<Key, Info>::const_iterator:
     it.node = node;
     it.next = next;
 
+    //use iterator's code
     ++it;
 
     prev = it.prev;
@@ -203,9 +194,7 @@ typename AVLTree<Key, Info>::const_iterator& AVLTree<Key, Info>::const_iterator:
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::const_iterator::operator++(int) {
     const_iterator old = *this;
-
     ++(*this);
-
     return old;
 }
 
@@ -216,6 +205,7 @@ typename AVLTree<Key, Info>::const_iterator& AVLTree<Key, Info>::const_iterator:
     it.node = node;
     it.next = next;
 
+    //use iterator's code
     --it;
 
     prev = it.prev;
@@ -228,9 +218,7 @@ typename AVLTree<Key, Info>::const_iterator& AVLTree<Key, Info>::const_iterator:
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::const_iterator::operator--(int) {
     const_iterator old = *this;
-
     --(*this);
-
     return old;
 }
 
