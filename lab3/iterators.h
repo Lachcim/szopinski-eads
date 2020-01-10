@@ -8,7 +8,6 @@ class AVLTree<Key, Info>::iterator {
     private:
         Node* prev;
         Node* node;
-        Node* next;
 
         AVLTree* parent;
 
@@ -37,7 +36,6 @@ class AVLTree<Key, Info>::const_iterator {
     private:
         Node* prev;
         Node* node;
-        Node* next;
 
         const AVLTree* parent;
 

@@ -17,8 +17,8 @@ template <typename Key, typename Info>
 AVLTree<Key, Info>::AVLTree() {
     //create empty tree
     this->root = nullptr;
-    this->beginNode = nullptr;
-    this->endNode = nullptr;
+    this->beginIterator = iterator(nullptr, nullptr);
+    this->endIterator = iterator(nullptr, nullptr);
     this->nodeCount = 0;
 }
 
@@ -46,8 +46,8 @@ template <typename Key, typename Info>
 AVLTree<Key, Info>::AVLTree(AVLTree<Key, Info>&& other) {
     //take over other tree's resources
     this->root = other.root;
-    this->beginNode = other.beginNode;
-    this->endNode = other.endNode;
+    this->beginIterator = other.beginIterator;
+    this->endIterator = other.endIterator;
     this->nodeCount = other.nodeCount;
 
     //mark other tree as empty
@@ -76,8 +76,8 @@ AVLTree<Key, Info>& AVLTree<Key, Info>::operator=(AVLTree<Key, Info>&& other) {
     //deallocate node list and take over other tree's resources
     delete this->root;
     this->root = other.root;
-    this->beginNode = other.beginNode;
-    this->endNode = other.endNode;
+    this->beginIterator = other.beginIterator;
+    this->endIterator = other.endIterator;
     this->nodeCount = other.nodeCount;
 
     //mark other tree as empty
@@ -95,25 +95,25 @@ AVLTree<Key, Info>& AVLTree<Key, Info>::operator=(AVLTree<Key, Info>&& other) {
 //return iterator to lowest key or end() if empty
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::begin() {
-    return iterator(beginNode, this);
+    return beginIterator;
 }
 
-//return iterator to highest key, incremented
+//return iterator to one past highest key
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::end() {
-    return ++iterator(endNode, this);
+    return endIterator;
 }
 
-//return iterator to lowest key or cend() if empty
+//return iterator to lowest key or end() if empty
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::cbegin() const {
-    return const_iterator(beginNode, this);
+    return const_iterator(beginIterator);
 }
 
-//return iterator to highest key, incremented
+//return iterator to one past highest key
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::cend() const {
-    return ++const_iterator(endNode, this);
+    return ++const_iterator(endIterator);
 }
 
 /*
@@ -184,25 +184,25 @@ int AVLTree<Key, Info>::size() const {
 *   ################################
 */
 
-//find beginNode and endNode
+//buffer begin and end iterators
 template <typename Key, typename Info>
 void AVLTree<Key, Info>::findLimits() {
     if (empty()) {
-        beginNode = nullptr;
-        endNode = nullptr;
+        beginIterator = iterator(nullptr, this);
+        endIterator = iterator(nullptr, this);
     }
 
     //obtain pointer to root, keep requesting lower number
     Node* node = root;
     while (node->left)
         node = node->left;
-    beginNode = node;
+    beginIterator = iterator(node, this);
 
     //repeat operation for higher numbers
     node = root;
     while (node->right)
         node = node->right;
-    endNode = node;
+    endIterator = ++iterator(node, this);
 }
 
 //add leaf to node

@@ -8,7 +8,6 @@ template <typename Key, typename Info>
 AVLTree<Key, Info>::iterator::iterator() {
     prev = nullptr;
     node = nullptr;
-    next = nullptr;
     parent = nullptr;
 }
 
@@ -16,7 +15,6 @@ template <typename Key, typename Info>
 AVLTree<Key, Info>::iterator::iterator(Node* start, AVLTree* newParent) {
     prev = start ? recede(start, start) : nullptr;
     node = start;
-    next = start ? advance(start, start) : nullptr;
     parent = newParent;
 }
 
@@ -42,9 +40,7 @@ typename AVLTree<Key, Info>::iterator& AVLTree<Key, Info>::iterator::operator++(
         throw std::logic_error("can't increment end iterator");
 
     prev = node;
-    node = next;
-    if (next)
-        next = advance(next, next);
+    if (node) node = advance(node, node);
 
     return *this;
 }
@@ -90,10 +86,8 @@ typename AVLTree<Key, Info>::iterator& AVLTree<Key, Info>::iterator::operator--(
     if (!prev)
         throw std::logic_error("can't decrement begin iterator");
 
-    next = node;
     node = prev;
-    if (prev)
-        prev = recede(prev, prev);
+    if (prev) prev = recede(prev, prev);
 
     return *this;
 }
@@ -154,7 +148,6 @@ template <typename Key, typename Info>
 AVLTree<Key, Info>::const_iterator::const_iterator() {
     prev = nullptr;
     node = nullptr;
-    next = nullptr;
     parent = nullptr;
 }
 
@@ -163,7 +156,6 @@ AVLTree<Key, Info>::const_iterator::const_iterator(Node* start, const AVLTree* n
     iterator it(start, (AVLTree*)newParent); //discard const in good faith
     prev = it.prev;
     node = it.node;
-    next = it.next;
     parent = it.parent;
 }
 
@@ -171,7 +163,6 @@ template <typename Key, typename Info>
 AVLTree<Key, Info>::const_iterator::const_iterator(const iterator& other) {
     prev = other.prev;
     node = other.node;
-    next = other.next;
     parent = other.parent;
 }
 
@@ -196,14 +187,12 @@ typename AVLTree<Key, Info>::const_iterator& AVLTree<Key, Info>::const_iterator:
     iterator it;
     it.prev = prev;
     it.node = node;
-    it.next = next;
 
     //use iterator's code
     ++it;
 
     prev = it.prev;
     node = it.node;
-    next = it.next;
 
     return *this;
 }
@@ -220,14 +209,12 @@ typename AVLTree<Key, Info>::const_iterator& AVLTree<Key, Info>::const_iterator:
     iterator it;
     it.prev = prev;
     it.node = node;
-    it.next = next;
 
     //use iterator's code
     --it;
 
     prev = it.prev;
     node = it.node;
-    next = it.next;
 
     return *this;
 }

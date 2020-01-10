@@ -11,13 +11,16 @@ class AVLTree {
             KeyInfoPair(Key, Info);
         };
 
+        class iterator;
+        class const_iterator;
+
     private:
         struct Node;
 
         Node* root;
-        Node* beginNode;
-        Node* endNode;
         int nodeCount;
+        iterator beginIterator;
+        iterator endIterator;
     public:
         AVLTree();
         ~AVLTree();
@@ -26,9 +29,6 @@ class AVLTree {
 
         AVLTree<Key, Info>& operator=(const AVLTree<Key, Info>&);
         AVLTree<Key, Info>& operator=(AVLTree<Key, Info>&&);
-
-        class iterator;
-        class const_iterator;
 
         iterator begin();
         iterator end();
