@@ -31,10 +31,6 @@ AVLTree<Key, Info>::~AVLTree() {
 //copy constructor
 template <typename Key, typename Info>
 AVLTree<Key, Info>::AVLTree(const AVLTree<Key, Info>& other) {
-    //prevent self-copying
-    if (&other == this)
-        return;
-
     //copy nodes from the other tree
     this->root = new Node(*other.root);
     this->nodeCount = other.nodeCount;
