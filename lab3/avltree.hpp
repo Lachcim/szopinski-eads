@@ -186,6 +186,15 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const Key& key,
     return insert(KeyInfoPair(key, info));
 }
 
+template <typename Key, typename Info>
+void AVLTree<Key, Info>::clear() {
+    delete root;
+    root = nullptr;
+    nodeCount = 0;
+    beginIterator = iterator(nullptr, this);
+    endIterator = iterator(nullptr, this);
+}
+
 /*
 *   ################################
 *   SECTION: CAPACITY
