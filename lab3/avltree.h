@@ -35,6 +35,18 @@ class AVLTree {
         const_iterator cbegin() const;
         const_iterator cend() const;
 
+        bool operator==(const AVLTree<Key, Info>&) const;
+        bool operator!=(const AVLTree<Key, Info>&) const;
+
+        KeyInfoPair& at(int);
+        KeyInfoPair& front();
+        KeyInfoPair& back();
+        KeyInfoPair& operator[](Key);
+        const KeyInfoPair& at(int) const;
+        const KeyInfoPair& front() const;
+        const KeyInfoPair& back() const;
+        const KeyInfoPair& operator[](Key) const;
+
         iterator insert(const KeyInfoPair&);
         iterator insert(const Key&, const Info&);
         iterator erase(const iterator&);
