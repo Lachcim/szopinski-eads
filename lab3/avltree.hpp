@@ -286,8 +286,6 @@ void AVLTree<Key, Info>::updateHeight(Node* node) {
 //rotate node left, return new root
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::rotateLeft(Node* pivot) {
-	printf("left rotation on %d\n", pivot->keyInfoPair.key);
-
 	//establish roles
 	Node* newTop = pivot->right;
 	Node* surrogateChild = newTop->left;
@@ -305,8 +303,6 @@ typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::rotateLeft(Node* pivot) {
 //rotate node right, return new root
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::rotateRight(Node* pivot) {
-	printf("right rotation on %d\n", pivot->keyInfoPair.key);
-
 	//establish roles
 	Node* newTop = pivot->left;
 	Node* surrogateChild = newTop->right;
