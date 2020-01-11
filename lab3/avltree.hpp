@@ -423,10 +423,7 @@ typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::addLeaf(Node* parent, boo
     findLimits();
 
     //update height in the branch
-    while (parent) {
-        updateHeight(parent);
-        parent = parent->parent;
-    }
+    updateHeight(parent);
 
     return newNode;
 }
@@ -440,20 +437,24 @@ int AVLTree<Key, Info>::getBalance(Node* node) {
     return leftHeight - rightHeight;
 }
 
-//get subtree height
+//update subtree height
 template <typename Key, typename Info>
 void AVLTree<Key, Info>::updateHeight(Node* node) {
-    int newHeight = 0;
+    while (node) {
+        int newHeight = 0;
 
-    if (node->left)
-        if (node->left->height >= newHeight)
-            newHeight = node->left->height + 1;
+        if (node->left)
+            if (node->left->height >= newHeight)
+                newHeight = node->left->height + 1;
 
-    if (node->right)
-        if (node->right->height >= newHeight)
-            newHeight = node->right->height + 1;
+        if (node->right)
+            if (node->right->height >= newHeight)
+                newHeight = node->right->height + 1;
 
-    node->height = newHeight;
+        node->height = newHeight;
+
+        node = node->parent;
+    }
 }
 
 //rotate node left, return new root
@@ -512,5 +513,4 @@ void AVLTree<Key, Info>::updateRelations(Node* pivot, Node* newTop, Node* surrog
 
 	//update heights
 	updateHeight(pivot);
-	updateHeight(newTop);
 }
