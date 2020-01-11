@@ -114,6 +114,40 @@ typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::cend() const {
 
 /*
 *   ################################
+*   SECTION: CONTAINER COMPARISON
+*   ################################
+*/
+
+//compare all nodes in order, regardless of internal structure
+template <typename Key, typename Info>
+bool AVLTree<Key, Info>::operator==(const AVLTree<Key, Info>& other) const {
+    //return false on node count mismatch
+    if (nodeCount != other.nodeCount)
+        return false;
+
+    const_iterator it1 = cbegin();
+    const_iterator it2 = other.cbegin();
+
+    //check every node in nominal order
+    while (it1 != cend()) {
+        if (it1->key != it2->key || it1->info != it2->info)
+            return false;
+
+        ++it1;
+        ++it2;
+    }
+
+    return true;
+}
+
+//complement of == operator
+template <typename Key, typename Info>
+bool AVLTree<Key, Info>::operator!=(const AVLTree<Key, Info>& other) const {
+    return !(*this == other);
+}
+
+/*
+*   ################################
 *   SECTION: MODIFIERS
 *   ################################
 */
