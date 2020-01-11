@@ -5,7 +5,7 @@ template <typename Key, typename Info>
 class AVLTree {
     public:
         struct KeyInfoPair {
-            Key key;
+            const Key key;
             Info info;
 
             KeyInfoPair(Key, Info);
