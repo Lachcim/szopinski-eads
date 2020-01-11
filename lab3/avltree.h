@@ -49,6 +49,8 @@ class AVLTree {
         Node* addLeaf(Node*, bool, const KeyInfoPair&);
         int getBalance(Node*);
         void updateHeight(Node*);
+        Node* rotateLeft(Node*);
+        Node* rotateRight(Node*);
         const_iterator internalFind(const Key&, int) const;
 };
 

@@ -151,9 +151,36 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const KeyInfoPa
     }
 
     //perform AVL balancing
+    for (Node* ancestor = parent; ancestor; ancestor = ancestor->parent) {
+        int balance = getBalance(ancestor);
+
+        //left left
+        if (balance > 1 && kip.key < ancestor->left->keyInfoPair.key) {
+            ancestor = rotateRight(ancestor);
+            continue;
+        }
+        //right right
+        if (balance < -1 && kip.key > ancestor->right->keyInfoPair.key) {
+            ancestor = rotateLeft(ancestor);
+            continue;
+        }
+        //left right
+        if (balance > 1 && kip.key > ancestor->left->keyInfoPair.key) {
+            ancestor->left = rotateLeft(ancestor->left);
+            ancestor = rotateRight(ancestor);
+            continue;
+        }
+        //right left
+        if (balance < -1 && kip.key < ancestor->right->keyInfoPair.key) {
+            ancestor->right = rotateRight(ancestor->right);
+            ancestor = rotateLeft(ancestor);
+            continue;
+        }
+    }
 
     return iterator(newLeaf, this);
 }
+
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const Key& key, const Info& info) {
     return insert(KeyInfoPair(key, info));
@@ -254,4 +281,50 @@ void AVLTree<Key, Info>::updateHeight(Node* node) {
             newHeight = node->right->height + 1;
 
     node->height = newHeight;
+}
+
+//rotate node left, return new root
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::rotateLeft(Node* pivot) {
+	//establish roles
+	Node* newTop = pivot->right;
+	Node* surrogateChild = newTop->left;
+
+	//perform rotation
+	newTop->left = pivot;
+	pivot->right = surrogateChild;
+
+	//update parents
+	newTop->parent = pivot->parent;
+	pivot->parent = newTop;
+	if (surrogateChild) surrogateChild->parent = pivot;
+
+	//update heights
+	updateHeight(pivot);
+	updateHeight(newTop);
+
+	return newTop;
+}
+
+//rotate node right, return new root
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::rotateRight(Node* pivot) {
+	//establish roles
+	Node* newTop = pivot->left;
+	Node* surrogateChild = newTop->right;
+
+	//perform rotation
+	newTop->right = pivot;
+	pivot->left = surrogateChild;
+
+	//update parents
+	newTop->parent = pivot->parent;
+	pivot->parent = newTop;
+	if (surrogateChild) surrogateChild->parent = pivot;
+
+	//update heights
+	updateHeight(pivot);
+	updateHeight(newTop);
+
+	return newTop;
 }
