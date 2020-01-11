@@ -48,9 +48,7 @@ class AVLTree {
         void findLimits();
         Node* addLeaf(Node*, bool, const KeyInfoPair&);
         int getBalance(Node*);
-        void balanceTree(Node*);
-        void rotateNodes(Node*, Node*, bool, bool);
-        void simpleRotate(Node*, bool);
+        void updateHeight(Node*);
         const_iterator internalFind(const Key&, int) const;
 };
 

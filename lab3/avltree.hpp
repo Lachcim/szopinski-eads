@@ -151,7 +151,6 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const KeyInfoPa
     }
 
     //perform AVL balancing
-    balanceTree(newLeaf);
 
     return iterator(newLeaf, this);
 }
@@ -225,17 +224,7 @@ typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::addLeaf(Node* parent, boo
 
     //update height in the branch
     while (parent) {
-        int newHeight = 0;
-
-        if (parent->left)
-            if (parent->left->height >= newHeight)
-                newHeight = parent->left->height + 1;
-
-        if (parent->right)
-            if (parent->right->height >= newHeight)
-                newHeight = parent->right->height + 1;
-
-        parent->height = newHeight;
+        updateHeight(parent);
         parent = parent->parent;
     }
 
@@ -251,40 +240,18 @@ int AVLTree<Key, Info>::getBalance(Node* node) {
     return leftHeight - rightHeight;
 }
 
-//perform AVL balancing
+//get subtree height
 template <typename Key, typename Info>
-void AVLTree<Key, Info>::balanceTree(Node* node) {
-    //find first unbalanced node and its two predecessors as well as the path taken
-    Node* rotatedNodes[3] = {nullptr, nullptr, nullptr};
-    int path[3];
+void AVLTree<Key, Info>::updateHeight(Node* node) {
+    int newHeight = 0;
 
-    //travel up the tree
-    while (node) {
-        //insert node into queue
-        rotatedNodes[2] = rotatedNodes[1];
-        rotatedNodes[1] = rotatedNodes[0];
-        rotatedNodes[0] = node;
+    if (node->left)
+        if (node->left->height >= newHeight)
+            newHeight = node->left->height + 1;
 
-        //remember path
-        if (node->parent) {
-            path[2] = path[1];
-            path[1] = path[0];
-            path[0] = node->parent->right ? (node == node->parent->right) : false;
-        }
+    if (node->right)
+        if (node->right->height >= newHeight)
+            newHeight = node->right->height + 1;
 
-        //if this node is unbalanced, finish search
-        int balanceFactor = getBalance(node);
-        if (balanceFactor == 2 || balanceFactor == -2)
-            break;
-
-        //proceed up the tree
-        node = node->parent;
-    }
-
-    //if the traversal ended prematurely, return
-    if (!node)
-        return;
-
-    //perform AVL rotation
-    rotateNodes(rotatedNodes[0], rotatedNodes[1], path[1], path[2]);
+    node->height = newHeight;
 }
