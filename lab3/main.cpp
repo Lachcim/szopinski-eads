@@ -4,15 +4,21 @@
 
 template class AVLTree<std::string, int>;
 
-int main()
+int main(int argCount, char* args[])
 {
+    //require a path
+    if (argCount < 2) {
+        std::cout << "Please specify a path." << std::endl;
+        return 0;
+    }
+
     //create word counter
     AVLTree<std::string, int> counter;
     AVLTree<std::string, int>::iterator it;
 
     //open file for reading
     std::ifstream file;
-    file.open("bible.txt");
+    file.open(args[1]);
 
     //read file word by word and update counter
     std::string word;
