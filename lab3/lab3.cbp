@@ -38,6 +38,8 @@
 		<Unit filename="iterators.h" />
 		<Unit filename="iterators.hpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="node.h" />
+		<Unit filename="node.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
