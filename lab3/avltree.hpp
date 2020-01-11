@@ -148,6 +148,90 @@ bool AVLTree<Key, Info>::operator!=(const AVLTree<Key, Info>& other) const {
 
 /*
 *   ################################
+*   SECTION: ELEMENT ACCESS
+*   ################################
+*/
+
+//internal random access function
+template <typename Key, typename Info>
+const typename AVLTree<Key, Info>::KeyInfoPair& AVLTree<Key, Info>::internalAt(int index) const {
+    //handle empty tree
+    if (empty())
+        throw std::out_of_range("can't access element of empty tree");
+
+    if (index < 0 || index >= nodeCount)
+        throw std::out_of_range("index out of range");
+
+    //optimization: access last element using cend()
+    if (index == nodeCount - 1)
+        return *(--cend());
+
+    //use iterator to access nth element
+    const_iterator it = cbegin();
+    for (int i = 0; i < index; i++) ++it;
+    return *it;
+}
+
+//public interface of internalAt
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::KeyInfoPair& AVLTree<Key, Info>::at(int index) {
+    return (KeyInfoPair&)internalAt(index);
+}
+
+//const version of at
+template <typename Key, typename Info>
+const typename AVLTree<Key, Info>::KeyInfoPair& AVLTree<Key, Info>::at(int index) const {
+    return internalAt(index);
+}
+
+//return first element
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::KeyInfoPair& AVLTree<Key, Info>::front() {
+    return (KeyInfoPair&)internalAt(0);
+}
+
+//const version of front
+template <typename Key, typename Info>
+const typename AVLTree<Key, Info>::KeyInfoPair& AVLTree<Key, Info>::front() const {
+    return internalAt(0);
+}
+
+//return last element
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::KeyInfoPair& AVLTree<Key, Info>::back() {
+    return (KeyInfoPair&)internalAt(nodeCount - 1);
+}
+
+//const version of back
+template <typename Key, typename Info>
+const typename AVLTree<Key, Info>::KeyInfoPair& AVLTree<Key, Info>::back() const {
+    return internalAt(nodeCount - 1);
+}
+
+//return element with the given key
+template <typename Key, typename Info>
+Info& AVLTree<Key, Info>::operator[](const Key& key) {
+    iterator it = find(key);
+
+    if (it == end())
+        throw std::out_of_range("no such key");
+
+    return it->info;
+}
+
+//const alias of operator[]
+template <typename Key, typename Info>
+const Info& AVLTree<Key, Info>::operator[](const Key& key) const {
+    const_iterator it = find(key);
+
+    if (it == cend())
+        throw std::out_of_range("no such key");
+
+    return it->info;
+}
+
+/*
+*   ################################
 *   SECTION: MODIFIERS
 *   ################################
 */
@@ -227,6 +311,52 @@ void AVLTree<Key, Info>::clear() {
     nodeCount = 0;
     beginIterator = iterator(nullptr, this);
     endIterator = iterator(nullptr, this);
+}
+
+/*
+*   ################################
+*   SECTION: LOOKUP
+*   ################################
+*/
+
+//internal key lookup function
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::internalFind(const Key& soughtKey) const {
+    //traverse the binary tree
+    Node* node = root;
+    while (node) {
+        //if the key matches, return an iterator to node
+        if (soughtKey == node->keyInfoPair.key)
+            return const_iterator(node, this);
+
+        //go left if lower key sought, else go right
+        if (soughtKey < node->keyInfoPair.key)
+            node = node->left;
+        else
+            node = node->right;
+    }
+
+    //if nothing was found, return cend()
+    return cend();
+}
+
+//public interface of internalFind
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::find(const Key& soughtKey) {
+    const_iterator it = internalFind(soughtKey);
+
+    iterator output;
+    output.node = it.node;
+    output.prev = it.prev;
+    output.parent = (AVLTree*)it.parent; //discard const in good faith
+
+    return output;
+}
+
+//const version of find
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::const_iterator AVLTree<Key, Info>::find(const Key& soughtKey) const {
+    return internalFind(soughtKey);
 }
 
 /*

@@ -41,11 +41,11 @@ class AVLTree {
         KeyInfoPair& at(int);
         KeyInfoPair& front();
         KeyInfoPair& back();
-        KeyInfoPair& operator[](Key);
+        Info& operator[](const Key&);
         const KeyInfoPair& at(int) const;
         const KeyInfoPair& front() const;
         const KeyInfoPair& back() const;
-        const KeyInfoPair& operator[](Key) const;
+        const Info& operator[](const Key&) const;
 
         iterator insert(const KeyInfoPair&);
         iterator insert(const Key&, const Info&);
@@ -53,7 +53,7 @@ class AVLTree {
         void clear();
 
         iterator find(const Key&);
-        const_iterator find(const Key) const;
+        const_iterator find(const Key&) const;
 
         bool empty() const;
         int size() const;
@@ -67,7 +67,8 @@ class AVLTree {
         Node* rotateRight(Node*);
         void updateRelations(Node*, Node*, Node*);
 
-        const_iterator internalFind(const Key&, int) const;
+        const KeyInfoPair& internalAt(int) const;
+        const_iterator internalFind(const Key&) const;
 };
 
 #include "avltree.hpp"
