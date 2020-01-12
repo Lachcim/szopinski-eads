@@ -66,6 +66,7 @@ class AVLTree {
         Node* rotateLeft(Node*);
         Node* rotateRight(Node*);
         void updateRelations(Node*, Node*, Node*);
+        void updateParent(Node*, Node*);
 
         const KeyInfoPair& internalAt(int) const;
         const_iterator internalFind(const Key&) const;

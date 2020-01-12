@@ -299,11 +299,78 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const KeyInfoPa
     return iterator(newLeaf, this);
 }
 
+//overload of insert
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const Key& key, const Info& info) {
     return insert(KeyInfoPair(key, info));
 }
 
+//erase the node at the given position
+template <typename Key, typename Info>
+typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::erase(const iterator& position) {
+    //obtain reference to next node sans the iterator
+    Node* nextPosition = (++iterator(position)).node;
+
+    //perform standard BST removal
+    if (!position.node->left && !position.node->right) {
+        //if the erased node is a leaf, simply delete it
+
+        updateParent(position.node, nullptr);
+        updateHeight(position.node->parent);
+
+        if (position.node == root)
+            root = nullptr;
+
+        delete position.node;
+    }
+    else if (!position.node->left || !position.node->right) {
+        //if the erased node only has one child, replace the node with the child
+
+        Node*& child = position.node->left ? position.node->left : position.node->right;
+        updateParent(position.node, child);
+        child->parent = position.node->parent;
+        updateHeight(child->parent);
+
+        if (position.node == root)
+            root = child;
+
+        //delete node, prevent former subtree from being deleted
+        child = nullptr;
+        delete position.node;
+    }
+    else {
+        //if the erased node has two children, replace it with its successor
+        //can't replace key because key is const
+
+        //find successor, lowest node in right subtree
+        Node* successor = position.node->right;
+        while (successor->left)
+            successor = successor->left;
+
+        updateParent(successor, nullptr);
+        updateHeight(successor->parent);
+        updateParent(position.node, successor);
+        successor->left = position.node->left;
+        successor->right = position.node->right;
+        successor->parent = position.node->parent;
+
+        if (position.node == root)
+            root = successor;
+
+        //delete node, prevent former subtree from being deleted
+        position.node->left = nullptr;
+        position.node->right = nullptr;
+        delete position.node;
+    }
+
+    //TODO: implement AVL balancing
+
+    //decrement node counter and return iterator to next node
+    nodeCount--;
+    return iterator(nextPosition, this);
+}
+
+//erase all nodes
 template <typename Key, typename Info>
 void AVLTree<Key, Info>::clear() {
     delete root;
@@ -494,18 +561,13 @@ typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::rotateRight(Node* pivot) 
 //rotate node right, return new root
 template <typename Key, typename Info>
 void AVLTree<Key, Info>::updateRelations(Node* pivot, Node* newTop, Node* surrogateChild) {
+    //update children of pivot's parent
+	updateParent(pivot, newTop);
+
 	//update parents
 	newTop->parent = pivot->parent;
 	pivot->parent = newTop;
 	if (surrogateChild) surrogateChild->parent = pivot;
-
-	//update children of pivot's parent
-	if (newTop->parent) {
-        if (newTop->parent->left == pivot)
-            newTop->parent->left = newTop;
-        else
-            newTop->parent->right = newTop;
-	}
 
 	//update root
 	if (pivot == root)
@@ -513,4 +575,17 @@ void AVLTree<Key, Info>::updateRelations(Node* pivot, Node* newTop, Node* surrog
 
 	//update heights
 	updateHeight(pivot);
+}
+
+//change parent's child if the
+template <typename Key, typename Info>
+void AVLTree<Key, Info>::updateParent(Node* oldChild, Node* newChild) {
+	if (!oldChild->parent)
+        return;
+
+    if (oldChild->parent->left == oldChild)
+        oldChild->parent->left = newChild;
+    else
+        oldChild->parent->right = newChild;
+
 }
