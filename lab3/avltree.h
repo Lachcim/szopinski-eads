@@ -1,5 +1,5 @@
-#ifndef AVLTREE_G
-#define AVLTREE_G
+#ifndef AVLTREE_H
+#define AVLTREE_H
 
 template <typename Key, typename Info>
 class AVLTree {
