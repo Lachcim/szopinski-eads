@@ -308,8 +308,9 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const Key& key,
 //erase the node at the given position
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::erase(const iterator& position) {
-    //obtain reference to next node sans the iterator
+    //obtain reference to next node sans the iterator as well as the current parent
     Node* nextPosition = (++iterator(position)).node;
+    Node* originalParent = position.node->parent;
 
     //perform standard BST removal
     if (!position.node->left && !position.node->right) {
@@ -363,7 +364,33 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::erase(const iterator& 
         delete position.node;
     }
 
-    //TODO: implement AVL balancing
+    //perform AVL balancing
+    for (Node* ancestor = originalParent; ancestor; ancestor = ancestor->parent) {
+        int balance = getBalance(ancestor);
+
+        //left left
+        if (balance > 1 && getBalance(ancestor->left) >= 0) {
+            ancestor = rotateRight(ancestor);
+            continue;
+        }
+        //right right
+        if (balance < -1 && getBalance(ancestor->right) <= 0) {
+            ancestor = rotateLeft(ancestor);
+            continue;
+        }
+        //left right
+        if (balance > 1 && getBalance(ancestor->left) < 0) {
+            ancestor->left = rotateLeft(ancestor->left);
+            ancestor = rotateRight(ancestor);
+            continue;
+        }
+        //right left
+        if (balance < -1 && getBalance(ancestor->left) > 0) {
+            ancestor->right = rotateRight(ancestor->right);
+            ancestor = rotateLeft(ancestor);
+            continue;
+        }
+    }
 
     //decrement node counter and return iterator to next node
     nodeCount--;
@@ -498,6 +525,9 @@ typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::addLeaf(Node* parent, boo
 //get AVL balance
 template <typename Key, typename Info>
 int AVLTree<Key, Info>::getBalance(Node* node) {
+    if (!node)
+        return 0;
+
     int leftHeight = node->left ? node->left->height : -1;
     int rightHeight = node->right ? node->right->height : -1;
 
