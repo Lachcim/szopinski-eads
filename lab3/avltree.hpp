@@ -308,6 +308,11 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const Key& key,
 //erase the node at the given position
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::erase(const iterator& position) {
+    if (position.parent)
+        throw std::invalid_argument("iterator doesn't belong to this container");
+    if (position.node == nullptr)
+        throw std::out_of_range("can't erase end iterator");
+
     //obtain reference to next node sans the iterator as well as the current parent
     Node* nextPosition = (++iterator(position)).node;
     Node* originalParent = position.node->parent;
@@ -392,8 +397,9 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::erase(const iterator& 
         }
     }
 
-    //decrement node counter and return iterator to next node
+    //final considerations, return iterator to next node
     nodeCount--;
+    findLimits();
     return iterator(nextPosition, this);
 }
 
