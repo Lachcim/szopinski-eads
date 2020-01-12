@@ -308,7 +308,7 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::insert(const Key& key,
 //erase the node at the given position
 template <typename Key, typename Info>
 typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::erase(const iterator& position) {
-    if (position.parent)
+    if (position.parent != this)
         throw std::invalid_argument("iterator doesn't belong to this container");
     if (position.node == nullptr)
         throw std::out_of_range("can't erase end iterator");
