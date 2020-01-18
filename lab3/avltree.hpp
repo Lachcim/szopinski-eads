@@ -489,6 +489,7 @@ void AVLTree<Key, Info>::findLimits() {
     if (empty()) {
         beginIterator = iterator(nullptr, this);
         endIterator = iterator(nullptr, this);
+        return;
     }
 
     //obtain pointer to root, keep requesting lower number
