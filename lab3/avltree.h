@@ -8,7 +8,7 @@ class AVLTree {
             const Key key;
             Info info;
 
-            KeyInfoPair(Key, Info);
+            KeyInfoPair(const Key&, const Info&);
         };
 
         class iterator;

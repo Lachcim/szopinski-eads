@@ -8,7 +8,7 @@
 
 //default KeyInfoPair constructor
 template <typename Key, typename Info>
-AVLTree<Key, Info>::AVLTree::KeyInfoPair::KeyInfoPair(Key newKey, Info newInfo): key(newKey), info(newInfo) {
+AVLTree<Key, Info>::AVLTree::KeyInfoPair::KeyInfoPair(const Key& newKey, const Info& newInfo): key(newKey), info(newInfo) {
     //assign key and info with initializer list
 }
 
