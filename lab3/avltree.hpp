@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <cmath>
+#include <sstream>
 
 /*
 *   ################################
@@ -495,12 +496,27 @@ void AVLTree<Key, Info>::print() const {
     //calculate graphic buffer dimensions
     int bufHeight = root->height * 2 + 1;
     int bufWidth = (int)pow(2, root->height); //number of nodes at lowest point
-    bufWidth += (bufWidth - 1) * 5; //spacing between nodes
+    bufWidth += (bufWidth - 1) * 5 + 1; //spacing between nodes + eof
 
     //allocate graphic buffer
     char** buffer = new char*[bufHeight];
     for (int i = 0; i < bufHeight; i++)
-        buffer[i] = new char[bufWidth];
+        buffer[i] = new char[bufWidth](); //initialize to 0
+
+    //print root in top center
+    internalPrint(buffer, bufWidth, root, (bufWidth - 1) / 2, 0);
+
+    //print buffer, treat zero as space
+    for (int i = 0; i < bufHeight; i++) {
+        for (int j = 0; j < bufWidth - 1; j++) {
+                if (buffer[i][j])
+                    putchar(buffer[i][j]);
+                else
+                    putchar(' ');
+        }
+
+        putchar('\n');
+    }
 
     //deallocate graphic buffer
     for (int i = 0; i < bufHeight; i++)
@@ -656,4 +672,31 @@ void AVLTree<Key, Info>::updateParent(Node* oldChild, Node* newChild) {
     else
         oldChild->parent->right = newChild;
 
+}
+
+//print a subtree to a graphical buffer at the given coordinates
+template <typename Key, typename Info>
+void AVLTree<Key, Info>::internalPrint(char** buffer, int bufWidth, Node* node, int x, int y) const {
+    //find out graphical key length
+    std::stringstream keyBuffer;
+    keyBuffer << node->keyInfoPair.key;
+    int keyWidth = keyBuffer.tellp();
+
+    //calculate dimensions of key
+    int keyStart = x - keyWidth / 2;
+    if (keyStart < 0) keyStart = 0;
+    if (keyStart + keyWidth >= bufWidth) keyWidth = bufWidth - keyStart - 1;
+
+    //print key at given coordinates
+    snprintf(&buffer[y][keyStart], keyWidth + 1, "%s", keyBuffer.str().c_str());
+
+    //print subtrees
+    if (node->left) {
+        buffer[y + 1][x - 2] = '/';
+        internalPrint(buffer, bufWidth, node->left, x - 3, y + 2);
+    }
+    if (node->right) {
+        buffer[y + 1][x + 2] = '\\';
+        internalPrint(buffer, bufWidth, node->right, x + 3, y + 2);
+    }
 }

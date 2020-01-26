@@ -11,7 +11,11 @@ int main(int argCount, char* args[])
         AVLTree<int, int> avl;
         avl.insert(5, 0);
         avl.insert(1, 0);
-        avl.insert(10, 0);
+        avl.insert(3, 0);
+        avl.insert(4, 0);
+        avl.insert(9, 0);
+        avl.insert(0, 0);
+        avl.insert(2, 0);
         avl.print();
 
         return 0;
