@@ -392,7 +392,7 @@ typename AVLTree<Key, Info>::iterator AVLTree<Key, Info>::erase(const iterator& 
             continue;
         }
         //right left
-        if (balance < -1 && getBalance(ancestor->left) > 0) {
+        if (balance < -1 && getBalance(ancestor->right) > 0) {
             ancestor->right = rotateRight(ancestor->right);
             ancestor = rotateLeft(ancestor);
             continue;
@@ -578,7 +578,7 @@ typename AVLTree<Key, Info>::Node* AVLTree<Key, Info>::addLeaf(Node* parent, boo
 
 //get AVL balance
 template <typename Key, typename Info>
-int AVLTree<Key, Info>::getBalance(Node* node) {
+int AVLTree<Key, Info>::getBalance(Node* node) const {
     if (!node)
         return 0;
 

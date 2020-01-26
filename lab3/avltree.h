@@ -63,7 +63,7 @@ class AVLTree {
         void findLimits();
 
         Node* addLeaf(Node*, bool, const KeyInfoPair&);
-        int getBalance(Node*);
+        int getBalance(Node*) const;
         void updateHeight(Node*);
         Node* rotateLeft(Node*);
         Node* rotateRight(Node*);
