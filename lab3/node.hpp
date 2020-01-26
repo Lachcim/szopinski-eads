@@ -7,47 +7,47 @@
 //default constructor
 template <typename Key, typename Info>
 AVLTree<Key, Info>::Node::Node(KeyInfoPair kip) : keyInfoPair(kip) {
-    this->left = nullptr;
-    this->right = nullptr;
-    this->parent = nullptr;
-    this->height = 0;
+    left = nullptr;
+    right = nullptr;
+    parent = nullptr;
+    height = 0;
 }
 
 //destructor
 template <typename Key, typename Info>
 AVLTree<Key, Info>::Node::~Node() {
-    if (this->left) delete this->left;
-    if (this->right) delete this->right;
+    if (left) delete left;
+    if (right) delete right;
 }
 
 //copy constructor
 template <typename Key, typename Info>
 AVLTree<Key, Info>::Node::Node(const Node& other) : keyInfoPair(other.keyInfoPair) {
-    this->left = nullptr;
-    this->right = nullptr;
+    left = nullptr;
+    right = nullptr;
 
     //copy children, set their parent
     if (other.left) {
-        this->left = new Node(*other.left);
-        this->left->parent = this;
+        left = new Node(*other.left);
+        left->parent = this;
     }
     if (other.right) {
-        this->right = new Node(*other.right);
-        this->right->parent = this;
+        right = new Node(*other.right);
+        right->parent = this;
     }
 
     //copy parameters
-    this->parent = other.parent;
-    this->height = other.height;
+    parent = other.parent;
+    height = other.height;
 }
 
 //move constructor
 template <typename Key, typename Info>
 AVLTree<Key, Info>::Node::Node(Node&& other) : keyInfoPair(other.keyInfoPair) {
-    this->left = other.left;
-    this->right = other.right;
-    this->parent = other.parent;
-    this->height = other.height;
+    left = other.left;
+    right = other.right;
+    parent = other.parent;
+    height = other.height;
 
     other.left = nullptr;
     other.right = nullptr;
@@ -61,24 +61,24 @@ typename AVLTree<Key, Info>::Node& AVLTree<Key, Info>::Node::operator=(const Nod
         return *this;
 
     //delete own nodes and copy other nodes
-    if (this->left) delete this->left;
-    if (this->right) delete this->right;
+    if (left) delete left;
+    if (right) delete right;
 
-    this->left = nullptr;
-    this->right = nullptr;
+    left = nullptr;
+    right = nullptr;
 
     if (other.left) {
-        this->left = new Node(*other.left);
-        this->left->parent = this;
+        left = new Node(*other.left);
+        left->parent = this;
     }
     if (other.right) {
-        this->right = new Node(*other.right);
-        this->right->parent = this;
+        right = new Node(*other.right);
+        right->parent = this;
     }
 
     //copy properties
-    this->parent = other.parent;
-    this->height = other.height;
+    parent = other.parent;
+    height = other.height;
 
     return *this;
 }
@@ -91,13 +91,13 @@ typename AVLTree<Key, Info>::Node& AVLTree<Key, Info>::Node::operator=(Node&& ot
         return *this;
 
     //delete own nodes
-    if (this->left) delete this->left;
-    if (this->right) delete this->right;
+    if (left) delete left;
+    if (right) delete right;
 
     //take over other nodes and copy properties
-    this->left = other.left;
-    this->right = other.right;
-    this->height = other.height;
+    left = other.left;
+    right = other.right;
+    height = other.height;
 
     //mark other node as empty
     other.left = nullptr;

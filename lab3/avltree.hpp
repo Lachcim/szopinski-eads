@@ -18,24 +18,24 @@ AVLTree<Key, Info>::AVLTree::KeyInfoPair::KeyInfoPair(const Key& newKey, const I
 template <typename Key, typename Info>
 AVLTree<Key, Info>::AVLTree() {
     //create empty tree
-    this->root = nullptr;
-    this->beginIterator = iterator(nullptr, this);
-    this->endIterator = iterator(nullptr, this);
-    this->nodeCount = 0;
+    root = nullptr;
+    beginIterator = iterator(nullptr, this);
+    endIterator = iterator(nullptr, this);
+    nodeCount = 0;
 }
 
 //default destructor
 template <typename Key, typename Info>
 AVLTree<Key, Info>::~AVLTree() {
-    delete this->root;
+    delete root;
 }
 
 //copy constructor
 template <typename Key, typename Info>
 AVLTree<Key, Info>::AVLTree(const AVLTree<Key, Info>& other) {
     //copy nodes from the other tree
-    this->root = new Node(*other.root);
-    this->nodeCount = other.nodeCount;
+    root = new Node(*other.root);
+    nodeCount = other.nodeCount;
     findLimits();
 }
 
@@ -43,10 +43,10 @@ AVLTree<Key, Info>::AVLTree(const AVLTree<Key, Info>& other) {
 template <typename Key, typename Info>
 AVLTree<Key, Info>::AVLTree(AVLTree<Key, Info>&& other) {
     //take over other tree's resources
-    this->root = other.root;
-    this->beginIterator = other.beginIterator;
-    this->endIterator = other.endIterator;
-    this->nodeCount = other.nodeCount;
+    root = other.root;
+    beginIterator = other.beginIterator;
+    endIterator = other.endIterator;
+    nodeCount = other.nodeCount;
 
     //mark other tree as empty
     other.root = nullptr;
@@ -60,9 +60,9 @@ AVLTree<Key, Info>& AVLTree<Key, Info>::operator=(const AVLTree<Key, Info>& othe
         return *this;
 
     //destroy current root and copy nodes from other tree
-    delete this->root;
-    this->root = new Node(*other.root);
-    this->nodeCount = other.nodeCount;
+    delete root;
+    root = new Node(*other.root);
+    nodeCount = other.nodeCount;
     findLimits();
 
     return *this;
@@ -72,11 +72,11 @@ AVLTree<Key, Info>& AVLTree<Key, Info>::operator=(const AVLTree<Key, Info>& othe
 template <typename Key, typename Info>
 AVLTree<Key, Info>& AVLTree<Key, Info>::operator=(AVLTree<Key, Info>&& other) {
     //deallocate node list and take over other tree's resources
-    delete this->root;
-    this->root = other.root;
-    this->beginIterator = other.beginIterator;
-    this->endIterator = other.endIterator;
-    this->nodeCount = other.nodeCount;
+    delete root;
+    root = other.root;
+    beginIterator = other.beginIterator;
+    endIterator = other.endIterator;
+    nodeCount = other.nodeCount;
 
     //mark other tree as empty
     other.root = nullptr;
