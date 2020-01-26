@@ -6,9 +6,14 @@ template class AVLTree<std::string, int>;
 
 int main(int argCount, char* args[])
 {
-    //require a path
+    //no arguments - default test bench
     if (argCount < 2) {
-        std::cout << "Please specify a path." << std::endl;
+        AVLTree<int, int> avl;
+        avl.insert(5, 0);
+        avl.insert(1, 0);
+        avl.insert(10, 0);
+        avl.print();
+
         return 0;
     }
 

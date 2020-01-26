@@ -57,6 +57,8 @@ class AVLTree {
 
         bool empty() const;
         int size() const;
+
+        void print() const;
     private:
         void findLimits();
 

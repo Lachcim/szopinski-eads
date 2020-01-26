@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <cmath>
 
 /*
 *   ################################
@@ -475,6 +476,36 @@ bool AVLTree<Key, Info>::empty() const {
 template <typename Key, typename Info>
 int AVLTree<Key, Info>::size() const {
     return nodeCount;
+}
+
+/*
+*   ################################
+*   SECTION: MISC
+*   ################################
+*/
+
+//print a graphical representation of the tree
+template <typename Key, typename Info>
+void AVLTree<Key, Info>::print() const {
+    if (!root) {
+        std::cout << "(empty tree)" << std::endl;
+        return;
+    }
+
+    //calculate graphic buffer dimensions
+    int bufHeight = root->height * 2 + 1;
+    int bufWidth = (int)pow(2, root->height); //number of nodes at lowest point
+    bufWidth += (bufWidth - 1) * 5; //spacing between nodes
+
+    //allocate graphic buffer
+    char** buffer = new char*[bufHeight];
+    for (int i = 0; i < bufHeight; i++)
+        buffer[i] = new char[bufWidth];
+
+    //deallocate graphic buffer
+    for (int i = 0; i < bufHeight; i++)
+        delete buffer[i];
+    delete buffer;
 }
 
 /*
