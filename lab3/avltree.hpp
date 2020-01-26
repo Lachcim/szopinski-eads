@@ -509,7 +509,7 @@ void AVLTree<Key, Info>::print() const {
     //print buffer, treat zero as space
     for (int i = 0; i < bufHeight; i++) {
         for (int j = 0; j < bufWidth - 1; j++)
-                putchar(buffer[i][j] ? buffer[i][j] : ' ');
+            putchar(buffer[i][j] ? buffer[i][j] : ' ');
 
         putchar('\n');
     }
