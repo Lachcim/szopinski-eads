@@ -504,7 +504,7 @@ void AVLTree<Key, Info>::print() const {
         buffer[i] = new char[bufWidth](); //initialize to 0
 
     //print root in top center
-    internalPrint(buffer, bufWidth, root, (bufWidth - 1) / 2, 0);
+    internalPrint(buffer, bufWidth, bufHeight, root, (bufWidth - 1) / 2, 0);
 
     //print buffer, treat zero as space
     for (int i = 0; i < bufHeight; i++) {
@@ -676,7 +676,7 @@ void AVLTree<Key, Info>::updateParent(Node* oldChild, Node* newChild) {
 
 //print a subtree to a graphical buffer at the given coordinates
 template <typename Key, typename Info>
-void AVLTree<Key, Info>::internalPrint(char** buffer, int bufWidth, Node* node, int x, int y) const {
+void AVLTree<Key, Info>::internalPrint(char** buffer, int bufWidth, int bufHeight, Node* node, int x, int y) const {
     //find out graphical key length
     std::stringstream keyBuffer;
     keyBuffer << node->keyInfoPair.key;
@@ -690,13 +690,19 @@ void AVLTree<Key, Info>::internalPrint(char** buffer, int bufWidth, Node* node, 
     //print key at given coordinates
     snprintf(&buffer[y][keyStart], keyWidth + 1, "%s", keyBuffer.str().c_str());
 
+    //calculate child node spacing
+    int level = (bufHeight - y) / 2 - 1;
+    int childSpacing = 5;
+    for (int i = 0; i < level; i++)
+        childSpacing = childSpacing * 2 + 1;
+
     //print subtrees
     if (node->left) {
-        buffer[y + 1][x - 2] = '/';
-        internalPrint(buffer, bufWidth, node->left, x - 3, y + 2);
+        buffer[y + 1][x - childSpacing / 4 - 1] = '/';
+        internalPrint(buffer, bufWidth, bufHeight, node->left, x - (childSpacing - childSpacing / 2), y + 2);
     }
     if (node->right) {
-        buffer[y + 1][x + 2] = '\\';
-        internalPrint(buffer, bufWidth, node->right, x + 3, y + 2);
+        buffer[y + 1][x + childSpacing / 4 + 1] = '\\';
+        internalPrint(buffer, bufWidth, bufHeight, node->right, x + (childSpacing - childSpacing / 2), y + 2);
     }
 }

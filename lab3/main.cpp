@@ -8,15 +8,18 @@ int main(int argCount, char* args[])
 {
     //no arguments - default test bench
     if (argCount < 2) {
+        int keys[] = {5, 1, 3, 0, 9, 8, 4, 2, 6, 7};
         AVLTree<int, int> avl;
-        avl.insert(5, 0);
-        avl.insert(1, 0);
-        avl.insert(3, 0);
-        avl.insert(4, 0);
-        avl.insert(9, 0);
-        avl.insert(0, 0);
-        avl.insert(2, 0);
+
         avl.print();
+
+        for (int i = 0; i < 10; i++) {
+            std::cout << "########" << std::endl;
+            std::cout << "Adding key " << keys[i] << std::endl;
+
+            avl.insert(keys[i], 123);
+            avl.print();
+        }
 
         return 0;
     }

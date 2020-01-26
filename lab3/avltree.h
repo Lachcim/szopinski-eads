@@ -73,7 +73,7 @@ class AVLTree {
         const KeyInfoPair& internalAt(int) const;
         const_iterator internalFind(const Key&) const;
 
-        void internalPrint(char**, int, Node*, int, int) const;
+        void internalPrint(char**, int, int, Node*, int, int) const;
 };
 
 #include "avltree.hpp"
