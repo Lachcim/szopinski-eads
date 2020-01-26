@@ -10,6 +10,7 @@ int main(int argCount, char* args[])
     if (argCount < 2) {
         int keys[] = {5, 1, 3, 0, 9, 8, 4, 2, 6, 7};
         AVLTree<int, int> avl;
+        AVLTree<int, int>::iterator it;
 
         avl.print();
 
@@ -18,6 +19,14 @@ int main(int argCount, char* args[])
             std::cout << "Adding key " << keys[i] << std::endl;
 
             avl.insert(keys[i], 123);
+            avl.print();
+        }
+
+        for (it = avl.begin(); it != avl.end();) {
+            std::cout << "########" << std::endl;
+            std::cout << "Erasing key " << it->key << std::endl;
+
+            it = avl.erase(it);
             avl.print();
         }
 
